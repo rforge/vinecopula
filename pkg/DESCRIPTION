@@ -1,7 +1,7 @@
 Package: VineCopula
 Type: Package
 Title: Statistical inference of vine copulas
-Version: 1.1-1
+Version: 1.1-2
 Date: 2013-02-07
 Author: Ulf Schepsmeier, Jakob Stoeber, Eike Christian Brechmann
 Maintainer: Ulf Schepsmeier <schepsmeier@ma.tum.de>

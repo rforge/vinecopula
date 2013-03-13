@@ -3,6 +3,15 @@ Changes for R-package VineCopula
 Ulf Schepsmeier, Jakob Stoeber and Eike Christian Brechmann <VineCopula@ma.tum.de>
 
 
+Version 1.1-2 (March, 13, 2013)
+
+- Additional validy check of the R-vine matrix  in RVineMatrix (Code provided by Harry Joe)
+
+- New bivariate copula: Reflection asymmetric Archimedean copula
+  In our functions it is "family=41", 51, 61, and 71 for the rotated versions.
+  So far only implemented in some bivariate functions (not documented so far; experimental)
+  
+
 Version 1.1-1 (February 7, 2013)
 
 - Bug fix:

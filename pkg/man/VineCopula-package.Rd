@@ -73,7 +73,7 @@ We are especially grateful to Harry Joe for his contributions to the implementat
 \tabular{ll}{
 Package: \tab VineCopula\cr
 Type: \tab Package\cr
-Version: \tab 1.1-1\cr
+Version: \tab 1.1-2\cr
 Date: \tab 2013-02-07\cr
 License: \tab GPL (>=2)\cr
 Depends: \tab R (\eqn{\geq 2.11.0}{>= 2.11.0}), MASS, mvtnorm, igraph0 \cr
