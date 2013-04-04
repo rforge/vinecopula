@@ -7,7 +7,7 @@ BiCopSelect <- function(u1,u2,familyset=NA,selectioncrit="AIC",indeptest=FALSE,l
   if(any(u2>1) || any(u2<0)) stop("Data has be in the interval [0,1].")	
   if(!is.na(familyset[1])) for(i in 1:length(familyset)) if(!(familyset[i] %in% c(0,1,2,3,4,5,6,7,8,9,10,13,14,16,17,18,19,20,23,24,26,27,28,29,30,33,34,36,37,38,39,40,41,51,61,71))) stop("Copula family not implemented.")  
   if(selectioncrit != "AIC" && selectioncrit != "BIC") stop("Selection criterion not implemented.")
-  if(level < 0 & level > 1) stop("Significance level has to be between 0 and 1.")
+  if(level < 0 || level > 1) stop("Significance level has to be between 0 and 1.")
   
   out=list()
 

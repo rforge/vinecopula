@@ -13,7 +13,7 @@ RVineStructureSelect = function(data,familyset=NA,type=0,selectioncrit="AIC",ind
 	
   if(!is.na(familyset[1])) for(i in 1:length(familyset)) if(!(familyset[i] %in% c(0,1:10,13,14,16:20,23,24,26:30,33,34,36:40))) stop("Copula family not implemented.")  
   if(selectioncrit != "AIC" && selectioncrit != "BIC") stop("Selection criterion not implemented.")
-  if(level < 0 & level > 1) stop("Significance level has to be between 0 and 1.")
+  if(level < 0 || level > 1) stop("Significance level has to be between 0 and 1.")
   	
 	if(is.null(colnames(data))) colnames(data) = paste("V",1:n,sep="") 
 
