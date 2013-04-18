@@ -105,14 +105,21 @@ void ktau(double *X, double *Y, int *N, double *tau, double *S, double *D, int *
 		do
 		{
 			I = L;
-			J = (I+K)<(*N-1)?(I+K):(*N-1);		// changed both from *N to (*N-1)
+			J = (I+K)<(*N)?(I+K):(*N);
 			Iend = J;
 			Jend = (J+K)<(*N)?(J+K):(*N);
 			do
 			{
 				Iflag = (I < Iend);
 				Jflag = (J < Jend);
-				Xflag = ((X[I] > X[J]) | ((X[I] == X[J]) & (Y[I] > Y[J])));	//Error? is it possible to get X[*N]? but X has only length *N
+				if (Iflag & Jflag) 
+				{
+				 	Xflag = ((X[I] > X[J]) | ((X[I] == X[J]) & (Y[I] > Y[J])));
+				} 
+				else
+				{
+					Xflag = FALSE;
+				}
 				if((Iflag & !Jflag) | (Iflag & Jflag & !Xflag))
 				{
 					X2[L] = X[I];
@@ -128,7 +135,7 @@ void ktau(double *X, double *Y, int *N, double *tau, double *S, double *D, int *
 					L++;
 				};
 			} 
-			while((Iflag | Jflag)  & I < *N & J < *N); // added additional constraints
+			while(Iflag | Jflag);
 		} 
 		while(L < *N);
 		
@@ -178,14 +185,21 @@ void ktau(double *X, double *Y, int *N, double *tau, double *S, double *D, int *
 		do
 		{
 			I = L;
-			J = (I+K)<(*N-1)?(I+K):(*N-1); // changed both from *N to (*N-1)
+			J = (I+K)<(*N)?(I+K):(*N);
 			Iend = J;
 			Jend = (J+K)<(*N)?(J+K):(*N);
 			do
 			{
 				Iflag = (I < Iend);
 				Jflag = (J < Jend);
-				Xflag = (Y[I] > Y[J]);
+				if (Iflag & Jflag) 
+				{
+				 	Xflag = (Y[I] > Y[J]);
+				} 
+				else
+				{
+					Xflag = FALSE;
+				}
 				if((Iflag & !Jflag) | (Iflag & Jflag & !Xflag))
 				{
 					X2[L] = X[I];
@@ -202,7 +216,7 @@ void ktau(double *X, double *Y, int *N, double *tau, double *S, double *D, int *
 					L++;
 				};
 			} 
-			while((Iflag | Jflag) & I < *N & J < *N); // added additional constraints
+			while((Iflag | Jflag));
 		} 
 		while(L < *N);
     
