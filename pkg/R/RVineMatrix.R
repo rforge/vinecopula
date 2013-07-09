@@ -17,7 +17,7 @@ RVineMatrix  = function(Matrix,family=array(0,dim=dim(Matrix)),par=array(NA,dim=
 	if(any(!(family %in% c(0,1:10,13,14,16:20,23,24,26:30,33,34,36:40,43,44)))) stop("Copula family not implemented.")
 	if(length(names)>0 & length(names)!=dim(Matrix)[1]) stop("Length of the vector 'names' is not correct.")
 	
-	if(varraycheck(Matrix)!=1) stop("'Matrix' is not a valid R-vine matrix")
+	if(RVineMatrixCheck(Matrix)!=1) stop("'Matrix' is not a valid R-vine matrix")
 	
 	if(!all(par %in% c(0,NA)))
 	{
@@ -350,8 +350,9 @@ vinvstepb=function(A,i,ichk0=0)
 # return -3 for diagonal not 1:d
 # return -2 for not permutation of 1:j in column j
 # return -1 if cannot find proper binary array from array in natural order
-varraycheck=function(A)
+RVineMatrixCheck=function(M)
 {
+	A=M
 	d=nrow(A)
 	if(d!=ncol(A)) return(-1)
 	
