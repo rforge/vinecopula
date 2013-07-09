@@ -47,6 +47,7 @@ export(D2RVine)
 
 export(TauMatrix)
 
+export(cor2pcor,pcor2cor)
 
 S3method(print, RVineMatrix)
 

@@ -3,7 +3,7 @@ Type: Package
 Title: Statistical inference of vine copulas
 Version: 1.1-2
 Date: 2013-07-09
-Author: Ulf Schepsmeier, Jakob Stoeber, Eike Christian Brechmann
+Author: Ulf Schepsmeier, Jakob Stoeber, Eike Christian Brechmann, Benedikt Graeler
 Maintainer: Ulf Schepsmeier <schepsmeier@ma.tum.de>
 Depends: R (>= 2.11.0), MASS, mvtnorm, igraph0
 Suggests: CDVine, TSP
