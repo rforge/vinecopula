@@ -68,7 +68,7 @@ normalizeRVineMatrix = function(RVM){
 	oldOrder = diag(RVM$Matrix)
 	Matrix = reorderRVineMatrix(RVM$Matrix)
 	
-	return(RVineMatrix(Matrix, RVM$family, RVM$par, RVM$par2, names = rev(RVM$names[oldOrder])))
+  return(RVineMatrix(Matrix, RVM$family, RVM$par, RVM$par2, names = rev(RVM$names[oldOrder])))
 }
 
 reorderRVineMatrix = function(Matrix){
@@ -81,6 +81,17 @@ reorderRVineMatrix = function(Matrix){
 	}
 	
 	return(Matrix)
+}
+
+# exported version of normalizeRVineMatrix
+RVineMatrixNormalize <- function(RVM) {
+  stopifnot(is(RVM, "RVineMatrix"))
+      
+  if(is.null(RVM$names))
+    RVM$names <- paste("V",1:nrow(RVM$Matrix),sep="")
+      oldOrder = diag(RVM$Matrix)
+  
+  return(normalizeRVineMatrix(RVM))
 }
 
 dim.RVineMatrix = function(x){
@@ -272,16 +283,19 @@ varray2NO=function(A,irev=FALSE,iprint=FALSE)
 }
 
 # This function is not in NAMESPACE (not for direct use).
-# Function with T(x,y)=ell if x-y are conditioned partners in tree l
-vpartner=function(A)
-{ d=nrow(A); 
-  T=matrix(0,d,d) 
-  for(j in 2:d)
-  { x=A[j,j]
-    for(k in 1:(j-1))
-    { y=A[k,j]; T[x,y]=k; T[y,x]=k }
+# Function with T(x,y)=k if x-y are conditioned partners in tree k
+vpartner <- function(A){
+  d=nrow(A); 
+  tree=matrix(0,d,d) 
+  for(j in 2:d) {
+    x=A[j,j]
+    for(k in 1:(j-1)) {
+      y=A[k,j]
+      tree[x,y]=k
+      tree[y,x]=k 
+    }
   }
-  T
+  tree
 }
 
 # Check whether A in natural order is a valid vine array if it has

@@ -1,4 +1,4 @@
-# functions for partial correlations
+# functions for partial correlations by H. Joe
 
 # specific partial correlation from a covariance or correlation matrix
 # 'given' is vector indices for the given variables
@@ -9,8 +9,13 @@ partcor=function(S,given,j,k) {
   S12=S[given,jk]
   S21=S[jk,given]
   S22=S[jk,jk]
-  if(length(given)>1) { tem=solve(S11,S12); Om212=S21%*%tem }
-  else { tem=S12/S11; Om212=outer(S21,tem) }
+  if(length(given)>1) { 
+    tem=solve(S11,S12)
+    Om212=S21%*%tem 
+  } else { 
+    tem=S12/S11
+    Om212=outer(S21,tem) 
+  }
   om11=1-Om212[1,1]
   om22=1-Om212[2,2]
   om12=S[j,k]-Om212[1,2]
@@ -25,20 +30,40 @@ partcor=function(S,given,j,k) {
 # param: cor, correlation matrix
 # param: RVM, RVineMatrix defining the strucutre of the RVine
 # result: RVineMatrix with transformed partial correlations
-cor2pcor=function(corMat, RVM) {
+RVineCor2pcor=function(RVM, corMat) {
   d <- nrow(corMat)
   stopifnot(d == nrow(RVM$Matrix))
+  stopifnot(is(RVM, "RVineMatrix"))
+  stopifnot(all(RVM$family%in%c(0,1,2)))
+  
   if(d<=2) 
     return(corMat)
   
   pp <- matrix(0, d, d)
-  A  <- matrix(0, d, d)
-  
-  # rotate towards notation in Kurowicka and Joe (2011), p. 9
-  for (i in 1:d) {
-    A[i,] <- rev(RVM$Matrix[d-i+1,])
+    
+  oldRVM <- RVM
+  oldOrder = diag(RVM$Matrix)
+  if(any(oldOrder != length(oldOrder):1)) {
+    RVM = normalizeRVineMatrix(RVM)
+    corMat <- corMat[rev(oldOrder),rev(oldOrder)]
   }
   
+  if(!is.null(oldRVM$names)) {
+    if(any(!(oldRVM$names %in% paste("V", 1:d, sep="")))) {
+      warning("RVM$names are not default and cannot be checked. Make sure that 
+              the correlation matrix has the same ordering of variables as the 
+              RVM.")
+    } else {
+      nameOrder <- order(oldRVM$names)
+      if(any(nameOrder != 1:length(oldRVM$names))){
+        corMat <- corMat[nameOrder,nameOrder]
+      }
+    }
+  }
+  
+  # rotate towards notation in Kurowicka and Joe (2011), p. 9
+  A <- RVM$Matrix[d:1,d:1]
+    
   # following algorithm is credited to Harry Joe
   for(j in 2:d) { # j <- 2
     pp[1,j] <- corMat[A[1,j],j]
@@ -60,79 +85,35 @@ cor2pcor=function(corMat, RVM) {
   }
   
   # re-rotate towards VineCopula notation
-  pc <- pp
-  for (i in 1:d) {
-    pc[i,] <- rev(pp[d-i+1,])
-  }
+  pc <- pp[d:1,d:1]
   
-  RVM$par <- pc
-  return(RVM)
+  oldRVM$par <- pc
+  return(oldRVM)
 }
-
-
-# corMat <- matrix(c(1.00, 0.17, 0.15, 0.14, 0.13,
-#                    0.17, 1.00, 0.30, 0.28, 0.05,
-#                    0.15, 0.30, 1.00, 0.17, 0.05,
-#                    0.14, 0.28, 0.17, 1.00, 0.04,
-#                    0.13, 0.05, 0.05, 0.04, 1.00),5,5)
-# 
-# 
-#  
-# RVM <- vineCopula(5L)@RVM
-# str(RVM)
-# 
-# cor2pcor.cvine(corMat)
-# 
-# newRVM <- cor2pcor(corMat, RVM)
-# newRVM$family <- matrix(1,5,5)
-# 
-# # classic
-# round(cor(rmvnorm(10000,rep(0,5),corMat))-corMat,2)
-# # vine
-# round(cor(qnorm(rCopula(10000, vineCopula(newRVM))))-corMat,2)
-# 
-# pcor2cor(cor2pcor(corMat, RVM))
-# round(pcor2cor(RVM=newRVM)-corMat,2)
-# cor2pcor(corMat, RVM)$par
-# 
-
-# library(gstat)
-# data(sic2004)
-# coordinates(sic.val) <- ~x+y
-# hist(variogramLine(vgm(0.8,"Mat",150000,0.2),covariance=T,dist_vector=spDists(sic.val[,])))
-# 
-# 
-# tauFromCor <- function(x) {
-#   tau(normalCopula(x))
-# }
-# 
-# plot(1:200*2500,sapply(variogramLine(vgm(0.8,"Mat",150000,0.2),covariance=T,dist_vector=1:200*2500)[,2],
-#       tauFromCor),type="l",ylim=c(0,1))
-# 
-# points(1:200*2500,variogramLine(vgm(0.8,"Mat",150000,0.2),covariance=T,dist_vector=1:200*2500)[,2],
-#        type="l", col="red")
-
 
 
 # generate correlation matrix based on partial correlations of R-vine
 # with vine array A that has 1:d on diagonal;
 
-pcor2cor <- function(RVM) {
-  d=nrow(RVM$Matrix)
+RVinePcor2cor <- function(RVM) {
+  d <- nrow(RVM$Matrix)
   
-  A <- matrix(0,d,d)
+  stopifnot(is(RVM, "RVineMatrix"))
+  stopifnot(all(RVM$family%in%c(0,1,2)))
+
+  oldRVM <- RVM
+  oldOrder <- diag(RVM$Matrix)
+  if(any(oldOrder != length(oldOrder):1)) {
+    RVM = normalizeRVineMatrix(RVM)
+  }
+  
   # rotate towards notation in Kurowicka and Joe (2011), p. 9
-  for (i in 1:d) {
-    A[i,] <- rev(RVM$Matrix[d-i+1,])
-  }
-  
-  pc <- matrix(0,d,d)
-  for (i in 1:d) {
-    pc[i,] <- rev(RVM$par[d-i+1,])
-  }
-  
+  A <- RVM$Matrix[d:1,d:1]
+  pc <- RVM$par[d:1,d:1] 
+
   if(d<=2) { 
-    corMat <- matrix(c(1,pc[1,2],pc[1,2],1))
+    iorder <- diag(RVM$Matrix)
+    corMat <- matrix(c(1,pc[iorder[1],iorder[2]],pc[iorder[1],iorder[2]],1))
     return(corMat) 
   }
   
@@ -171,5 +152,116 @@ pcor2cor <- function(RVM) {
       corMat[j,anew] <- corMat[anew,j]
     }
   }
-  corMat
+  
+  corMat <- corMat[rev(oldOrder), rev(oldOrder)]
+    
+  nameOrder <- NULL
+  if(!is.null(oldRVM$names)) {
+    if(any(!(oldRVM$names %in% paste("V", 1:d, sep="")))) {
+      warning("RVM$names are not default and cannot be checked. Make sure to
+              interpret the correlation matrix in the same ordering of variables
+              as given in the RVineMatrix.")
+    } else {
+      nameOrder <- order(oldRVM$names)
+      if(any(nameOrder != 1:length(oldRVM$names))){
+        corMat <- corMat[nameOrder, nameOrder]
+      }
+    }
+  }
+  
+  return(corMat)
 }
+
+# #######################################
+# # for immeddeate testing run as well ##
+# #######################################
+# 
+# normalizeRVineMatrix = function(RVM){
+#   
+#   oldOrder = diag(RVM$Matrix)
+#   Matrix = reorderRVineMatrix(RVM$Matrix)
+#   
+#   names <- RVM$names
+#   if(is.null(names))
+#     names <- paste("V",1:nrow(RVM$Matrix),sep="")
+#   
+#   return(RVineMatrix(Matrix, RVM$family, RVM$par, RVM$par2, names = rev(names[oldOrder])))
+# }
+# 
+# reorderRVineMatrix = function(Matrix){
+#   oldOrder = diag(Matrix)
+#   
+#   O = apply(t(1:nrow(Matrix)),2,"==", Matrix)
+#   
+#   for(i in 1:nrow(Matrix)){
+#     Matrix[O[,oldOrder[i]]] = nrow(Matrix)-i+1
+#   }
+#   
+#   return(Matrix)
+# }
+# 
+# # examples/test cases
+# ######################
+# 
+# corMat <- matrix(c(1.00, 0.17, 0.15, 0.14, 0.13,
+#                    0.17, 1.00, 0.30, 0.28, 0.05,
+#                    0.15, 0.30, 1.00, 0.17, 0.05,
+#                    0.14, 0.28, 0.17, 1.00, 0.04,
+#                    0.13, 0.05, 0.05, 0.04, 1.00),5,5)
+# 
+# Matrix = matrix(c(5,2,3,1,4,
+#                   0,2,3,4,1,
+#                   0,0,3,4,1,
+#                   0,0,0,4,1,
+#                   0,0,0,0,1),5,5)
+# family = matrix(1,5,5)
+# 
+# par = matrix(c(0,0.2,0.9,0.5,0.8,
+#                0,  0,0.1,0.6,0.9,
+#                0,  0,  0,0.7,0.5,
+#                0,  0,  0,  0,0.8,
+#                0,  0,  0,  0,  0),5,5)
+# 
+# # define RVineMatrix object
+# RVM = RVineMatrix(Matrix,family,par)
+# 
+# # adjust the un-ordered RVine
+# newRVM <- RVineCor2pcor(RVM, corMat)
+# round(cor(qnorm(RVineSim(100000, newRVM)))-corMat, 2)
+# 
+# # normalise the RVine
+# normRVM <- normalizeRVineMatrix(RVM)
+# 
+# # adjust the normalised RVine
+# newNormRVM <- RVineCor2pcor(normRVM, corMat)
+# 
+# # newRVM and newNormRVM are the same vine using only different naming:
+# newNormRVM$par - newRVM$par
+# 
+# # the variable now do have a different ordering in the correlation matrix
+# newNormCor <- cor(qnorm(RVineSim(100000, newNormRVM)))
+# round(newNormCor,2)
+# 
+# # permuted, they meet the initial correlation matrix up to +/- 0.01
+# round(newNormCor[c(1,4,3,2,5),c(1,4,3,2,5)]-corMat, 2)
+# 
+# # re-order names of the normalised RVine generating a new RVine
+# normRVM2 <- normRVM
+# normRVM2$names <- c("V1", "V2", "V3", "V4", "V5")
+# 
+# # adjust the normalised RVine
+# newNormRVM2 <- RVineCor2pcor(normRVM2, corMat)
+# # check whether the parameters are different beyond permutation (that's why 
+# # permutation does not work)
+# newNormRVM2$par
+# newRVM$par
+# 
+# # adjust the normalised RVine
+# newNormRVM2 <- RVineCor2pcor(normRVM2, corMat[c(1,4,3,2,5),c(1,4,3,2,5)])
+# # check whether the parameters are now identical
+# round(newNormRVM2$par - newRVM$par,2)
+# 
+# # back and forth
+# RVinePcor2cor(RVineCor2pcor(RVM, corMat))-corMat
+# RVinePcor2cor(RVineCor2pcor(normRVM, corMat))-corMat
+# RVinePcor2cor(RVineCor2pcor(normRVM2, corMat))-corMat
