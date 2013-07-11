@@ -43,7 +43,18 @@ echo $contents; } ?>
 
 <!-- end of project description -->
 
-<p> The research underlying this project can be found at vine-copula.org </p>
+<p> The research underlying this project can be found at ><a href="http://vine-copula.org">vine-copula.org</a> <br>
+The page provides an extensive overview of research on vine copula models including 
+<ul>
+<li><b>Slides</b> of Introductory talks given at conferences and workshops</li>
+<li><b>Videos</b> of talks given at conferences and workshops</li>
+<li><b>Books and Surveys</b></li>
+<li><b>Fundamental Papers</b> giving the theoretical basics and fundamental approaches</li>
+<li><b>Workshops and Conferences</B></li>
+<li><b>Recent Publications</b> - Publications, submissions, recent developments and preprints in the last years</li>
+<li><b>Software</b> R-packages, including this one, and other software</li>
+</ul>
+</p>
 
 <p> The <strong>project summary page</strong> you can find <a href="http://<?php echo $domain; ?>/projects/<?php echo $group_name; ?>/"><strong>here</strong></a>. </p>
 
