@@ -2,6 +2,7 @@ RVineStructureSelect = function(data,familyset=NA,type=0,selectioncrit="AIC",ind
 
   if(type == 0) type = "RVine"
   else if(type == 1) type = "CVine"
+  else if(type == 2 || type == "DVine") stop("Code to determine the order of the nodes in a D-vine using the package TSP is provided as an example in the documentation of this function." )
   if(type != "RVine" & type != "CVine") stop("Vine model not implemented.")
 
 	n = dim(data)[2]
