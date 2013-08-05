@@ -100,7 +100,7 @@ dim.RVineMatrix = function(x){
 	NextMethod("dim")
 }
 
-print.RVineMatrix = function(x, ...){
+print.RVineMatrix = function(x, detail=FALSE, ...){
 	RVine=x
 	message("R-vine matrix:")
 	print(RVine$Matrix, ...)
@@ -114,7 +114,60 @@ print.RVineMatrix = function(x, ...){
 		}
 	}
 	#NextMethod("print")
+
+	d=dim(RVine)
+	if(detail==TRUE || detail==T)
+	{
+		message("")
+		message("Tree 1:")
+		for(i in 1:(d-1))
+		{
+			a=paste(RVine$names[[RVine$Matrix[i,i]]],",",RVine$names[[RVine$Matrix[d,i]]],sep="")
+			a=paste(a,": ", BiCopName(RVine$family[d,i], short=FALSE),sep="")
+			if(RVine$family[d,i]!=0)
+			{
+				a=paste(a," with par=", round(RVine$par[d,i],2), sep="")
+				if(RVine$family[d,i]%in%c(2,7,8,9,10,17,18,19,20,27,28,29,30,37,38,39,40))
+				{
+					a=paste(a," and par2=", round(RVine$par2[d,i],2), sep="")
+				}
+				a=paste(a, " (tau=", round(BiCopPar2Tau(RVine$family[d,i],RVine$par[d,i],RVine$par2[d,i]),2), ")", sep="")
+			}
+			message(a)
+		}
+		for(j in 2:(d-1))
+		{
+			message("")
+			a=paste("Tree ",j,":",sep="")
+			message(a)
+			for(i in 1:(d-j))
+			{
+				a=paste(RVine$names[[RVine$Matrix[i,i]]],",",RVine$names[[RVine$Matrix[d-j+1,i]]],sep="")
+				a=paste(a,"|",sep="")
+				conditioningSet=(d-j+2):d
+				for(k in 1:length(conditioningSet))
+				{
+					if(k>1){ a=paste(a,",",sep="")}
+					a=paste(a,RVine$names[[RVine$Matrix[conditioningSet[k],i]]],sep="")
+				}
+				a=paste(a,": ", BiCopName(RVine$family[d-j+1,i], short=FALSE),sep="")
+				if(RVine$family[d-j+1,i]!=0)
+				{
+					a=paste(a," with par=", round(RVine$par[d-j+1,i],2), sep="")
+					if(RVine$family[d-j+1,i]%in%c(2,7,8,9,10,17,18,19,20,27,28,29,30,37,38,39,40))
+					{
+						a=paste(a," and par2=", round(RVine$par2[d-j+1,i],2), sep="")
+					}
+					a=paste(a, " (tau=", round(BiCopPar2Tau(RVine$family[d-j+1,i],RVine$par[d-j+1,i],RVine$par2[d-j+1,i]),2), ")", sep="")
+				}
+				message(a)
+			}
+		}
+
+	}
 }
+
+
 
 createMaxMat = function(Matrix){
 
