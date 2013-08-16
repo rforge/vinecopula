@@ -5,8 +5,10 @@ Ulf Schepsmeier, Jakob Stoeber and Eike Christian Brechmann <VineCopula@ma.tum.d
 
 Version 1.1-2 (July, 09, 2013)
 
+- Changed dependency from "igraph0" to "igraph" since the support for "igraph0" will be quit soon.
+
 - Additional validy check of the R-vine matrix in RVineMatrix (Code provided by Harry Joe)
-  Also alvalable as separate function "RVineMatrixCheck"
+  Also available as separate function "RVineMatrixCheck"
 
 - New bivariate copula: Reflection asymmetric Archimedean copula
   In our functions it is "family=41", and 51, 61, and 71 for the rotated versions.

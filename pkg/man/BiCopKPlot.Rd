@@ -60,7 +60,7 @@ Journal of Hydrologic Engineering, 12 (4), 347-368.
 \seealso{\code{\link{BiCopMetaContour}}, \code{\link{BiCopChiPlot}}, \code{\link{BiCopLambda}}, \code{\link{BiCopGofTest}}}
 
 \examples{
-\donotrun{
+\dontrun{
 # Gaussian and Clayton copulas
 n = 500
 tau = 0.5

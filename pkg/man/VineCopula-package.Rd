@@ -74,9 +74,9 @@ We are especially grateful to Harry Joe for his contributions to the implementat
 Package: \tab VineCopula\cr
 Type: \tab Package\cr
 Version: \tab 1.1-2\cr
-Date: \tab 2013-07-09\cr
+Date: \tab 2013-08-16\cr
 License: \tab GPL (>=2)\cr
-Depends: \tab R (\eqn{\geq 2.11.0}{>= 2.11.0}), MASS, mvtnorm, igraph0 \cr
+Depends: \tab R (\eqn{\geq 2.11.0}{>= 2.11.0}), MASS, mvtnorm, igraph \cr
 Suggests: \tab CDVine, TSP \cr
 LazyLoad: \tab yes
 }

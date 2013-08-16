@@ -71,7 +71,7 @@ Submitted for publication.
 \code{\link{RVineHessian}}}
 
 \examples{
-\donotrun{
+\dontrun{
 # define 5-dimensional R-vine tree structure matrix
 Matrix = c(5,2,3,1,4,0,2,3,4,1,0,0,3,4,1,0,0,0,4,1,0,0,0,0,1)
 Matrix = matrix(Matrix,5,5)

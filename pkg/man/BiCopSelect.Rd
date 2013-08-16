@@ -149,7 +149,7 @@ cop2$family
 cop2$par
 cop2$par2
 
-\donotrun{
+\dontrun{
 ## Example 3: empirical data
 data(daxreturns)
 cop3 = BiCopSelect(daxreturns[,1],daxreturns[,4],
