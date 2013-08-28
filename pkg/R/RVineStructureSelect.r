@@ -88,7 +88,7 @@ findMaximumTauTree <- function(g,mode="RVine")
 	}
 	else if(mode == "CVine")
 	{
-		M = abs(get.adjacency(g,attr="weight"))
+		M = abs(get.adjacency(g,attr="weight",sparse=0))
 		sumtaus = rowSums(M)
 		root = which.max(sumtaus)
 		
