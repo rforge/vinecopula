@@ -11,7 +11,7 @@ BiCopSelect <- function(u1,u2,familyset=NA,selectioncrit="AIC",indeptest=FALSE,l
   if(any(u2>1) || any(u2<0)) 
     stop("Data has to be in the interval [0,1].")	
   if(any(is.na(familyset)))
-    familyset <- c(1:10,13,14,16:20,23,24,26:30,33,34,36:40,41,51,61,71)
+    familyset <- c(1:10,13,14,16:20,23,24,26:30,33,34,36:40)
   if(any(!(familyset %in% c(0,1:10,13,14,16:20,23,24,26:30,33,34,36:40,41,51,61,71))))
     stop("Copula family not implemented.")
   if(selectioncrit != "AIC" && selectioncrit != "BIC") 
