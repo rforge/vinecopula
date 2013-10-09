@@ -44,7 +44,15 @@ BiCopCDF(u1, u2, family, par, par2=0)
 		\code{37} = rotated BB1 copula (270 degrees) \cr
 		\code{38} = rotated BB6 copula (270 degrees) \cr
 		\code{39} = rotated BB7 copula (270 degrees) \cr
-		\code{40} = rotated BB8 copula (270 degrees) 
+		\code{40} = rotated BB8 copula (270 degrees) \cr
+    \code{104} = Tawn copula with fixed third parameter \cr
+    \code{114} = rotated Tawn copula (180 degrees) with fixed third parameter \cr
+    \code{124} = rotated Tawn copula (90 degrees) with fixed third parameter \cr
+    \code{134} = rotated Tawn copula (270 degrees) with fixed third parameter \cr
+    \code{204} = Tawn copula with fixed second parameter \cr
+    \code{214} = rotated Tawn copula (180 degrees) with fixed second parameter \cr
+    \code{224} = rotated Tawn copula (90 degrees) with fixed second parameter \cr
+    \code{234} = rotated Tawn copula (270 degrees) with fixed second parameter \cr
 		}
   \item{par}{Copula parameter.}
   \item{par2}{Second parameter for bivariate copulas with two parameters (t, BB1, BB6, BB7, BB8; default: \code{par2 = 0}). \code{par2} should be an positive integer for the Students's t copula \code{family=2}.}
