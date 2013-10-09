@@ -56,7 +56,7 @@ The specification of an R-vine is done in matrix notation, introduced by Dissman
 one the copula families utilized and two matrices corresponding parameter values. 
 These four matrices are stored in an \code{RVineMatrix} object created by the function \code{RVineMatrix}. Each matrix is a d x d lower triangular matrix.
 Since C- and D-vines are special cases, boundary cases, of R-vines one can write each C- or D-vine in R-vine notation. The transformation
-of notation to or from an R-vine can be done via \code{C2RVine, D2RVine, R2CVine} and \code{R2DVine}, which provide an interface to the package CDVine.
+of notation to an R-vine can be done via \code{C2RVine} and \code{D2RVine}, which provide an interface to the package CDVine.
 For more details see the documentation of the functions.
 }
 
@@ -73,11 +73,11 @@ We are especially grateful to Harry Joe for his contributions to the implementat
 \tabular{ll}{
 Package: \tab VineCopula\cr
 Type: \tab Package\cr
-Version: \tab 1.1-2\cr
-Date: \tab 2013-08-16\cr
+Version: \tab 1.2\cr
+Date: \tab 2013-09-03\cr
 License: \tab GPL (>=2)\cr
 Depends: \tab R (\eqn{\geq 2.11.0}{>= 2.11.0}), MASS, mvtnorm, igraph \cr
-Suggests: \tab CDVine, TSP \cr
+Suggests: \tab CDVine, TSP, ADGofTest \cr
 LazyLoad: \tab yes
 }
 }
@@ -105,7 +105,7 @@ Canadian Journal of Statistics 40 (1), 68-85.
 
 Brechmann, E. C. and C. Czado (2011).
 Risk management with high-dimensional vine copulas: An analysis of the Euro Stoxx 50.
-Submitted for publication.
+Statistics & Risk Modeling, to appear
 \url{http://mediatum.ub.tum.de/node?id=1079276}.
 
 Brechmann, E. C. and U. Schepsmeier (2013).
@@ -144,11 +144,23 @@ Singapore: World Scientific Publishing Co.
 
 Schepsmeier, U. and J. Stoeber (2012).
 Derivatives and Fisher information of bivariate copulas.
-Submitted for publication.
-\url{http://mediatum.ub.tum.de/node?id=1106541}.
+Statistical Papers.
+\url{http://link.springer.com/article/10.1007/s00362-013-0498-x}.
+
+Schepsmeier, U. (2013)
+A goodness-of-fit test for regular vine copula models. 
+Preprint
+\url{http://arxiv.org/abs/1306.0818}
+
+Schepsmeier, U. (2013)
+Efficient goodness-of-fit tests in multi-dimensional vine copula models. 
+Preprint
 
 Stoeber, J. and U. Schepsmeier (2012).
-Is there significant time-variation in multivariate copulas?
-Submitted for publication.
-\url{http://arxiv.org/abs/1205.4841}.
+Estimating standard errors in regular vine copula models. Computational Statistics, 1-29
+\url{http://link.springer.com/article/10.1007/s00180-013-0423-8#}.
+
+White, H. (1982)
+Maximum likelihood estimation of misspecified models,
+Econometrica, 50, 1-26.
 }

@@ -1,9 +1,28 @@
 Changes for R-package VineCopula
 
-Ulf Schepsmeier, Jakob Stoeber and Eike Christian Brechmann <VineCopula@ma.tum.de>
+Ulf Schepsmeier, Jakob Stoeber, Eike Christian Brechmann and Benedikt Graeler <VineCopula@ma.tum.de>
 
 
-Version 1.1-2 (July, 09, 2013)
+Version 1.2 (October 09, 2013)
+
+- New functionality:
+  * RVinePIT 		Calculation of the probability integral transform (PIT) for R-vines
+  * RVineGofTest 	15 different goodness-of-fit tests for R-vine copulas (Schepsmeier 2013).
+  * print.RVM		A more detailed summary is printed if print(RVM, detail=TRUE) is set.
+  * BetaMatrix  Matrix of empirical Blomqvist's beta values
+  * BiCopPar2Beta   Blomqvist's beta value of a bivariate copula
+  * RVinePar2Beta   Blomqvist's beta values of an R-vine copula model
+  * New copula familes for most of the BiCop as well as for the RVine-functions: The Tawn copula has be definition three parameters. We fixed the second or the third parameter to one to stay consitent with the notation used so far.
+The families 104,114,124,134 denote the Tawn copula and their rotated versions in the case that the third parameter is fixed to 1.
+The families 204,214,224,234 denote the Tawn copula and their rotated versions in the case that the second parameter is fixed to 1.
+  
+- Bug fix:
+  * RVineStructureSelect: Corrected code for the igraph package
+
+- Documentation update
+
+
+Version 1.1-2 (July 09, 2013)
 
 - Changed dependency from "igraph0" to "igraph" since the support for "igraph0" will be quit soon.
 
@@ -14,7 +33,7 @@ Version 1.1-2 (July, 09, 2013)
   In our functions it is "family=41", and 51, 61, and 71 for the rotated versions.
   So far only implemented in some bivariate functions (not documented so far; experimental)
 
-- New author: Benedikt Gräler  
+- New author: Benedikt Gr?ler  
   
 - Bug fix:
   * New (correct) examples for the Clarke and Vuong test
