@@ -15,11 +15,11 @@ BiCopCDF(u1, u2, family, par, par2=0)
   \item{u1,u2}{Numeric vectors of equal length with values in [0,1].}
   \item{family}{An integer defining the bivariate copula family: \cr
 		\code{0} = independence copula \cr
-	        \code{1} = Gaussian copula \cr
-	        \code{3} = Clayton copula \cr
-	        \code{4} = Gumbel copula \cr
-	        \code{5} = Frank copula \cr
-	        \code{6} = Joe copula \cr 
+	  \code{1} = Gaussian copula \cr
+	  \code{3} = Clayton copula \cr
+	  \code{4} = Gumbel copula \cr
+	  \code{5} = Frank copula \cr
+	  \code{6} = Joe copula \cr 
 		\code{7} = BB1 copula \cr
 		\code{8} = BB6 copula \cr
 		\code{9} = BB7 copula \cr
@@ -45,17 +45,17 @@ BiCopCDF(u1, u2, family, par, par2=0)
 		\code{38} = rotated BB6 copula (270 degrees) \cr
 		\code{39} = rotated BB7 copula (270 degrees) \cr
 		\code{40} = rotated BB8 copula (270 degrees) \cr
-    \code{104} = Tawn copula with fixed third parameter \cr
-    \code{114} = rotated Tawn copula (180 degrees) with fixed third parameter \cr
-    \code{124} = rotated Tawn copula (90 degrees) with fixed third parameter \cr
-    \code{134} = rotated Tawn copula (270 degrees) with fixed third parameter \cr
-    \code{204} = Tawn copula with fixed second parameter \cr
-    \code{214} = rotated Tawn copula (180 degrees) with fixed second parameter \cr
-    \code{224} = rotated Tawn copula (90 degrees) with fixed second parameter \cr
-    \code{234} = rotated Tawn copula (270 degrees) with fixed second parameter \cr
+    \code{104} = Tawn type 1 copula \cr
+    \code{114} = rotated Tawn type 1 copula (180 degrees) \cr
+    \code{124} = rotated Tawn type 1 copula (90 degrees)  \cr
+    \code{134} = rotated Tawn type 1 copula (270 degrees) \cr
+    \code{204} = Tawn type 2 copula  \cr
+    \code{214} = rotated Tawn type 2 copula (180 degrees) \cr
+    \code{224} = rotated Tawn type 2 copula (90 degrees)  \cr
+    \code{234} = rotated Tawn type 2 copula (270 degrees) \cr
 		}
   \item{par}{Copula parameter.}
-  \item{par2}{Second parameter for bivariate copulas with two parameters (t, BB1, BB6, BB7, BB8; default: \code{par2 = 0}). \code{par2} should be an positive integer for the Students's t copula \code{family=2}.}
+  \item{par2}{Second parameter for bivariate copulas with two parameters (t, BB1, BB6, BB7, BB8, Tawn type 1 and type 2; default: \code{par2 = 0}). \code{par2} should be an positive integer for the Students's t copula \code{family=2}.}
 }
 
 \value{

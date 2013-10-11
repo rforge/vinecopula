@@ -28,6 +28,11 @@ The two parameter BB1, BB6, BB7 and BB8 copulas are however numerically instable
 in particular, if BB6, BB7 and BB8 copulas are close to the Joe copula which is a boundary case of these three copula families.
 In general, the user should be careful with extreme parameter choices.
 
+As an asymmetric extension of the Gumbel copula, the Tawn copula with three parameters is now also included in the package.
+Both the Gumbel and the Tawn copula are extreme-value copulas, which can be defined in terms of their corresponding Pickands dependence functions.
+For simplicity, we implemented two versions of the Tawn copula with two parameters each.
+Each type has one of the asymmetry parameters fixed to 1, so that the corresponding Pickands dependence is either left- or right-skewed. In the manual we will call these two new copulas "Tawn type 1" and "Tawn type 2".
+
 The following table shows the parameter ranges of bivariate copula families with parameters \code{par} and \code{par2}:
 \tabular{lll}{
 Copula family \tab \code{par} \tab \code{par2} \cr
@@ -48,6 +53,8 @@ Rotated Clayton-Gumbel (90 and 270 degrees) \tab \eqn{(-\infty,0)} \tab \eqn{(-\
 Rotated Joe-Gumbel (90 and 270 degrees) \tab \eqn{(-\infty,-1]} \tab \eqn{(-\infty,-1]} \cr
 Rotated Joe-Clayton (90 and 270 degrees) \tab \eqn{(-\infty,-1]} \tab \eqn{(-\infty,0)} \cr
 Rotated Joe-Frank (90 and 270 degrees) \tab \eqn{(-\infty,-1]} \tab \eqn{[-1,0)} \cr
+(Survival) Tawn type 1 and type 2 \tab \eqn{[1,\infty)} \tab \eqn{[0,1]} \cr
+Rotated Tawn type 1 and type 2 (90 and 270 degrees) \tab \eqn{(-\infty,-1]} \tab \eqn{[0,1]} \cr
 }  
 }
 

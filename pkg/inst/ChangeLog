@@ -12,9 +12,12 @@ Version 1.2 (October 09, 2013)
   * BetaMatrix  Matrix of empirical Blomqvist's beta values
   * BiCopPar2Beta   Blomqvist's beta value of a bivariate copula
   * RVinePar2Beta   Blomqvist's beta values of an R-vine copula model
-  * New copula familes for most of the BiCop as well as for the RVine-functions: The Tawn copula has be definition three parameters. We fixed the second or the third parameter to one to stay consitent with the notation used so far.
-The families 104,114,124,134 denote the Tawn copula and their rotated versions in the case that the third parameter is fixed to 1.
-The families 204,214,224,234 denote the Tawn copula and their rotated versions in the case that the second parameter is fixed to 1.
+  * New copula familes for most of the BiCop as well as for the RVine-functions: As an asymmetric extension of the Gumbel copula, the Tawn copula with three parameters is now also included in the package.
+Both the Gumbel and the Tawn copula are extreme-value copulas, which can be defined in terms of their corresponding Pickands dependence functions.
+For simplicity, we implemented two versions of the Tawn copula with two parameters each.
+Each type has one of the asymmetry parameters fixed to 1, so that the corresponding Pickands dependence is either left- or right-skewed. In the manual we will call these two new copulas "Tawn type 1" and "Tawn type 2". 
+The families 104,114,124,134 denote the Tawn copula and their rotated versions in the case of left skewness (Tawn type 1).
+The families 204,214,224,234 denote the Tawn copula and their rotated versions in the case of right skewness (Tawn type 2).
   
 - Bug fix:
   * RVineStructureSelect: Corrected code for the igraph package
