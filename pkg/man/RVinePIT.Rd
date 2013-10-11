@@ -48,7 +48,7 @@ of Mathematical Statistics 23 (3), 470-472.
 
 Schepsmeier, U. (2013)
 Efficient goodness-of-fit tests in multi-dimensional vine copula models. 
-Preprint
+\url{http://arxiv.org/abs/1309.5808}
 }
 
 \examples{

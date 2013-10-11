@@ -28,7 +28,7 @@ The two parameter BB1, BB6, BB7 and BB8 copulas are however numerically instable
 in particular, if BB6, BB7 and BB8 copulas are close to the Joe copula which is a boundary case of these three copula families.
 In general, the user should be careful with extreme parameter choices.
 
-As an asymmetric extension of the Gumbel copula, the Tawn copula with three parameters is now also included in the package.
+As an asymmetric extension of the Gumbel copula, the Tawn copula with three parameters is also included in the package.
 Both the Gumbel and the Tawn copula are extreme-value copulas, which can be defined in terms of their corresponding Pickands dependence functions.
 For simplicity, we implemented two versions of the Tawn copula with two parameters each.
 Each type has one of the asymmetry parameters fixed to 1, so that the corresponding Pickands dependence is either left- or right-skewed. In the manual we will call these two new copulas "Tawn type 1" and "Tawn type 2".
@@ -81,7 +81,7 @@ We are especially grateful to Harry Joe for his contributions to the implementat
 Package: \tab VineCopula\cr
 Type: \tab Package\cr
 Version: \tab 1.2\cr
-Date: \tab 2013-09-03\cr
+Date: \tab 2013-10-11\cr
 License: \tab GPL (>=2)\cr
 Depends: \tab R (\eqn{\geq 2.11.0}{>= 2.11.0}), MASS, mvtnorm, igraph \cr
 Suggests: \tab CDVine, TSP, ADGofTest \cr
@@ -90,7 +90,7 @@ LazyLoad: \tab yes
 }
 
 \author{
-Ulf Schepsmeier, Jakob Stoeber, Eike Christian Brechmann <VineCopula@ma.tum.de>
+Ulf Schepsmeier, Jakob Stoeber, Eike Christian Brechmann, Benedikt Graeler <VineCopula@ma.tum.de>
 }
 
 \references{ 
@@ -128,6 +128,11 @@ Dissmann, J. F., E. C. Brechmann, C. Czado, and D. Kurowicka (2013).
 Selecting and estimating regular vine copulae and application to financial returns.
 Computational Statistics & Data Analysis, 59 (1), 52-69.
 
+Eschenburg, P. (2013).
+Properties of extreme-value copulas
+Diploma thesis, Technische Universitaet Muenchen
+\url{http://mediatum.ub.tum.de/node?id=1145695}
+
 Joe, H. (1996).
 Families of m-variate distributions with given margins and m(m-1)/2 bivariate dependence parameters.
 In L. Rueschendorf, B. Schweizer, and M. D. Taylor (Eds.), Distributions with fixed marginals and related topics, pp. 120-141.
@@ -149,6 +154,10 @@ Kurowicka, D. and H. Joe (Eds.) (2011).
 Dependence Modeling: Vine Copula Handbook.
 Singapore: World Scientific Publishing Co.
 
+Nelsen, R. (2006). 
+An introduction to copulas. 
+Springer
+
 Schepsmeier, U. and J. Stoeber (2012).
 Derivatives and Fisher information of bivariate copulas.
 Statistical Papers.
@@ -161,9 +170,9 @@ Preprint
 
 Schepsmeier, U. (2013)
 Efficient goodness-of-fit tests in multi-dimensional vine copula models. 
-Preprint
+\url{http://arxiv.org/abs/1309.5808}
 
-Stoeber, J. and U. Schepsmeier (2012).
+Stoeber, J. and U. Schepsmeier (2013).
 Estimating standard errors in regular vine copula models. Computational Statistics, 1-29
 \url{http://link.springer.com/article/10.1007/s00180-013-0423-8#}.
 

@@ -133,7 +133,7 @@ Preprint
 
 Schepsmeier, U. (2013)
 Efficient goodness-of-fit tests in multi-dimensional vine copula models. 
-Preprint
+\url{http://arxiv.org/abs/1309.5808}
 
 Wanling, H. and A. Prokhorov (2011).
 A Goodness-of-fit Test for Copulas.
