@@ -102,8 +102,8 @@ No. \tab Lower tail dependence \tab Upper tail dependence \cr
 \code{28, 38} \tab - \tab - \cr
 \code{29, 39} \tab - \tab - \cr
 \code{30, 40} \tab - \tab - \cr
-\code{104, 204} \tab - \tab \eqn{\Psi_1+\Psi_2-2((0.5\Psi_1)^{\theta}+(0.5\Psi_2)^{\theta})^{1/\theta}} \cr
-\code{114, 214} \tab \eqn{\Psi_1+\Psi_2-2((0.5\Psi_1)^{\theta}+(0.5\Psi_2)^{\theta})^{1/\theta}} \tab - \cr
+\code{104,204} \tab - \tab \eqn{\delta+1-(\delta^{\theta}+1)^{1/\theta}} \cr
+\code{114, 214} \tab \eqn{1+\delta-(\delta^{\theta}+1)^{1/\theta}} \tab - \cr
 \code{124, 224} \tab - \tab - \cr
 \code{134, 234} \tab - \tab - \cr
 }
