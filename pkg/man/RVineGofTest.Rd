@@ -13,7 +13,8 @@ RVineGofTest(data,RVM,method="White",statistic="CvM",B=200,alpha=2)
 
 \arguments{
   \item{data}{An N x d data matrix (with uniform margins).} 
-  \item{RVM}{\code{\link{RVineMatrix}} objects of the R-vine model under the null hypothesis.}
+  \item{RVM}{\code{\link{RVineMatrix}} objects of the R-vine model under the null hypothesis. \cr
+  Note that the pair-copula families in the R-vine Matrix object have to be a member of the vector \code{(0,1:6,13,14,16,23,24,26,33,34,36)}}
   \item{method}{A string indicating the goodness-of-fit method:\cr
 		\code{"White"} = goodness-of-fit test based on White's information matrix equality (default) \cr
 		\code{"IR"} = goodness-of-fit test based on the information ratio \cr
