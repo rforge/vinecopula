@@ -51,6 +51,15 @@ RVineMLE <- function(data, RVM, start=RVM$par, start2=RVM$par2, maxit=200, max.d
 			if ((RVM$family[i,j]==104 || RVM$family[i,j]==114 || RVM$family[i,j]==204 || RVM$family[i,j]==214) && (start2[i,j]<0 || start2[i,j]>1)) stop("Please choose 'par2' of the Tawn copula in [0,1].")
 			if ((RVM$family[i,j]==124 || RVM$family[i,j]==134 || RVM$family[i,j]==224 || RVM$family[i,j]==234) && start[i,j]>-1) stop("Please choose 'par' of the Tawn copula in (-oo,-1].")
 			if ((RVM$family[i,j]==124 || RVM$family[i,j]==134 || RVM$family[i,j]==224 || RVM$family[i,j]==234) && (start2[i,j]<0 || start2[i,j]>1)) stop("Please choose 'par2' of the Tawn copula in [0,1].")
+		
+		  if(grad==TRUE)
+		  {
+        if(RVM$family[i,j]%in%c(7:10,17:20,27:30,37:40,104,114,124,134,204,214,224,234))
+        {
+          message("The combination 'grad=TRUE' and a copula family of the vector (7:10,17:20,27:30,37:40,104,114,124,134,204,214,224,234) is not possible. The algorithm will continue with 'grad=FALSE'.")
+          grad=FALSE
+        }
+		  }
 		}
 	  }
 	}
@@ -154,7 +163,7 @@ RVineMLE <- function(data, RVM, start=RVM$par, start2=RVM$par2, maxit=200, max.d
 		}else if(Copula.Types[i] %in% c(43,44)){ #double Clayton, Gumbel
 				lb[i] = -0.9999
 				ub[i] = 0.9999
-		}else if(Copula.Types[i] %in% c(104,114,2014,214)){ #Tawn
+		}else if(Copula.Types[i] %in% c(104,114,204,214)){ #Tawn
 				lb[i] = 1.001
 				ub[i] = 20
 		}else if(Copula.Types[i] %in% c(124,134,224,234)){ #Tawn
@@ -167,41 +176,39 @@ RVineMLE <- function(data, RVM, start=RVM$par, start2=RVM$par2, maxit=200, max.d
 	if(nParams2 > 0){
 	    todo = which(Copula.Types %in% c(2,7:10,17:20,27:30,37:40,104,114,124,134,204,214,224,234))	
 		
-	    for(i in 1:nParams2){
-  		if(Copula.Types[todo[i]]==2){ #t
-  				lb[nParams+i] = 2.001
-  				ub[nParams+i] = max.df
-		}else if(Copula.Types[todo[i]] %in% c(7,17)){ #bb1
-				lb[nParams+i] = 1.001
-  				ub[nParams+i] = max.BB$BB1[2]
-		}else if(Copula.Types[todo[i]] %in% c(8,18)){ #bb6
-				lb[nParams+i] = 1.001
-  				ub[nParams+i] = max.BB$BB6[2]
-		}else if(Copula.Types[todo[i]] %in% c(9,19)){ #bb7
-  				lb[nParams+i] = 0.001
-  				ub[nParams+i] = max.BB$BB7[2]
-		}else if(Copula.Types[todo[i]] %in% c(10,20)){ #bb8
-				lb[nParams+i] = 0.001
-  				ub[nParams+i] = max.BB$BB1[2]
-		}else if(Copula.Types[todo[i]] %in% c(27,37)){ #rotated bb1
-				lb[nParams+i] = -max.BB$BB1[2]
-  				ub[nParams+i] = -1.001
-		}else if(Copula.Types[todo[i]] %in% c(28,38)){ #rotated bb6
-				lb[nParams+i] = -max.BB$BB6[2]
-  				ub[nParams+i] = -1.001
-		}else if(Copula.Types[todo[i]] %in% c(29,39)){ #rotated bb7
-				lb[nParams+i] = -max.BB$BB7[2]
-  				ub[nParams+i] = -1.001
-		}else if(Copula.Types[todo[i]] %in% c(30,40)){ #rotated bb8
-				lb[nParams+i] = -max.BB$BB8[2]
-  				ub[nParams+i] = -0.001
-		}else if(Copula.Types[i] %in% c(104,114,2014,214)){ #Tawn
-				lb[nParams+i] = 0.001
-				ub[nParams+i] = 0.99
-		}else if(Copula.Types[i] %in% c(124,134,224,234)){ #Tawn
-				lb[nParams+i] = -0.99
-				ub[nParams+i] = -0.001
-		}
+	    for(i in 1:nParams2)
+        {
+      		if(Copula.Types[todo[i]]==2){ #t
+      				lb[nParams+i] = 2.001
+      				ub[nParams+i] = max.df
+      		}else if(Copula.Types[todo[i]] %in% c(7,17)){ #bb1
+      				lb[nParams+i] = 1.001
+        				ub[nParams+i] = max.BB$BB1[2]
+      		}else if(Copula.Types[todo[i]] %in% c(8,18)){ #bb6
+      				lb[nParams+i] = 1.001
+        				ub[nParams+i] = max.BB$BB6[2]
+      		}else if(Copula.Types[todo[i]] %in% c(9,19)){ #bb7
+        				lb[nParams+i] = 0.001
+        				ub[nParams+i] = max.BB$BB7[2]
+      		}else if(Copula.Types[todo[i]] %in% c(10,20)){ #bb8
+      				lb[nParams+i] = 0.001
+        				ub[nParams+i] = max.BB$BB1[2]
+      		}else if(Copula.Types[todo[i]] %in% c(27,37)){ #rotated bb1
+      				lb[nParams+i] = -max.BB$BB1[2]
+        				ub[nParams+i] = -1.001
+      		}else if(Copula.Types[todo[i]] %in% c(28,38)){ #rotated bb6
+      				lb[nParams+i] = -max.BB$BB6[2]
+        				ub[nParams+i] = -1.001
+      		}else if(Copula.Types[todo[i]] %in% c(29,39)){ #rotated bb7
+      				lb[nParams+i] = -max.BB$BB7[2]
+        				ub[nParams+i] = -1.001
+      		}else if(Copula.Types[todo[i]] %in% c(30,40)){ #rotated bb8
+      				lb[nParams+i] = -max.BB$BB8[2]
+        				ub[nParams+i] = -0.001
+      		}else if(Copula.Types[i] %in% c(104,114,124,134,204,214,224,234)){ #Tawn
+      				lb[nParams+i] = 0.001
+      				ub[nParams+i] = 0.99
+      		}
   	    }
 	}
 	
@@ -294,9 +301,14 @@ RVineMLE <- function(data, RVM, start=RVM$par, start2=RVM$par2, maxit=200, max.d
 	{
 		pscale[i] = ifelse(Copula.Types[i] %in% c(1,2,43,44), 0.01, 1)
 	}
-	pscale=c(pscale,rep(1,nParams2))
+  pscale2=numeric()
+  for(i in 1:nParams2)
+  {
+    pscale2[i] = ifelse(Copula.Types[i] %in% c(104,114,124,134,204,214,224,234), 0.05, 1)
+  }
+	pscale=c(pscale,pscale2)
 
-	if(!exists("factr"))		# Toleranz etwas hoch setzen (gröber)
+	if(!exists("factr"))		# Toleranz etwas hoch setzen (groeber)
 		factr=1e8
 
 	if(all(Copula.Types %in% c(0,1,2,3:6,13,14,16,23,24,26,33,34,36,43,44)) && grad==TRUE)
@@ -332,6 +344,12 @@ RVineMLE <- function(data, RVM, start=RVM$par, start2=RVM$par2, maxit=200, max.d
 		}
 		else
 		{
+      #print("startpar1")
+      #print(startpar1)
+      #print("lower")
+      #print(lb)
+      #print("upper")
+      #print(ub)
 			out1 = optim(par=startpar1,fn=optim_LL,
 			data=data,posParams=posParams,posParams2=posParams2,Copula.Types=Copula.Types,start=start,start2=start2,RVM=RVM, calcupdate=NA,
 			method="L-BFGS-B",control=list(fnscale=-1,maxit=maxit,trace=1,parscale=pscale,factr=factr,...),lower=lb,upper=ub)
