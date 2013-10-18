@@ -12,7 +12,7 @@ The given matrix is tested to be a valid R-vine matrix.
 
 \arguments{
   \item{M}{A dxd vine matrix: only lower triangle is used;
-For the check, M is assumed to be in natural order, i.e. 1:d on diagonal.
+For the check, M is assumed to be in natural order, i.e. d:1 on diagonal.
 Further M[j-1,j]=j-1 and M[j,j]=j
 }
 }

@@ -12,7 +12,8 @@ RVinePar2Beta(RVM)
 }
 
 \arguments{
-  \item{RVM}{An \code{\link{RVineMatrix}} object.}
+  \item{RVM}{An \code{\link{RVineMatrix}} object. \cr
+  Note that the Student's t-copula is not allowed since the CDF of the t-copula is not implemented (see \code{\link{BiCopCDF}} and \code{\link{BiCopPar2Beta}}).}
 }
 
 \value{
@@ -20,7 +21,7 @@ Matrix with the same structure as the family and parameter matrices of the \code
 are values of Blomqvist's beta corresponding to the families and parameters of the R-vine copula model given by \code{RVM}.
 }
 
-\author{Jeffrey Dissmann}
+\author{Ulf Schepsmeier}
 
 \seealso{\code{\link{RVineMatrix}}, \code{\link{BiCopPar2Beta}}}
 

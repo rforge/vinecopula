@@ -21,6 +21,7 @@ The families 204,214,224,234 denote the Tawn copula and their rotated versions i
   
 - Bug fix:
   * RVineStructureSelect: Corrected code for the igraph package
+  * RVineTreePlot: Now a 3-dimensional R-vine can be plotted too.
 
 - Documentation update
 

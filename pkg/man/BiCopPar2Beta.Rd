@@ -15,7 +15,6 @@ BiCopPar2Beta(family,par,par2=0)
   \item{family}{An integer defining the bivariate copula family:\cr
 		\code{0} = independence copula \cr
 	        \code{1} = Gaussian copula \cr
-	        \code{2} = Student t copula (t-copula) \cr
 	        \code{3} = Clayton copula \cr
 	        \code{4} = Gumbel copula \cr
 	        \code{5} = Frank copula \cr
@@ -53,6 +52,7 @@ BiCopPar2Beta(family,par,par2=0)
     \code{214} = rotated Tawn type 2 copula (180 degrees) \cr
     \code{224} = rotated Tawn type 2 copula (90 degrees)  \cr
     \code{234} = rotated Tawn type 2 copula (270 degrees) \cr
+    Note that the Student's t-copula is not allowed since the CDF of the t-copula is not implemented (see \code{\link{BiCopCDF}}).
 		}
   \item{par}{Copula parameter.}
   \item{par2}{Second parameter for the two parameter BB1, BB6, BB7, BB8, Tawn type 1 and type 2 copulas (default: \code{par2 = 0}).}

@@ -14,7 +14,24 @@ RVineGofTest(data,RVM,method="White",statistic="CvM",B=200,alpha=2)
 \arguments{
   \item{data}{An N x d data matrix (with uniform margins).} 
   \item{RVM}{\code{\link{RVineMatrix}} objects of the R-vine model under the null hypothesis. \cr
-  Note that the pair-copula families in the R-vine Matrix object have to be a member of the vector \code{(0,1:6,13,14,16,23,24,26,33,34,36)}}
+  Only the following copula families are allowed in \code{RVM$family} due to restrictions in \code{\link{RVineGrad}} and \code{\link{RVineHessian}}  \cr
+  	\code{0} = independence copula \cr
+		\code{1} = Gaussian copula \cr
+		\code{2} = Student t copula (t-copula)\cr
+		\code{3} = Clayton copula \cr
+		\code{4} = Gumbel copula \cr
+		\code{5} = Frank copula \cr
+		\code{6} = Joe copula \cr 
+		\code{13} = rotated Clayton copula (180 degrees; ``survival Clayton'') \cr
+		\code{14} = rotated Gumbel copula (180 degrees; ``survival Gumbel'') \cr
+		\code{16} = rotated Joe copula (180 degrees; ``survival Joe'') \cr 
+		\code{23} = rotated Clayton copula (90 degrees) \cr
+		\code{24} = rotated Gumbel copula (90 degrees) \cr
+		\code{26} = rotated Joe copula (90 degrees) \cr
+		\code{33} = rotated Clayton copula (270 degrees) \cr
+		\code{34} = rotated Gumbel copula (270 degrees) \cr
+		\code{36} = rotated Joe copula (270 degrees) \cr
+		}
   \item{method}{A string indicating the goodness-of-fit method:\cr
 		\code{"White"} = goodness-of-fit test based on White's information matrix equality (default) \cr
 		\code{"IR"} = goodness-of-fit test based on the information ratio \cr
@@ -30,7 +47,7 @@ RVineGofTest(data,RVM,method="White",statistic="CvM",B=200,alpha=2)
 		\code{"AD"} = Anderson-Darling test statistic (only univariate for \code{"Breymann"}, \code{"Berg"} and \code{"Berg2"})
 		}
 	\item{B}{an integer for the number of bootstrap steps (default \code{B=200})\cr
-	For \code{B = 0} the asymptotic p-value is returned if available, otherwise only the the test statistic is returned.\cr
+	For \code{B = 0} the asymptotic p-value is returned if available, otherwise only the test statistic is returned.\cr
     WARNING: If \code{B} is chosen too large, computations will take very long.}
 	\item{alpha}{an integer of the set \code{2,4,6,...} for the \code{"Berg2"} goodness-of-fit test (default \code{alpha=2})}
 }
@@ -68,7 +85,7 @@ against the alternative
 }
 where \eqn{\boldsymbol{H}(\theta)} is the expected Hessian matrix and \eqn{\boldsymbol{C}(\theta)} is the expected outer product of the score function. \cr
 For the calculation of the test statistic we use the consistent maximum likelihood estimator \eqn{\hat{\theta}} and the sample counter parts of \eqn{\boldsymbol{H}(\theta)} and \eqn{\boldsymbol{C}(\theta)}. \cr
-The correction of the Covariance-Matrix in the test statistic for the uncertainty in the margins is skipped. The implemented tests assumes that where is no uncertainty in the margins. The correction can be found in Wanling and Prokhorov (2011) for bivariate copulas and in Schepsmeier (2013) for vine copulas. It involves multi-dimensional integrals. \cr
+The correction of the Covariance-Matrix in the test statistic for the uncertainty in the margins is skipped. The implemented test assumes that there is no uncertainty in the margins. The correction can be found in Wanling and Prokhorov (2011) for bivariate copulas and in Schepsmeier (2013) for vine copulas. It involves multi-dimensional integrals. \cr
 
 \code{method="IR"}: \cr
 As the White test the information matrix ratio test is based on the expected Hessian matrix \eqn{\boldsymbol{H}(\theta)} and the expected outer product of the score function \eqn{\boldsymbol{C}(\theta)}. \cr
