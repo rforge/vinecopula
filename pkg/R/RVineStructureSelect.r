@@ -368,11 +368,11 @@ fit.ACopula <- function(u1,u2,familyset=NA,selectioncrit="AIC",indeptest=FALSE,l
 {
 
 	out=BiCopSelect(u1,u2,familyset,selectioncrit,indeptest,level,weights=weights)
-	if(out$family%in%c(23,24,26:30))
+	if(out$family%in%c(23,24,26:30,124,224))
 	{
 		out$family=out$family+10
 	}
-	else if(out$family%in%c(33,34,36:40))
+	else if(out$family%in%c(33,34,36:40,134,234))
 	{
 		out$family=out$family-10
 	}
