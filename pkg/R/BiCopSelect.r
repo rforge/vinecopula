@@ -25,6 +25,7 @@ BiCopSelect <- function(u1,u2,familyset=NA,selectioncrit="AIC",indeptest=FALSE,l
     if(!is.na(familyset[1]) && (!any(c(1,2,5,23,24,26:30,33,34,36:40,104,114,204,214) %in% familyset) || !any(c(1:10,13,14,16:20,124,134,224,234) %in% familyset))) stop("'familyset' has to include at least one bivariate copula family for positive and one for negative dependence.")
 
     emp_tau = fasttau(data1,data2,weights)
+    
 
     if(indeptest == TRUE){
       out$p.value.indeptest = BiCopIndTest(data1,data2)$p.value

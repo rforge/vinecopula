@@ -209,7 +209,7 @@ void  Hfunc1(int* family,int* n,double* u,double* v,double* theta,double* nu,dou
 	else if(*family==104)
 	{
 		double par3=1;
-		dC_du(v,u,n,theta,nu,&par3,out);		// u und v kommen aus BiCopHfunc vertauscht hier an. Dreh zurück. NOch testen, wie sich das auf die anderen Funktione auswirkt
+		dC_du(v,u,n,theta,nu,&par3,out);		// u und v kommen aus BiCopHfunc vertauscht hier an. Dreh zur?ck. NOch testen, wie sich das auf die anderen Funktione auswirkt
 	}
 	else if(*family==114)
 	{
@@ -259,7 +259,7 @@ void  Hfunc1(int* family,int* n,double* u,double* v,double* theta,double* nu,dou
 			out[j]= 1-out[j];
 		}
 	}
-	else if(*family==124)
+	else if(*family==224)
 	{
 		double par3=*nu;
 		double par2=1;
@@ -269,7 +269,7 @@ void  Hfunc1(int* family,int* n,double* u,double* v,double* theta,double* nu,dou
 			dC_dv(&u[j],&negv[j],&T,&ntheta,&par2,&par3,&out[j]);
 		}
 	}
-	else if(*family==134)
+	else if(*family==234)
 	{
 		double par3=*nu;
 		double par2=1;
@@ -553,7 +553,7 @@ void Hfunc(int* family, int* n, double* u, double* v, double* theta, double* nu,
 			}
 			Free(param);		  
 		  }
-		else if(*family==13) //rotated clayton (180°)
+		else if(*family==13) //rotated clayton (180?)
 		  {
 			if(*theta == 0) h[j] = u[j] ;
 			if(*theta < XEPS) h[j] = u[j] ;
@@ -568,7 +568,7 @@ void Hfunc(int* family, int* n, double* u, double* v, double* theta, double* nu,
 				v[j]=1-v[j];
 		  }
 		  }
-		else if(*family==14) //rotated gumbel (180°)
+		else if(*family==14) //rotated gumbel (180?)
 			{
 					v[j]= 1-v[j];
 					u[j]= 1-u[j];
@@ -1158,7 +1158,7 @@ void Hinv(int* family, int* n, double* u, double* v, double* theta, double* nu, 
 			u[j]=1-u[j];
 			v[j]=1-v[j];
 	  }
-	else if(*family==14) //rotated gumbel (180°) - must turn to numerical inversion
+	else if(*family==14) //rotated gumbel (180?) - must turn to numerical inversion
 		{
       //int jj=4;
 			u[j]=1-u[j];
@@ -1169,7 +1169,7 @@ void Hinv(int* family, int* n, double* u, double* v, double* theta, double* nu, 
 			u[j]=1-u[j];
 			v[j]=1-v[j];
 		}
-	else if(*family==16) //rotated joe (180°) - must turn to numerical inversion
+	else if(*family==16) //rotated joe (180?) - must turn to numerical inversion
 		{
 			u[j]=1-u[j];
 			v[j]=1-v[j];			
@@ -1187,7 +1187,7 @@ void Hinv(int* family, int* n, double* u, double* v, double* theta, double* nu, 
 			u[j]=1-u[j];
 			v[j]=1-v[j];
 		}
-	else if(*family==17) //rotated BB1 (180°) - must turn to numerical inversion
+	else if(*family==17) //rotated BB1 (180?) - must turn to numerical inversion
 	{
 			int jj=7;
 			u[j]=1-u[j];
@@ -1198,7 +1198,7 @@ void Hinv(int* family, int* n, double* u, double* v, double* theta, double* nu, 
 			u[j]=1-u[j];
 			v[j]=1-v[j];
 	}
-	else if(*family==18) //rotated BB6 (180°) - must turn to numerical inversion
+	else if(*family==18) //rotated BB6 (180?) - must turn to numerical inversion
 	{
 			int jj=8;
 			u[j]=1-u[j];
@@ -1208,7 +1208,7 @@ void Hinv(int* family, int* n, double* u, double* v, double* theta, double* nu, 
 			u[j]=1-u[j];
 			v[j]=1-v[j];
 	}
-	else if(*family==19) //rotated BB7 (180°) - must turn to numerical inversion
+	else if(*family==19) //rotated BB7 (180?) - must turn to numerical inversion
 	{
 			int jj=9;
 			u[j]=1-u[j];
@@ -1218,7 +1218,7 @@ void Hinv(int* family, int* n, double* u, double* v, double* theta, double* nu, 
 			u[j]=1-u[j];
 			v[j]=1-v[j];
 	}
-	else if(*family==20) //rotated BB8 (180°) - must turn to numerical inversion
+	else if(*family==20) //rotated BB8 (180?) - must turn to numerical inversion
 	{
 			int jj=10;
 			u[j]=1-u[j];

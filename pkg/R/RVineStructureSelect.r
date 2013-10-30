@@ -30,6 +30,7 @@ RVineStructureSelect = function(data,familyset=NA,type=0,selectioncrit="AIC",ind
 	RVine$Tree[[1]] = VineTree
 	RVine$Graph[[1]] = g
 	oldVineGraph  = VineTree
+  
 	
 	for(i in 2:(n-1)){
 
