@@ -45,15 +45,15 @@ BiCopSelect <- function(u1,u2,familyset=NA,selectioncrit="AIC",indeptest=FALSE,l
 	    start[[2]] = c(sin(emp_tau*pi/2),10)
 	    start[[3]] = start[[13]] = 2*abs(emp_tau)/(1-abs(emp_tau))
 	    start[[4]] = start[[14]] = 1/(1-abs(emp_tau))
-	    start[[5]] = Frank.itau.JJ(emp_tau)
-	    start[[6]] = start[[16]] = Joe.itau.JJ(abs(emp_tau))
+	    if(5%in% familyset) start[[5]] = Frank.itau.JJ(emp_tau) else start[[5]] = 0
+	    if(any(c(6,16)%in% familyset)) start[[6]] = start[[16]] = Joe.itau.JJ(abs(emp_tau)) else start[[6]] = start[[16]] = 0
 	    start[[7]] = start[[17]] = c(0.5, 1.5)
 	    start[[8]] = start[[18]] = c(1.5, 1.5)
 	    start[[9]] = start[[19]] = c(1.5, 0.5)
 	    start[[10]] = start[[20]] = c(1.5,0.5)
 	    start[[23]] = start[[33]] = -2*abs(emp_tau)/(1-abs(emp_tau))
 	    start[[24]] = start[[34]] = -1/(1-abs(emp_tau))
-	    start[[26]] = start[[36]] = -Joe.itau.JJ(abs(emp_tau))
+	    if(any(c(26,36)%in% familyset)) start[[26]] = start[[36]] = -Joe.itau.JJ(abs(emp_tau)) else start[[26]] = start[[36]] = 0
 	    start[[27]] = start[[37]] = c(-0.5, -1.5)
 	    start[[28]] = start[[38]] = c(-1.5, -1.5)
 	    start[[29]] = start[[39]] = c(-1.5, -0.5)
