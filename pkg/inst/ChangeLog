@@ -20,6 +20,7 @@ The families 104,114,124,134 denote the Tawn copula and their rotated versions i
 The families 204,214,224,234 denote the Tawn copula and their rotated versions in the case of right skewness (Tawn type 2).
   
 - Bug fix:
+  * BiCopPar2Tau: corrected calculation of Kendall's tau of rotated BB7 (Reported by Giampiero Marra. Thanks!)
   * RVineStructureSelect: Corrected code for the igraph package
   * RVineTreePlot: Now a 3-dimensional R-vine can be plotted too.
   * Corrected upper tail dependence coefficient for the survival BB1 copula (BiCopPar2TailDep)

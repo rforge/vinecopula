@@ -95,8 +95,8 @@ BiCopPar2Tau<-function(family,par,par2=0)
 	}
 	else if(family==9 || family==19)
 	{
-		theta=par
-		delta=par2
+		#theta=par
+		#delta=par2
 		#tau=1-2/(delta*(2-theta))+4/(theta^2*delta)*gamma(delta+2)*gamma((2-2*theta)/(theta)+1)/gamma(delta+3+(2-2*theta)/(theta))
 		kt<-function(t) {( (1-(1-t)^par)^-par2-1 )/( -par*par2*(1-t)^(par-1)*(1-(1-t)^par)^(-par2-1) )}
 		tau=1+4*integrate(kt,0,1)$value
@@ -151,7 +151,7 @@ BiCopPar2Tau<-function(family,par,par2=0)
 		theta=-par
 		delta=-par2
 		#tau=1-2/(delta*(2-theta))+4/(theta^2*delta)*gamma(delta+2)*gamma((2-2*theta)/(theta)+1)/gamma(delta+3+(2-2*theta)/(theta))
-		kt<-function(t) {( (1-(1-t)^par)^(-par2)-1 )/( -par*par2*(1-t)^(par-1)*(1-(1-t)^par)^(par2-1) )}
+		kt<-function(t) {( (1-(1-t)^theta)^(-delta)-1 )/( -theta*delta*(1-t)^(theta-1)*(1-(1-t)^theta)^(-delta-1) )}
 		tau=1+4*integrate(kt,0,1)$value
 		tau=-tau
 	}
