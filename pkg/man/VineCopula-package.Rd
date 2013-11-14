@@ -81,7 +81,7 @@ We are especially grateful to Harry Joe for his contributions to the implementat
 Package: \tab VineCopula\cr
 Type: \tab Package\cr
 Version: \tab 1.2\cr
-Date: \tab 2013-10-11\cr
+Date: \tab 2013-11-11\cr
 License: \tab GPL (>=2)\cr
 Depends: \tab R (\eqn{\geq 2.11.0}{>= 2.11.0}), MASS, mvtnorm, igraph \cr
 Suggests: \tab CDVine, TSP, ADGofTest \cr

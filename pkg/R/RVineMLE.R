@@ -302,11 +302,14 @@ RVineMLE <- function(data, RVM, start=RVM$par, start2=RVM$par2, maxit=200, max.d
 		pscale[i] = ifelse(Copula.Types[i] %in% c(1,2,43,44), 0.01, 1)
 	}
   pscale2=numeric()
-  for(i in 1:nParams2)
+  if(nParams2>0)
   {
-    pscale2[i] = ifelse(Copula.Types[i] %in% c(104,114,124,134,204,214,224,234), 0.05, 1)
-  }
-	pscale=c(pscale,pscale2)
+	  for(i in 1:nParams2)
+	  {
+		pscale2[i] = ifelse(Copula.Types[i] %in% c(104,114,124,134,204,214,224,234), 0.05, 1)
+	  }
+		pscale=c(pscale,pscale2)
+	}
 
 	if(!exists("factr"))		# Toleranz etwas hoch setzen (groeber)
 		factr=1e8
