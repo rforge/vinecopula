@@ -287,8 +287,6 @@ BiCopSelect <- function(u1, u2, familyset=NA, selectioncrit="AIC", indeptest=FAL
         }
       }
       
-      cat(todo, "\n")
-      
       for(i in todo[!(todo%in%c(2,7:10,17:20,27:30,37:40,104,114,124,134,204,214,224,234))]){
         optiout[[i]] = MLE_intern(cbind(data1,data2),start[[i]],i,weights=weights)
     	}
