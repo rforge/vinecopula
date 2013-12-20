@@ -86,8 +86,8 @@ RVineCopSelect <- function(data,familyset=NA,Matrix,selectioncrit="AIC",indeptes
 	}
 
   varnames = paste("V", 1:n, sep="")
-  
-  print(Types)
+ 
+ print(Types)
   
   RVM = RVineMatrix(Mold, family=Types, par=Params, par2=Params2, names=varnames)
 

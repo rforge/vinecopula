@@ -205,7 +205,7 @@ RVineMLE <- function(data, RVM, start=RVM$par, start2=RVM$par2, maxit=200, max.d
       		}else if(Copula.Types[todo[i]] %in% c(30,40)){ #rotated bb8
       				lb[nParams+i] = -max.BB$BB8[2]
         				ub[nParams+i] = -0.001
-      		}else if(Copula.Types[i] %in% c(104,114,124,134,204,214,224,234)){ #Tawn
+      		}else if(Copula.Types[todo[i]] %in% c(104,114,124,134,204,214,224,234)){ #Tawn
       				lb[nParams+i] = 0.001
       				ub[nParams+i] = 0.99
       		}
