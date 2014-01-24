@@ -533,7 +533,10 @@ void SimulateRVine(int* T, int* d, int* family, int* maxmat, int* matrix, int* c
 			fam2[i][j]=family[(i+1)+(*d)*j-1] ;
 		}
 	}
-	for(j=0;j<(*d);j++) for(i=0;i<(*T);i++) U2[i][j]=U[(*T)*j+i]; // (T [=N], d)-matrix
+	if(*takeU == 1)
+	{
+		for(j=0;j<(*d);j++) for(i=0;i<(*T);i++) U2[i][j]=U[(*T)*j+i]; // (T [=N], d)-matrix
+	}
 
 	// Matrizen rotieren für den Algo
 	for(i=0;i<(*d);i++)
