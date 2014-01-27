@@ -18,7 +18,7 @@
 
 
 
-// Code from Jakob Stöber and Ulf Schepsmeier for R-vine log-likelihood calculation
+// Code from Jakob St?ber and Ulf Schepsmeier for R-vine log-likelihood calculation
 
 //////////////////////////////////////////////////////////////
 // Function to compute log-likelihood for the pair-copula construction (Rvine)
@@ -159,7 +159,7 @@ void VineLogLikRvine(int* T, int* d, int* family, int* maxmat, int* matrix, int*
 						kk = 1;
 						for(t=0;t<*T;t++ )
 						{
-							 LL_mod(&fam[k][i],&kk,&vdirect[k][i][t],&vdirect[k][(*d-m)][t],&theta[k][i],&nu[k][i],&loglik);
+							 LL_mod2(&fam[k][i],&kk,&vdirect[k][(*d-m)][t],&vdirect[k][i][t],&theta[k][i],&nu[k][i],&loglik);
 							 /* sumloglik += loglik; */
 							 value2[k][i][t]=loglik;
 						 }
@@ -167,7 +167,7 @@ void VineLogLikRvine(int* T, int* d, int* family, int* maxmat, int* matrix, int*
 					else
 					{
 
-						LL_mod(&fam[k][i],T,vdirect[k][i],vdirect[k][(*d-m)],&theta[k][i],&nu[k][i],&loglik);
+						LL_mod2(&fam[k][i],T,vdirect[k][(*d-m)],vdirect[k][i],&theta[k][i],&nu[k][i],&loglik);
 						/* sumloglik += loglik; */
 						value[k][i]=loglik;
 					}
@@ -190,14 +190,14 @@ void VineLogLikRvine(int* T, int* d, int* family, int* maxmat, int* matrix, int*
 						kk = 1;
 						for(t=0;t<*T;t++ )
 						{
-							LL_mod(&fam[k][i],&kk,&vdirect[k][i][t],&vindirect[k][(*d-m)][t],&theta[k][i],&nu[k][i],&loglik);
+							LL_mod2(&fam[k][i],&kk,&vindirect[k][(*d-m)][t],&vdirect[k][i][t],&theta[k][i],&nu[k][i],&loglik);
 							/* sumloglik += loglik; */
 							value2[k][i][t]=loglik;
 						}
 					}
 					else
 					{
-						LL_mod(&fam[k][i],T,vdirect[k][i],vindirect[k][(*d-m)],&theta[k][i],&nu[k][i],&loglik);
+						LL_mod2(&fam[k][i],T,vindirect[k][(*d-m)],vdirect[k][i],&theta[k][i],&nu[k][i],&loglik);
 						/* sumloglik += loglik; */
 						value[k][i]=loglik;
 					}
@@ -538,7 +538,7 @@ void SimulateRVine(int* T, int* d, int* family, int* maxmat, int* matrix, int* c
 		for(j=0;j<(*d);j++) for(i=0;i<(*T);i++) U2[i][j]=U[(*T)*j+i]; // (T [=N], d)-matrix
 	}
 
-	// Matrizen rotieren für den Algo
+	// Matrizen rotieren f?r den Algo
 	for(i=0;i<(*d);i++)
 	{
 		for(j=0;j<(*d);j++)
