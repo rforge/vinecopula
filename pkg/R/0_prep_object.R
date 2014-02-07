@@ -43,6 +43,10 @@ copulaFromFamilyIndex <- function(family, par, par2=0) {
   constr(c(par,par2))
 }
 
+# generic fitting
+## make fitCopula from copula generic
+setGeneric("fitCopula", fitCopula)
+
 #########################################################
 ## generic wrapper functions to the VineCopula package ##
 #########################################################

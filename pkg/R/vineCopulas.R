@@ -90,9 +90,6 @@ rRVine <- function(n, copula) {
 
 setMethod("rCopula", signature("numeric","vineCopula"), rRVine)
 
-## make fitCopula from copula generic
-setGeneric("fitCopula",fitCopula)
-
 # fitting using RVine
 fitVineCop <- function(copula, data, 
                        method=list(StructureSelect=FALSE, indeptest=FALSE)) {
