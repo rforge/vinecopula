@@ -139,7 +139,7 @@ r90TawnT1Copula <- function (param=c(-2, 0.5)) {
     stop(paste("Parameter values out of bounds: param1: [1,Inf), param2: [0,1]."))
   new("r90TawnT1Copula", dimension = as.integer(2), parameters = param, 
       param.names = c("param1", "param2"), param.lowbnd = c(-Inf, 0), param.upbnd = c(-1, 1),
-      family=124, fullname = "Survival Tawn type 1 copula family. Number 124 in VineCopula.")
+      family=124, fullname = "90 deg rotated Tawn type 1 copula family. Number 124 in VineCopula.")
 }
 
 ## density ##
@@ -194,7 +194,7 @@ r270TawnT1Copula <- function (param=c(-2, 0.5)) {
     stop(paste("Parameter values out of bounds: param1: [1,Inf), param2: [0,1]."))
   new("r270TawnT1Copula", dimension = as.integer(2), parameters = param, 
       param.names = c("param1", "param2"), param.lowbnd = c(-Inf, 0), param.upbnd = c(-1, 1),
-      family=134, fullname = "Survival Tawn type 1 copula family. Number 134 in VineCopula.")
+      family=134, fullname = "270 deg rotated Tawn type 1 copula family. Number 134 in VineCopula.")
 }
 
 ## density ##
@@ -361,7 +361,7 @@ r90TawnT2Copula <- function (param=c(-2, 0.5)) {
     stop(paste("Parameter values out of bounds: param1: [1,Inf), param2: [0,1]."))
   new("r90TawnT2Copula", dimension = as.integer(2), parameters = param, 
       param.names = c("param1", "param2"), param.lowbnd = c(-Inf, 0), param.upbnd = c(-1, 1),
-      family=224, fullname = "Survival Tawn type 2 copula family. Number 224 in VineCopula.")
+      family=224, fullname = "90 deg rotated Tawn type 2 copula family. Number 224 in VineCopula.")
 }
 
 ## density ##
@@ -416,7 +416,7 @@ r270TawnT2Copula <- function (param=c(-2, 0.5)) {
     stop(paste("Parameter values out of bounds: param1: [1,Inf), param2: [0,1]."))
   new("r270TawnT2Copula", dimension = as.integer(2), parameters = param, 
       param.names = c("param1", "param2"), param.lowbnd = c(-Inf, 0), param.upbnd = c(-1, 1),
-      family=234, fullname = "Survival Tawn type 2 copula family. Number 234 in VineCopula.")
+      family=234, fullname = "270 deg rotated Tawn type 2 copula family. Number 234 in VineCopula.")
 }
 
 ## density ##

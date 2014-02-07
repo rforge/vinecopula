@@ -90,21 +90,32 @@ rRVine <- function(n, copula) {
 
 setMethod("rCopula", signature("numeric","vineCopula"), rRVine)
 
+## make fitCopula from copula generic
+setGeneric("fitCopula",fitCopula)
+
 # fitting using RVine
-fitVineCop <- function(copula, data, method) {
+fitVineCop <- function(copula, data, 
+                       method=list(StructureSelect=FALSE, indeptest=FALSE)) {
   stopifnot(copula@dimension==ncol(data))
-  if(!is.null(method[["familyset"]]))
+  if("familyset" %in% names(method))
     familyset <- method[["familyset"]]
   else
     familyset <- NA
-  if("StructureSelect" %in% method)
-    vineCop <- vineCopula(RVineStructureSelect(data, familyset, indeptest="indeptest" %in% method))
+  if("indeptest" %in% names(method))
+    indept <- method[["indeptest"]]
   else
-    vineCop <- vineCopula(RVineCopSelect(data, familyset, copula@RVM$Matrix, 
-                                         indeptest="indeptest" %in% method))
+    indept <- FALSE
+  if("StructureSelect" %in% names(method)) {
+    if(method[["StructureSelect"]])
+      vineCop <- vineCopula(RVineStructureSelect(data, familyset, indeptest=indept))
+    else 
+      vineCop <- vineCopula(RVineCopSelect(data, familyset, copula@RVM$Matrix, indeptest=indept))
+  } else {
+    vineCop <- vineCopula(RVineCopSelect(data, familyset, copula@RVM$Matrix, indeptest=indept))
+  }
   
   return(new("fitCopula", estimate = vineCop@parameters, var.est = matrix(NA), 
-             method = sapply(method,paste,collapse=", "), 
+             method = paste(names(method), method, sep="=", collapse=", "),
              loglik = RVineLogLik(data, vineCop@RVM)$loglik,
              fitting.stats=list(convergence = as.integer(NA)),
              nsample = nrow(data), copula=vineCop))

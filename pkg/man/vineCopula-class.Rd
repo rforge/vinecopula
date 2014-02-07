@@ -28,7 +28,7 @@ Class \code{"\linkS4class{copula}"}, directly.
 Class \code{"\linkS4class{Copula}"}, by class "copula", distance 2.
 }
 \section{Methods}{
-No additional methods yet, but uses e.g. \code{\link{dCopula}}, \code{\link{pCopula}}, \code{\link{rCopula}} and \code{\link{rCopula}} as any other copula. Via the \code{method} argument in \code{fitCopula}, control over the  fit of the RVine can be taken via entries \code{"StructureSelect"}, \code{"indeptest"} and \code{"familyset"}. See \code{\link{RVineCopSelect}} and \code{\link{RVineStructureSelect}} for further details on the underlying functions.
+No additional methods yet, but uses e.g. \code{\link{dCopula}}, \code{\link{pCopula}}, \code{\link{rCopula}} and \code{\link{rCopula}} as any other copula. Via the \code{method} argument in \code{fitCopula}, control over the  fit of the RVine can be taken via entries \code{StructureSelect}, \code{indeptest} and \code{familyset}. See \code{\link{RVineCopSelect}} and \code{\link{RVineStructureSelect}} for further details on the underlying functions. Missing entries are treated as default values, i.e. \code{StructureSelect=FALSE}, \code{indeptest=FALSE} and \code{familyset=NA}
 }
 
 \references{

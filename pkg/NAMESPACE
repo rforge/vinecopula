@@ -71,6 +71,7 @@ export(surGumbelCopula, r90GumbelCopula, r270GumbelCopula)
 export(tawnT1Copula, surTawnT1Copula, r90TawnT1Copula, r270TawnT1Copula)
 export(tawnT2Copula, surTawnT2Copula, r90TawnT2Copula, r270TawnT2Copula)
 export(vineCopula)
+export(copulaFromFamilyIndex)
 
 exportClasses(BB1Copula, surBB1Copula, r90BB1Copula, r270BB1Copula)
 exportClasses(BB6Copula, surBB6Copula, r90BB6Copula, r270BB6Copula)
@@ -82,6 +83,8 @@ exportClasses(surGumbelCopula, r90GumbelCopula, r270GumbelCopula)
 exportClasses(tawnT1Copula, surTawnT1Copula, r90TawnT1Copula, r270TawnT1Copula)
 exportClasses(tawnT2Copula, surTawnT2Copula, r90TawnT2Copula, r270TawnT2Copula)
 exportClasses(vineCopula)
+
+
 S3method(print, RVineMatrix)
 
 useDynLib("VineCopula")
