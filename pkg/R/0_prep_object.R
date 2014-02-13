@@ -79,7 +79,6 @@ linkVineCop.CDF <- function (u, copula) {
   n <- nrow(u)
   fam <- copula@family
   
-#   res <- RarchCDF(fam, n, u, param)[[6]]
   res <- .C("archCDF", as.double(u[,1]), as.double(u[,2]), as.integer(n), as.double(param),
             as.integer(fam), as.double(rep(0, n)), PACKAGE = "VineCopula")[[6]]
   return(res)
@@ -94,7 +93,6 @@ linkVineCop.surCDF <- function (u, copula) {
   n <- nrow(u)
   fam <- copula@family
 
-#   res <- u1 + u2 - 1 + RarchCDF(fam-10, n, cbind(1-u1,1-u2), param)[[6]]
   res <-  u1 + u2 - 1 + .C("archCDF", as.double(1 - u1), as.double(1 - u2), as.integer(n),
                            as.double(param), as.integer(fam - 10), as.double(rep(0, n)),
                            PACKAGE = "VineCopula")[[6]]
@@ -110,10 +108,9 @@ linkVineCop.r90CDF <- function (u, copula) {
   n <- nrow(u)
   fam <- copula@family
   
-#   res <- u2 - RarchCDF(fam - 20, n, cbind(1-u1,u2), -param)[[6]]
   u2 - .C("archCDF", as.double(1 - u1), as.double(u2), as.integer(n), 
-                  as.double(-param), as.integer(fam - 20), as.double(rep(0, n)), 
-                  PACKAGE = "VineCopula")[[6]]
+          as.double(-param), as.integer(fam - 20), as.double(rep(0, n)), 
+          PACKAGE = "VineCopula")[[6]]
 }
 
 # for 270 deg rotated copulas: family %in% c(33, 34, 36:40)
@@ -125,47 +122,55 @@ linkVineCop.r270CDF <- function (u, copula) {
   n <- nrow(u)
   fam <- copula@family
   
-#   u1 - RarchCDF(fam-30, n, cbind(u1,1-u2), -param)[[6]]
   u1 - .C("archCDF", as.double(u1), as.double(1 - u2), as.integer(n), 
-               as.double(-param), as.integer(fam - 30), as.double(rep(0, n)), 
-               PACKAGE = "VineCopula")[[6]]
+          as.double(-param), as.integer(fam - 30), as.double(rep(0, n)), 
+          PACKAGE = "VineCopula")[[6]]
 }
 
 ## derivtives/h-function  from BiCopHfunc
 # ddu
 linkVineCop.ddu <- function (u, copula) {
   param <- copula@parameters
+  
+  if(length(param)==1) 
+    param <- c(param,0)
+  
   u <- matrix(u, ncol = 2)
   n <- nrow(u)
   fam <- copula@family
   
-#   RHfunc1(fam, n, u, param)[[7]]
-    .C("Hfunc1", as.integer(fam), as.integer(n), as.double(u[,2]), as.double(u[,1]), 
-            as.double(param[1]), as.double(param[2]), as.double(rep(0, n)), 
-            PACKAGE = "VineCopula")[[7]]
+  .C("Hfunc1", as.integer(fam), as.integer(n), as.double(u[,2]), as.double(u[,1]), 
+     as.double(param[1]), as.double(param[2]), as.double(rep(0, n)), 
+     PACKAGE = "VineCopula")[[7]]
 }
 
 # ddv
 linkVineCop.ddv <- function (u, copula) {
   param <- copula@parameters
+  
+  if(length(param)==1) 
+    param <- c(param,0)
+  
   u <- matrix(u, ncol = 2)
   n <- nrow(u)
   fam <- copula@family
   
-#   RHfunc2(fam, n, u, param)[[7]]
   .C("Hfunc2", as.integer(fam), as.integer(n), as.double(u[,1]), as.double(u[,2]), 
-          as.double(param[1]), as.double(param[2]), as.double(rep(0, n)), 
-          PACKAGE = "VineCopula")[[7]]
+     as.double(param[1]), as.double(param[2]), as.double(rep(0, n)), 
+     PACKAGE = "VineCopula")[[7]]
 }
 
 
 ## random numbers from VineCopulaSim
 linkVineCop.r <- function (n, copula){
   param <- copula@parameters
+  
+  if(length(param)==1) 
+    param <- c(param,0)
+  
   fam <- copula@family
   if(is.na(param[2])) param <- c(param,0)
   
-#   tmp <- Rpcc(fam, n, param)[[7]]
   res <- .C("pcc", as.integer(n), as.integer(2), as.integer(fam), as.integer(1), 
             as.double(param[1]), as.double(param[2]), as.double(rep(0, n * 2)), 
             PACKAGE = "VineCopula")[[7]]
@@ -175,8 +180,11 @@ linkVineCop.r <- function (n, copula){
 
 ## Kendall's tau
 linkVineCop.tau <- function(copula) {
-  par <- copula@parameters
-  BiCopPar2Tau(copula@family, par[1], par[2])
+  param <- copula@parameters
+  if(length(param)==1) 
+    param <- c(param,0)
+  
+  BiCopPar2Tau(copula@family, param[1], param[2])
 }
 
 ## get parameter from Kendall's tau (only for one parameter families)
@@ -186,8 +194,11 @@ linkVineCop.iTau <- function(copula, tau) {
 
 ## tailIndex
 linkVineCop.tailIndex <- function(copula) {
-  par <- copula@parameters
-  unlist(BiCopPar2TailDep(copula@family,par[1],par[2]))
+  param <- copula@parameters
+  if(length(param)==1) 
+    param <- c(param,0)
+  
+  unlist(BiCopPar2TailDep(copula@family, param[1], param[2]))
 }
 
 setGeneric("dduCopula", function(u, copula, ...) standardGeneric("dduCopula"))
