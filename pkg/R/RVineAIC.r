@@ -89,7 +89,7 @@ RVineBIC <-function(data,RVM,par=RVM$par,par2=RVM$par2){
 	n<-d
 	N<-T
 	if(n != dim(RVM)) stop("Dimensions of 'data' and 'RVM' do not match.")
-  if(is(RVM) != "RVineMatrix") stop("'RVM' has to be an RVineMatrix object.")
+  if(is(RVM)[1] != "RVineMatrix") stop("'RVM' has to be an RVineMatrix object.")
   
   par[is.na(par)]=0
 	par[upper.tri(par,diag=T)]=0

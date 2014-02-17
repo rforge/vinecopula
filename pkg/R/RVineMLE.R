@@ -1,6 +1,6 @@
 RVineMLE <- function(data, RVM, start=RVM$par, start2=RVM$par2, maxit=200, max.df=30, max.BB=list(BB1=c(5,6),BB6=c(6,6),BB7=c(5,6),BB8=c(6,1)), grad=FALSE, hessian=FALSE, se=FALSE, ...)
 {
-  if(is(RVM) != "RVineMatrix") stop("'RVM' has to be an RVineMatrix object.")
+  if(is(RVM)[1] != "RVineMatrix") stop("'RVM' has to be an RVineMatrix object.")
 	if(maxit<=0) stop("'maxit' has to be greater than zero.")	
                                                
   if(max.df<=2) stop("The upper bound for the degrees of freedom parameter has to be larger than 2.")
