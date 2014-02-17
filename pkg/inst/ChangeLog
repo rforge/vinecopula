@@ -1,7 +1,7 @@
 Changes for R-package VineCopula
 
 Current authors: Ulf Schepsmeier, Tobias Erhardt and Benedikt Graeler
-Former authors: Eike Brechmann and Jakob Stöber
+Former authors: Eike Brechmann and Jakob Stoeber
 
 Version 1.2-1 (January 25, 2014)
 
@@ -13,6 +13,7 @@ Version 1.2-1 (January 25, 2014)
   * RVineMLE: the optim argument "parscale" was not correctly defined for all cases.
   * RVineAIC/BIC: Instead of the function arguments "par" and "par2" the calculation was based on RVM$par and RVM$par2. 
     This is corrected now. (reported by Marcel Duellmann; thanks)
+  * RVineStructureSelect: The new igraph version returned a different variable type causing an error in the second and higher order tree selection.
   
 
 Version 1.2 (October 09, 2013)
