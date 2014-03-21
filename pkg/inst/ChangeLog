@@ -3,6 +3,11 @@ Changes for R-package VineCopula
 Current authors: Ulf Schepsmeier, Tobias Erhardt and Benedikt Graeler
 Former authors: Eike Brechmann and Jakob Stoeber
 
+Version 1.2-1 (March 21, 2014)
+
+- Moved copula from depends to the more appropriate import field
+- Added tests generated from example code
+
 Version 1.2-1 (March 4, 2014)
 
 - New functionality:

@@ -24,7 +24,7 @@ vine <- vineCopula(4L,"CVine")
 
 \dontrun{
 library(copula)
-library(latice)
+library(lattice)
 
 cloud(V1~V2+V3, as.data.frame(rCopula(500,vine)))}
 }
