@@ -1,3 +1,8 @@
+## switch for testing the following time consuming examples
+docheck <- FALSE
+
+if(docheck){
+  
 ## tests from excluded examples
 library(VineCopula)
 
@@ -221,3 +226,5 @@ set.seed(666)
 rCopula(500,vine)
 
 # End(Not run)
+
+}
