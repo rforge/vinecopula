@@ -773,7 +773,7 @@ void LL_mod2(int* family, int* n, double* u, double* v, double* theta, double* n
 		if(v[i]<UMIN) v[i]=UMIN;
 		else if(v[i]>UMAX) v[i]=UMAX;
 	}
-	if((*family==43))
+	if((*family)==43)
 	{
 		nfamily=3;
 		if(*theta > 0){
@@ -784,7 +784,7 @@ void LL_mod2(int* family, int* n, double* u, double* v, double* theta, double* n
 			for (int i = 0; i < *n; ++i) {negu[i] = 1 - u[i];}
 			LL(&nfamily, n, negu,  v, &ntheta, &nnu, loglik);
 		}
-	}else if((*family==44))
+	}else if((*family)==44)
 	{
 		nfamily=4;
 		if(*theta > 0){
@@ -1365,7 +1365,7 @@ void copLik_mod(int* family, int* n, double* u, double* v, double* theta, double
 		else if(v[i]>UMAX) v[i]=UMAX;
 	}
 
-if((*family==43))
+if((*family)==43)
 	{
 		nfamily=3;
 		if(*theta > 0){
@@ -1376,7 +1376,7 @@ if((*family==43))
 			for (i = 0; i < *n; ++i) {negv[i] = 1 - v[i];}
 			copLik(&nfamily, n, u,  negv, &ntheta, &nnu, coplik);
 		}
-	}else if((*family==44))
+	}else if((*family)==44)
 	{
 		nfamily=4;
 		if(*theta > 0){
