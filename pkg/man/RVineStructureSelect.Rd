@@ -118,7 +118,9 @@ Computational Statistics & Data Analysis, 59 (1), 52-69.
 data(daxreturns)
 
 # select the R-vine structure, families and parameters
-RVM = RVineStructureSelect(daxreturns[,1:4],c(1:6),progress=TRUE)
+# using only the first 4 variables and the first 750 observations
+# we allow for the copula families: Gauss, t, Clayton, Gumbel, Frank and Joe
+RVM = RVineStructureSelect(daxreturns[1:750,1:4],c(1:6),progress=TRUE)
 
 # specify a C-vine copula model with only Clayton, Gumbel and Frank copulas
 \dontrun{

@@ -1,7 +1,7 @@
 
-R version 3.0.3 (2014-03-06) -- "Warm Puppy"
-Copyright (C) 2014 The R Foundation for Statistical Computing
-Platform: i386-w64-mingw32/i386 (32-bit)
+R version 3.0.2 (2013-09-25) -- "Frisbee Sailing"
+Copyright (C) 2013 The R Foundation for Statistical Computing
+Platform: x86_64-w64-mingw32/x64 (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -2564,7 +2564,9 @@ $se
 > data(daxreturns)
 > 
 > # select the R-vine structure, families and parameters
-> RVM = RVineStructureSelect(daxreturns[,1:4],c(1:6),progress=TRUE)
+> # using only the first 4 variables and the first 750 observations
+> # we allow for the copula families: Gauss, t, Clayton, Gumbel, Frank and Joe
+> RVM = RVineStructureSelect(daxreturns[1:750,1:4],c(1:6),progress=TRUE)
 ALV.DE + BAYN.DE --> ALV.DE,BAYN.DE | BAS.DE
 BAS.DE + BMW.DE --> BAS.DE,BMW.DE | ALV.DE
 BAYN.DE + BMW.DE --> BAYN.DE,BMW.DE | ALV.DE,BAS.DE
@@ -3339,7 +3341,7 @@ Class "Copula", by class "copula", distance 2
 > ###
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  11.56 0.25 11.95 NA NA 
+Time elapsed:  12.15 0.15 12.54 NA NA 
 > grDevices::dev.off()
 null device 
           1 
