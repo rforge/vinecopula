@@ -89,6 +89,6 @@ P[[1]][1,] = P[[1]][1,]*2
 # re-set random seed for testing
 set.seed(666)
 # plot only the first tree with new coordinates
-RVineTreePlot(data=NULL,RVM=RVM,tree=1,edge.labels=FALSE,P=P)
+P = RVineTreePlot(data=NULL,RVM=RVM,tree=1,edge.labels=FALSE,P=P)
 }
 

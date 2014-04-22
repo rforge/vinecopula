@@ -1,7 +1,7 @@
 
-R version 3.1.0 alpha (2014-03-13 r65184) -- "Unsuffered Consequences"
+R version 3.0.3 (2014-03-06) -- "Warm Puppy"
 Copyright (C) 2014 The R Foundation for Statistical Computing
-Platform: x86_64-w64-mingw32/x64 (64-bit)
+Platform: i386-w64-mingw32/i386 (32-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -2564,9 +2564,10 @@ $se
 > data(daxreturns)
 > 
 > # select the R-vine structure, families and parameters
-> ## Not run: 
-> ##D RVM = RVineStructureSelect(daxreturns,c(1:6),progress=TRUE)
-> ## End(Not run)
+> RVM = RVineStructureSelect(daxreturns[,1:4],c(1:6),progress=TRUE)
+ALV.DE + BAYN.DE --> ALV.DE,BAYN.DE | BAS.DE
+BAS.DE + BMW.DE --> BAS.DE,BMW.DE | ALV.DE
+BAYN.DE + BMW.DE --> BAYN.DE,BMW.DE | ALV.DE,BAS.DE
 > 
 > # specify a C-vine copula model with only Clayton, Gumbel and Frank copulas
 > ## Not run: 
@@ -2634,33 +2635,7 @@ $se
 > # re-set random seed for testing
 > set.seed(666)
 > # plot only the first tree with new coordinates
-> RVineTreePlot(data=NULL,RVM=RVM,tree=1,edge.labels=FALSE,P=P)
-[[1]]
-           [,1]      [,2]
-[1,] -3.8457113 -6.587719
-[2,] -0.2013961 -5.009948
-[3,] -0.7663026 -1.265319
-[4,] -4.1809028 -4.057487
-[5,]  0.2648352 -7.037175
-
-[[2]]
-          [,1]      [,2]
-[1,] -4.480340 0.3583995
-[2,] -6.318059 1.3342655
-[3,] -6.392279 3.4136931
-[4,] -8.083176 0.2296919
-
-[[3]]
-         [,1]      [,2]
-[1,] 1.059949 -2.364237
-[2,] 2.002854 -3.698179
-[3,] 3.620195 -3.926621
-
-[[4]]
-           [,1]       [,2]
-[1,]  0.4314873 -0.3846163
-[2,] -0.7333122  0.1423367
-
+> P = RVineTreePlot(data=NULL,RVM=RVM,tree=1,edge.labels=FALSE,P=P)
 > 
 > 
 > 
@@ -3364,7 +3339,7 @@ Class "Copula", by class "copula", distance 2
 > ###
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  8.98 0.09 9.18 NA NA 
+Time elapsed:  11.56 0.25 11.95 NA NA 
 > grDevices::dev.off()
 null device 
           1 
