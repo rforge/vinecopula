@@ -80,17 +80,18 @@ We are especially grateful to Harry Joe for his contributions to the implementat
 \tabular{ll}{
 Package: \tab VineCopula\cr
 Type: \tab Package\cr
-Version: \tab 1.2\cr
-Date: \tab 2013-11-11\cr
+Version: \tab 1.3-1\cr
+Date: \tab 2013-09-10\cr
 License: \tab GPL (>=2)\cr
-Depends: \tab R (\eqn{\geq 2.11.0}{>= 2.11.0}), MASS, mvtnorm, igraph \cr
+Depends: \tab R (\eqn{\geq 2.11.0}{>= 2.11.0})
+Imports: MASS, mvtnorm, igraph, methods, copula \cr
 Suggests: \tab CDVine, TSP, ADGofTest \cr
 LazyLoad: \tab yes
 }
 }
 
 \author{
-Ulf Schepsmeier, Jakob Stoeber, Eike Christian Brechmann, Benedikt Graeler <VineCopula@ma.tum.de>
+Ulf Schepsmeier, Jakob Stoeber, Eike Christian Brechmann, Benedikt Graeler
 }
 
 \references{ 
