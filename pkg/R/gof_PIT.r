@@ -105,8 +105,10 @@ gof_PIT<-function(data,RVM,weight="Breymann",B=200, statisticName="AD", alpha=2)
 		{
 			S[i]=sum(tmp[i,])
 		}
-		if(statisticName==1 && method==1)		# Macht nur Sinn bei Breymann
+		if(statisticName==1 && method==1){		# Macht nur Sinn bei Breymann
+      require(ADGofTest)
 			pvalue=ad.test(S,pchisq,df=d)$p.value
+		}
 		else if(statisticName==2 && method==1)
 			pvalue=ks.test(S,"pchisq",df=d)$p.value
 		else 

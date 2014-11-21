@@ -240,7 +240,7 @@ BiCopSelect <- function(u1, u2, familyset=NA, selectioncrit="AIC", indeptest=FAL
 	      optiout[[37]] = MLE_intern(cbind(data1,data2),start[[37]],37,weights=weights)
         if(optiout[[37]]$par[1] >= -0.1 | optiout[[37]]$par[2] >= -1.1){
     		  if(optiout[[37]]$par[1] >= -0.1){
-            todo[todo==37] = 24
+            todo[todo==37] = 34
             todo = unique(todo)
     		  }else if(optiout[[37]]$par[2] >= -1.1){
       		  todo[todo==37] = 33
@@ -254,10 +254,10 @@ BiCopSelect <- function(u1, u2, familyset=NA, selectioncrit="AIC", indeptest=FAL
 	      optiout[[38]] = MLE_intern(cbind(data1,data2),start[[38]],38,weights=weights)
         if(optiout[[38]]$par[1] >= -1.1 | optiout[[38]]$par[2] >= -1.1){
     		  if(optiout[[38]]$par[1] >= -1.1){
-            todo[todo==38] = 24
+            todo[todo==38] = 34
             todo = unique(todo)
     		  }else if(optiout[[38]]$par[2] >= -1.1){
-      		  todo[todo==38] = 26
+      		  todo[todo==38] = 36
             todo = unique(todo)
       		}
       		optiout[[38]] = list()
