@@ -2,8 +2,8 @@ BiCopSelect <- function(u1, u2, familyset=NA, selectioncrit="AIC", indeptest=FAL
   if(is.null(u1)==TRUE || is.null(u2)==TRUE) stop("u1 and/or u2 are not set or have length zero.")
   if(length(u1)!=length(u2)) stop("Lengths of 'u1' and 'u2' do not match.")
   if(length(u1)<2) stop("Number of observations has to be at least 2.")
-  if(any(u1>1) || any(u1<0)) stop("Data has be in the interval [0,1].")
-  if(any(u2>1) || any(u2<0)) stop("Data has be in the interval [0,1].")	
+  if(any(u1>1) || any(u1<0)) stop("Data has to be in the interval [0,1].")
+  if(any(u2>1) || any(u2<0)) stop("Data has to be in the interval [0,1].")	
   if(!is.na(familyset[1])) for(i in 1:length(familyset)) if(!(familyset[i] %in% c(0:10,13,14,16:20,23,24,26:30,33,34,36,37,38,39,40,104,114,124,134,204,214,224,234))) stop("Copula family not implemented.")  
   if(selectioncrit != "AIC" && selectioncrit != "BIC") stop("Selection criterion not implemented.")
   if(level < 0 & level > 1) stop("Significance level has to be between 0 and 1.")
@@ -246,7 +246,7 @@ BiCopSelect <- function(u1, u2, familyset=NA, selectioncrit="AIC", indeptest=FAL
         optiout[[37]] = MLE_intern(cbind(data1,data2),start[[37]],37,weights=weights)
         if(optiout[[37]]$par[1] >= -0.1 | optiout[[37]]$par[2] >= -1.1){
           if(optiout[[37]]$par[1] >= -0.1){
-            todo[todo==37] = 24
+            todo[todo==37] = 34
             todo = unique(todo)
           }else if(optiout[[37]]$par[2] >= -1.1){
             todo[todo==37] = 33
@@ -260,10 +260,10 @@ BiCopSelect <- function(u1, u2, familyset=NA, selectioncrit="AIC", indeptest=FAL
         optiout[[38]] = MLE_intern(cbind(data1,data2),start[[38]],38,weights=weights)
         if(optiout[[38]]$par[1] >= -1.1 | optiout[[38]]$par[2] >= -1.1){
           if(optiout[[38]]$par[1] >= -1.1){
-            todo[todo==38] = 24
+            todo[todo==38] = 34
             todo = unique(todo)
           }else if(optiout[[38]]$par[2] >= -1.1){
-            todo[todo==38] = 26
+            todo[todo==38] = 36
             todo = unique(todo)
           }
           optiout[[38]] = list()

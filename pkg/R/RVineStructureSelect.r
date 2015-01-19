@@ -1,14 +1,14 @@
 RVineStructureSelect = function(data,familyset=NA,type=0,selectioncrit="AIC",indeptest=FALSE,level=0.05,trunclevel=NA,progress=FALSE,weights=NA){
-  library(igraph)
+
   if(type == 0) type = "RVine"  else if(type == 1) type = "CVine"
   if(type != "RVine" & type != "CVine") stop("Vine model not implemented.")
   
-  n = dim(data)[2]
-  d = dim(data)[1]
+  d = n = dim(data)[2]
+  N = dim(data)[1]
   
-  if(dim(data)[1]<2) stop("Number of observations has to be at least 2.")
-  if(d<2) stop("Dimension has to be at least 2.")
-  if(any(data>1) || any(data<0)) stop("Data has be in the interval [0,1].")
+  if(N<2) stop("Number of observations has to be at least 2.")
+  if(d<3) stop("Dimension has to be at least 3.")
+  if(any(data>1) || any(data<0)) stop("Data has to be in the interval [0,1].")
   
   if(!is.na(familyset[1])) for(i in 1:length(familyset)) if(!(familyset[i] %in% c(0,1:10,13,14,16:20,23,24,26:30,33,34,36:40, 104,114,124,134,204,214,224,234))) stop("Copula family not implemented.")  
   if(selectioncrit != "AIC" && selectioncrit != "BIC") stop("Selection criterion not implemented.")

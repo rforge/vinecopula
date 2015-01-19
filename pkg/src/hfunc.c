@@ -973,7 +973,33 @@ void Hinv1(int* family, int* n, double* u, double* v, double* theta, double* nu,
 		else if(v[i]>UMAX) v[i]=UMAX;
 	}
 
-   if(((*family ==23) | (*family ==24) | (*family==26) | (*family ==27) | (*family ==28) | (*family==29) | (*family==30) | (*family==61) ))
+   if((*family)==43)
+	{
+		nfamily=3;
+		if(*theta > 0){
+			ntheta=2*(*theta)/(1-*theta);
+			Hinv(&nfamily, n, u, v, &ntheta, &nnu, out);
+		}else{
+			ntheta=-2*(*theta)/(1+*theta);
+			for (int i = 0; i < *n; ++i) {negv[i]=1 - v[i];}
+			Hinv(&nfamily, n, u, negv, &ntheta, &nnu, out);
+			for (int i = 0; i < *n; i++) {out[i]=1-out[i];};
+		}
+	}
+	else if((*family)==44)
+	{
+		nfamily=4;
+		if(*theta > 0){
+			ntheta=1/(1-*theta);
+			Hinv(&nfamily, n, u, v, &ntheta, &nnu, out);
+		}else{
+			ntheta=1/(1+*theta);
+			for (int i = 0; i < *n; ++i) {negv[i]=1 - v[i];}
+			Hinv(&nfamily, n, u, negv, &ntheta, &nnu, out);
+			for (int i = 0; i < *n; i++) {out[i]=1-out[i];};
+		}
+	}
+	else if(((*family ==23) | (*family ==24) | (*family==26) | (*family ==27) | (*family ==28) | (*family==29) | (*family==30) | (*family==61) ))
       {
 	   nfamily=(*family)-20;
 		for (int i = 0; i < *n; ++i) {negv[i]=1 - v[i];}
@@ -1028,7 +1054,33 @@ void Hinv2(int* family, int* n, double* v, double* u, double* theta, double* nu,
 		else if(v[i]>UMAX) v[i]=UMAX;
 	}
 
-   if(((*family ==23) | (*family ==24) | (*family==26) | (*family ==27) | (*family ==28) | (*family==29) | (*family==30) | (*family==61) ))
+   if((*family)==43)
+	{
+		nfamily=3;
+		if(*theta > 0){
+			ntheta=2*(*theta)/(1-*theta);
+			Hinv(&nfamily, n, v, u, &ntheta, &nnu, out);
+		}else{
+			ntheta=-2*(*theta)/(1+*theta);
+			for (int i = 0; i < *n; ++i) {negv[i]=1 - v[i];}
+			Hinv(&nfamily, n, negv, u, &ntheta, &nnu, out);
+			for (int i = 0; i < *n; i++) {out[i]=1-out[i];};
+		}
+	}
+	else if((*family)==44)
+	{
+		nfamily=4;
+		if(*theta > 0){
+			ntheta=1/(1-*theta);
+			Hinv(&nfamily, n, v, u, &ntheta, &nnu, out);
+		}else{
+			ntheta=1/(1+*theta);
+			for (int i = 0; i < *n; ++i) {negv[i]=1 - v[i];}
+			Hinv(&nfamily, n, negv, u, &ntheta, &nnu, out);
+			for (int i = 0; i < *n; i++) {out[i]=1-out[i];};
+		}
+	}
+	else if(((*family ==23) | (*family ==24) | (*family==26) | (*family ==27) | (*family ==28) | (*family==29) | (*family==30) | (*family==61) ))
       {
 	   nfamily = (*family)-20;
 		for (int i = 0; i < *n; ++i) {negv[i]=1 - v[i];}

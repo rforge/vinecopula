@@ -4,6 +4,10 @@ import(igraph)
 import(copula)
 import(methods)
 
+importFrom(ADGofTest, ad.test)
+
+export(pobs)
+
 export(BiCopEst)
 export(BiCopMetaContour)
 export(BiCopChiPlot)
