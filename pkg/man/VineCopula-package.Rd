@@ -3,7 +3,7 @@
 \alias{VineCopula}
 \docType{package}
 
-\title{Statistical inference of vine copulas}
+\title{Statistical Inference of Vine Copulas}
 
 \description{
 This package provides functions for statistical inference of vine copulas.

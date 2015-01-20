@@ -1,6 +1,6 @@
 
-R version 3.0.2 (2013-09-25) -- "Frisbee Sailing"
-Copyright (C) 2013 The R Foundation for Statistical Computing
+R Under development (unstable) (2015-01-14 r67471) -- "Unsuffered Consequences"
+Copyright (C) 2015 The R Foundation for Statistical Computing
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -21,6 +21,18 @@ Type 'q()' to quit R.
 > source(file.path(R.home("share"), "R", "examples-header.R"))
 > options(warn = 1)
 > options(pager = "console")
+> base::assign(".ExTimings", "VineCopula-Ex.timings", pos = 'CheckExEnv')
+> base::cat("name\tuser\tsystem\telapsed\n", file=base::get(".ExTimings", pos = 'CheckExEnv'))
+> base::assign(".format_ptime",
++ function(x) {
++   if(!is.na(x[4L])) x[1L] <- x[1L] + x[4L]
++   if(!is.na(x[5L])) x[2L] <- x[2L] + x[5L]
++   options(OutDec = '.')
++   format(x[1L:3L], digits = 7L)
++ },
++ pos = 'CheckExEnv')
+> 
+> ### * </HEADER>
 > library('VineCopula')
 > 
 > base::assign(".oldSearch", base::search(), pos = 'CheckExEnv')
@@ -30,6 +42,7 @@ Type 'q()' to quit R.
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: BB1Copula-class
 > ### Title: Classes '"BB1Copula"', '"surBB1Copula"', '"r90BB1Copula"' and
 > ###   '"r270BB1Copula"'
@@ -71,12 +84,15 @@ Class "Copula", by class "copula", distance 2
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("BB1Copula-class", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("BB1Copula")
 > ### * BB1Copula
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: BB1Copula
 > ### Title: Constructor of the BB1 family and rotated versions thereof
 > ### Aliases: BB1Copula surBB1Copula r90BB1Copula r270BB1Copula
@@ -94,20 +110,22 @@ The following object is masked from 'package:VineCopula':
 
 > 
 > persp(BB1Copula(c(1,1.5)),dCopula, zlim=c(0,10))
-Warning in persp.default(xis, yis, zmat, theta = theta, phi = phi, expand = expand,  :
+Warning in persp.default(xis, yis, zmat, xlab = xlab, ylab = ylab, zlab = zlab,  :
   surface extends beyond the box
 > persp(surBB1Copula(c(1,1.5)),dCopula, zlim=c(0,10))
-Warning in persp.default(xis, yis, zmat, theta = theta, phi = phi, expand = expand,  :
+Warning in persp.default(xis, yis, zmat, xlab = xlab, ylab = ylab, zlab = zlab,  :
   surface extends beyond the box
 > persp(r90BB1Copula(c(-1,-1.5)),dCopula, zlim=c(0,10))
-Warning in persp.default(xis, yis, zmat, theta = theta, phi = phi, expand = expand,  :
+Warning in persp.default(xis, yis, zmat, xlab = xlab, ylab = ylab, zlab = zlab,  :
   surface extends beyond the box
 > persp(r270BB1Copula(c(-1,-1.5)),dCopula, zlim=c(0,10))
-Warning in persp.default(xis, yis, zmat, theta = theta, phi = phi, expand = expand,  :
+Warning in persp.default(xis, yis, zmat, xlab = xlab, ylab = ylab, zlab = zlab,  :
   surface extends beyond the box
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("BB1Copula", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 
 detaching 'package:copula'
@@ -117,6 +135,7 @@ detaching 'package:copula'
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: BB6Copula-class
 > ### Title: Classes '"BB6Copula"', '"surBB6Copula"', '"r90BB6Copula"' and
 > ###   '"r270BB6Copula"'
@@ -158,12 +177,15 @@ Class "Copula", by class "copula", distance 2
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("BB6Copula-class", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("BB6Copula")
 > ### * BB6Copula
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: BB6Copula
 > ### Title: Constructor of the BB6 family and its derivatives
 > ### Aliases: BB6Copula surBB6Copula r90BB6Copula r270BB6Copula
@@ -180,20 +202,22 @@ The following object is masked from 'package:VineCopula':
 
 > 
 > persp(BB6Copula(c(1,1.5)),dCopula, zlim=c(0,10))
-Warning in persp.default(xis, yis, zmat, theta = theta, phi = phi, expand = expand,  :
+Warning in persp.default(xis, yis, zmat, xlab = xlab, ylab = ylab, zlab = zlab,  :
   surface extends beyond the box
 > persp(surBB6Copula(c(1,1.5)),dCopula, zlim=c(0,10))
-Warning in persp.default(xis, yis, zmat, theta = theta, phi = phi, expand = expand,  :
+Warning in persp.default(xis, yis, zmat, xlab = xlab, ylab = ylab, zlab = zlab,  :
   surface extends beyond the box
 > persp(r90BB6Copula(c(-1,-1.5)),dCopula, zlim=c(0,10))
-Warning in persp.default(xis, yis, zmat, theta = theta, phi = phi, expand = expand,  :
+Warning in persp.default(xis, yis, zmat, xlab = xlab, ylab = ylab, zlab = zlab,  :
   surface extends beyond the box
 > persp(r270BB6Copula(c(-1,-1.5)),dCopula, zlim=c(0,10))
-Warning in persp.default(xis, yis, zmat, theta = theta, phi = phi, expand = expand,  :
+Warning in persp.default(xis, yis, zmat, xlab = xlab, ylab = ylab, zlab = zlab,  :
   surface extends beyond the box
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("BB6Copula", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 
 detaching 'package:copula'
@@ -203,6 +227,7 @@ detaching 'package:copula'
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: BB7Copula-class
 > ### Title: Classes '"BB7Copula"', '"surBB7Copula"', '"r90BB7Copula"' and
 > ###   '"r270BB7Copula"'
@@ -244,12 +269,15 @@ Class "Copula", by class "copula", distance 2
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("BB7Copula-class", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("BB7Copula")
 > ### * BB7Copula
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: BB7Copula
 > ### Title: Constructor of the BB7 family and its derivatives
 > ### Aliases: BB7Copula surBB7Copula r90BB7Copula r270BB7Copula
@@ -266,20 +294,22 @@ The following object is masked from 'package:VineCopula':
 
 > 
 > persp(BB7Copula(c(1,1.5)),dCopula, zlim=c(0,10))
-Warning in persp.default(xis, yis, zmat, theta = theta, phi = phi, expand = expand,  :
+Warning in persp.default(xis, yis, zmat, xlab = xlab, ylab = ylab, zlab = zlab,  :
   surface extends beyond the box
 > persp(surBB7Copula(c(1,1.5)),dCopula, zlim=c(0,10))
-Warning in persp.default(xis, yis, zmat, theta = theta, phi = phi, expand = expand,  :
+Warning in persp.default(xis, yis, zmat, xlab = xlab, ylab = ylab, zlab = zlab,  :
   surface extends beyond the box
 > persp(r90BB7Copula(c(-1,-1.5)),dCopula, zlim=c(0,10))
-Warning in persp.default(xis, yis, zmat, theta = theta, phi = phi, expand = expand,  :
+Warning in persp.default(xis, yis, zmat, xlab = xlab, ylab = ylab, zlab = zlab,  :
   surface extends beyond the box
 > persp(r270BB7Copula(c(-1,-1.5)),dCopula, zlim=c(0,10))
-Warning in persp.default(xis, yis, zmat, theta = theta, phi = phi, expand = expand,  :
+Warning in persp.default(xis, yis, zmat, xlab = xlab, ylab = ylab, zlab = zlab,  :
   surface extends beyond the box
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("BB7Copula", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 
 detaching 'package:copula'
@@ -289,6 +319,7 @@ detaching 'package:copula'
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: BB8Copula-class
 > ### Title: Classes '"BB8Copula"', '"surBB8Copula"', '"r90BB8Copula"' and
 > ###   '"r270BB8Copula"'
@@ -330,12 +361,15 @@ Class "Copula", by class "copula", distance 2
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("BB8Copula-class", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("BB8Copula")
 > ### * BB8Copula
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: BB8Copula
 > ### Title: Constructor of the BB8 family and its derivatives
 > ### Aliases: BB8Copula surBB8Copula r90BB8Copula r270BB8Copula
@@ -358,6 +392,8 @@ The following object is masked from 'package:VineCopula':
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("BB8Copula", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 
 detaching 'package:copula'
@@ -367,6 +403,7 @@ detaching 'package:copula'
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: BetaMatrix
 > ### Title: Matrix of empirical Blomqvist's beta values
 > ### Aliases: BetaMatrix
@@ -381,12 +418,15 @@ detaching 'package:copula'
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("BetaMatrix", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("BiCopCDF")
 > ### * BiCopCDF
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: BiCopCDF
 > ### Title: Distribution function of a bivariate copula
 > ### Aliases: BiCopCDF
@@ -453,12 +493,15 @@ detaching 'package:copula'
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("BiCopCDF", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("BiCopChiPlot")
 > ### * BiCopChiPlot
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: BiCopChiPlot
 > ### Title: Chi-plot for bivariate copula data
 > ### Aliases: BiCopChiPlot
@@ -488,12 +531,15 @@ detaching 'package:copula'
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("BiCopChiPlot", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("BiCopDeriv")
 > ### * BiCopDeriv
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: BiCopDeriv
 > ### Title: Derivatives of a bivariate copula density
 > ### Aliases: BiCopDeriv
@@ -570,12 +616,15 @@ detaching 'package:copula'
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("BiCopDeriv", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("BiCopDeriv2")
 > ### * BiCopDeriv2
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: BiCopDeriv2
 > ### Title: Second derivatives of a bivariate copula density
 > ### Aliases: BiCopDeriv2
@@ -652,12 +701,15 @@ detaching 'package:copula'
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("BiCopDeriv2", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("BiCopEst")
 > ### * BiCopEst
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: BiCopEst
 > ### Title: Parameter estimation for bivariate copula data using inversion
 > ###   of Kendall's tau or maximum likelihood estimation
@@ -758,12 +810,15 @@ $se2
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("BiCopEst", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("BiCopGofTest")
 > ### * BiCopGofTest
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: BiCopGofTest
 > ### Title: Goodness-of-fit test for bivariate copulas
 > ### Aliases: BiCopGofTest
@@ -811,12 +866,15 @@ $statistic
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("BiCopGofTest", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("BiCopHfunc")
 > ### * BiCopHfunc
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: BiCopHfunc
 > ### Title: Conditional distribution function (h-function) of a bivariate
 > ###   copula
@@ -832,12 +890,15 @@ $statistic
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("BiCopHfunc", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("BiCopHfuncDeriv")
 > ### * BiCopHfuncDeriv
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: BiCopHfuncDeriv
 > ### Title: Derivatives of the h-function of a bivariate copula
 > ### Aliases: BiCopHfuncDeriv
@@ -915,12 +976,15 @@ $statistic
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("BiCopHfuncDeriv", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("BiCopHfuncDeriv2")
 > ### * BiCopHfuncDeriv2
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: BiCopHfuncDeriv2
 > ### Title: Second derivatives of the h-function of a bivariate copula
 > ### Aliases: BiCopHfuncDeriv2
@@ -998,12 +1062,15 @@ $statistic
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("BiCopHfuncDeriv2", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("BiCopIndTest")
 > ### * BiCopIndTest
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: BiCopIndTest
 > ### Title: Independence test for bivariate copula data
 > ### Aliases: BiCopIndTest
@@ -1041,12 +1108,15 @@ $p.value
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("BiCopIndTest", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("BiCopKPlot")
 > ### * BiCopKPlot
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: BiCopKPlot
 > ### Title: Kendall's plot (K-plot) for bivariate copula data
 > ### Aliases: BiCopKPlot
@@ -1077,12 +1147,15 @@ $p.value
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("BiCopKPlot", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("BiCopLambda")
 > ### * BiCopLambda
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: BiCopLambda
 > ### Title: Lambda-function (plot) for bivariate copula data
 > ### Aliases: BiCopLambda
@@ -1123,12 +1196,15 @@ $p.value
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("BiCopLambda", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("BiCopMetaContour")
 > ### * BiCopMetaContour
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: BiCopMetaContour
 > ### Title: Contour plot of bivariate meta distribution with different
 > ###   margins and copula (theoretical and empirical)
@@ -1160,12 +1236,15 @@ $p.value
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("BiCopMetaContour", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("BiCopName")
 > ### * BiCopName
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: BiCopName
 > ### Title: Bivariate copula family names
 > ### Aliases: BiCopName
@@ -1191,12 +1270,15 @@ $p.value
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("BiCopName", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("BiCopPDF")
 > ### * BiCopPDF
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: BiCopPDF
 > ### Title: Density of a bivariate copula
 > ### Aliases: BiCopPDF
@@ -1263,12 +1345,15 @@ $p.value
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("BiCopPDF", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("BiCopPar2Beta")
 > ### * BiCopPar2Beta
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: BiCopPar2Beta
 > ### Title: Blomqvist's beta value of a bivariate copula
 > ### Aliases: BiCopPar2Beta
@@ -1281,12 +1366,15 @@ $p.value
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("BiCopPar2Beta", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("BiCopPar2TailDep")
 > ### * BiCopPar2TailDep
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: BiCopPar2TailDep
 > ### Title: Tail dependence coefficients of a bivariate copula
 > ### Aliases: BiCopPar2TailDep
@@ -1313,12 +1401,15 @@ $upper
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("BiCopPar2TailDep", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("BiCopPar2Tau")
 > ### * BiCopPar2Tau
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: BiCopPar2Tau
 > ### Title: Kendall's tau value of a bivariate copula
 > ### Aliases: BiCopPar2Tau
@@ -1339,12 +1430,15 @@ $upper
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("BiCopPar2Tau", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("BiCopSelect")
 > ### * BiCopSelect
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: BiCopSelect
 > ### Title: Selection and maximum likelihood estimation of bivariate copula
 > ###   families
@@ -1395,12 +1489,15 @@ $upper
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("BiCopSelect", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("BiCopSim")
 > ### * BiCopSim
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: BiCopSim
 > ### Title: Simulation from a bivariate copula
 > ### Aliases: BiCopSim
@@ -1412,12 +1509,15 @@ $upper
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("BiCopSim", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("BiCopTau2Par")
 > ### * BiCopTau2Par
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: BiCopTau2Par
 > ### Title: Parameter of a bivariate copula for a given Kendall's tau value
 > ### Aliases: BiCopTau2Par
@@ -1438,12 +1538,15 @@ $upper
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("BiCopTau2Par", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("BiCopVuongClarke")
 > ### * BiCopVuongClarke
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: BiCopVuongClarke
 > ### Title: Scoring goodness-of-fit test based on Vuong and Clarke tests for
 > ###   bivariate copula data
@@ -1464,12 +1567,15 @@ $upper
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("BiCopVuongClarke", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("C2RVine")
 > ### * C2RVine
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: C2RVine
 > ### Title: Transform C-vine to R-vine structure
 > ### Aliases: C2RVine
@@ -1517,6 +1623,8 @@ The following objects are masked from 'package:VineCopula':
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("C2RVine", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 
 detaching 'package:CDVine', 'package:igraph', 'package:mvtnorm',
@@ -1527,6 +1635,7 @@ detaching 'package:CDVine', 'package:igraph', 'package:mvtnorm',
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: D2RVine
 > ### Title: Transform D-vine to R-vine structure
 > ### Aliases: D2RVine
@@ -1574,6 +1683,8 @@ The following objects are masked from 'package:VineCopula':
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("D2RVine", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 
 detaching 'package:CDVine', 'package:igraph', 'package:mvtnorm',
@@ -1584,6 +1695,7 @@ detaching 'package:CDVine', 'package:igraph', 'package:mvtnorm',
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: RVineAIC/BIC
 > ### Title: AIC and BIC of an R-vine copula model
 > ### Aliases: RVineAIC RVineBIC
@@ -1641,12 +1753,15 @@ $pair.BIC
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("RVineAICBIC", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("RVineClarkeTest")
 > ### * RVineClarkeTest
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: RVineClarkeTest
 > ### Title: Clarke test comparing two R-vine copula models
 > ### Aliases: RVineClarkeTest
@@ -1673,12 +1788,15 @@ $pair.BIC
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("RVineClarkeTest", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("RVineCopSelect")
 > ### * RVineCopSelect
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: RVineCopSelect
 > ### Title: Sequential copula selection and estimation of R-vine copula
 > ###   models
@@ -1720,12 +1838,15 @@ $pair.BIC
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("RVineCopSelect", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("RVineCor2pcor")
 > ### * RVineCor2pcor
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: RVineCor2pcor
 > ### Title: correlations to partial correlations and vice versa for R-vines
 > ### Aliases: RVinePcor2cor RVineCor2pcor
@@ -1858,12 +1979,15 @@ V5 -0.02 -0.03 0.03 0.01  0.00
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("RVineCor2pcor", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("RVineGofTest")
 > ### * RVineGofTest
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: RVineGofTest
 > ### Title: Goodness-of-fit tests for R-vine copula models
 > ### Aliases: RVineGofTest
@@ -1887,12 +2011,15 @@ V5 -0.02 -0.03 0.03 0.01  0.00
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("RVineGofTest", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("RVineGrad")
 > ### * RVineGrad
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: RVineGrad
 > ### Title: Gradient of the log-likelihood of an R-vine copula model
 > ### Aliases: RVineGrad
@@ -1931,12 +2058,15 @@ V5 -0.02 -0.03 0.03 0.01  0.00
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("RVineGrad", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("RVineHessian")
 > ### * RVineHessian
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: RVineHessian
 > ### Title: Hessian matrix of the log-likelihood of an R-vine copula model
 > ### Aliases: RVineHessian
@@ -1995,12 +2125,15 @@ V5 -0.02 -0.03 0.03 0.01  0.00
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("RVineHessian", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("RVineLogLik")
 > ### * RVineLogLik
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: RVineLogLik
 > ### Title: Log-likelihood of an R-vine copula model
 > ### Aliases: RVineLogLik
@@ -2091,12 +2224,15 @@ V5 -0.02 -0.03 0.03 0.01  0.00
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("RVineLogLik", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("RVineMLE")
 > ### * RVineMLE
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: RVineMLE
 > ### Title: Maximum likelihood estimation of an R-vine copula model
 > ### Aliases: RVineMLE
@@ -2134,12 +2270,15 @@ V5 -0.02 -0.03 0.03 0.01  0.00
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("RVineMLE", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("RVineMatrix")
 > ### * RVineMatrix
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: RVineMatrix
 > ### Title: R-vine copula model in matrix notation
 > ### Aliases: RVineMatrix
@@ -2203,12 +2342,15 @@ V5,V2|V3,V1,V4: Gaussian with par=0.2 (tau=0.13)
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("RVineMatrix", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("RVineMatrixNormalize")
 > ### * RVineMatrixNormalize
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: RVineMatrixNormalize
 > ### Title: Permute the variables to achieve a natural ordering
 > ### Aliases: RVineMatrixNormalize
@@ -2251,12 +2393,15 @@ Where
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("RVineMatrixNormalize", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("RVinePIT")
 > ### * RVinePIT
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: RVinePIT
 > ### Title: Probability integral transformation for R-vine copula models
 > ### Aliases: RVinePIT
@@ -2280,12 +2425,15 @@ Where
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("RVinePIT", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("RVinePar2Beta")
 > ### * RVinePar2Beta
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: RVinePar2Beta
 > ### Title: Blomqvist's beta values of an R-vine copula model
 > ### Aliases: RVinePar2Beta
@@ -2317,12 +2465,15 @@ Where
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("RVinePar2Beta", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("RVinePar2Tau")
 > ### * RVinePar2Tau
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: RVinePar2Tau
 > ### Title: Kendall's tau values of an R-vine copula model
 > ### Aliases: RVinePar2Tau
@@ -2354,12 +2505,15 @@ Where
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("RVinePar2Tau", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("RVineSeqEst")
 > ### * RVineSeqEst
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: RVineSeqEst
 > ### Title: Sequential estimation of an R-vine copula model
 > ### Aliases: RVineSeqEst
@@ -2459,12 +2613,15 @@ $se2
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("RVineSeqEst", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("RVineSim")
 > ### * RVineSim
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: RVineSim
 > ### Title: Simulation from an R-vine copula model
 > ### Aliases: RVineSim
@@ -2496,12 +2653,15 @@ $se2
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("RVineSim", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("RVineStdError")
 > ### * RVineStdError
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: RVineStdError
 > ### Title: Standard errors of an R-vine copula model
 > ### Aliases: RVineStdError
@@ -2548,12 +2708,15 @@ $se
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("RVineStdError", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("RVineStructureSelect")
 > ### * RVineStructureSelect
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: RVineStructureSelect
 > ### Title: Sequential specification of R- and C-vine copula models
 > ### Aliases: RVineStructureSelect
@@ -2590,12 +2753,15 @@ BAYN.DE + BMW.DE --> BAYN.DE,BMW.DE | ALV.DE,BAS.DE
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("RVineStructureSelect", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("RVineTreePlot")
 > ### * RVineTreePlot
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: RVineTreePlot
 > ### Title: Plot function for R-vine trees
 > ### Aliases: RVineTreePlot
@@ -2641,12 +2807,15 @@ BAYN.DE + BMW.DE --> BAYN.DE,BMW.DE | ALV.DE,BAS.DE
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("RVineTreePlot", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("RVineVuongTest")
 > ### * RVineVuongTest
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: RVineVuongTest
 > ### Title: Vuong test comparing two R-vine copula models
 > ### Aliases: RVineVuongTest
@@ -2673,12 +2842,15 @@ BAYN.DE + BMW.DE --> BAYN.DE,BMW.DE | ALV.DE,BAS.DE
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("RVineVuongTest", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("RvineMatrixCheck")
 > ### * RvineMatrixCheck
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: RVineMatrixCheck
 > ### Title: Vine Matrix validation
 > ### Aliases: RVineMatrixCheck
@@ -2717,12 +2889,15 @@ BAYN.DE + BMW.DE --> BAYN.DE,BMW.DE | ALV.DE,BAS.DE
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("RvineMatrixCheck", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("TauMatrix")
 > ### * TauMatrix
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: TauMatrix
 > ### Title: Matrix of empirical Kendall's tau values
 > ### Aliases: TauMatrix
@@ -2737,12 +2912,15 @@ BAYN.DE + BMW.DE --> BAYN.DE,BMW.DE | ALV.DE,BAS.DE
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("TauMatrix", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("copulaFromFamilyIndex")
 > ### * copulaFromFamilyIndex
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: copulaFromFamilyIndex
 > ### Title: Construction of a copula object from a VineCopula family index
 > ### Aliases: copulaFromFamilyIndex
@@ -2767,12 +2945,15 @@ Parameters:
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("copulaFromFamilyIndex", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("daxreturns")
 > ### * daxreturns
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: daxreturns
 > ### Title: Major German Stocks
 > ### Aliases: daxreturns
@@ -2835,12 +3016,15 @@ VOW3.DE 1.0000000
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("daxreturns", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("dduCopula")
 > ### * dduCopula
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: dduCopula
 > ### Title: partial derivatives of copulas
 > ### Aliases: dduCopula ddvCopula
@@ -2871,6 +3055,8 @@ The following object is masked from 'package:VineCopula':
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("dduCopula", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 
 detaching 'package:copula'
@@ -2880,6 +3066,7 @@ detaching 'package:copula'
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: joeBiCopula-class
 > ### Title: Classes '"joeBiCopula"', '"surJoeBiCopula"', '"r90JoeBiCopula"'
 > ###   and '"r270JoeBiCopula"'
@@ -2922,12 +3109,15 @@ Class "Copula", by class "copula", distance 2
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("joeBiCopula-class", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("joeBiCopula")
 > ### * joeBiCopula
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: joeBiCopula
 > ### Title: Constructor of the survival and rotated versions of the Joe
 > ###   family
@@ -2945,26 +3135,76 @@ The following object is masked from 'package:VineCopula':
 
 > 
 > persp(surJoeBiCopula(1.5),dCopula, zlim=c(0,10))
-Warning in persp.default(xis, yis, zmat, theta = theta, phi = phi, expand = expand,  :
+Warning in persp.default(xis, yis, zmat, xlab = xlab, ylab = ylab, zlab = zlab,  :
   surface extends beyond the box
 > persp(r90JoeBiCopula(-1.5),dCopula, zlim=c(0,10))
-Warning in persp.default(xis, yis, zmat, theta = theta, phi = phi, expand = expand,  :
+Warning in persp.default(xis, yis, zmat, xlab = xlab, ylab = ylab, zlab = zlab,  :
   surface extends beyond the box
 > persp(r270JoeBiCopula(-1.5),dCopula, zlim=c(0,10))
-Warning in persp.default(xis, yis, zmat, theta = theta, phi = phi, expand = expand,  :
+Warning in persp.default(xis, yis, zmat, xlab = xlab, ylab = ylab, zlab = zlab,  :
   surface extends beyond the box
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("joeBiCopula", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 
 detaching 'package:copula'
+
+> nameEx("pobs")
+> ### * pobs
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: pobs
+> ### Title: Pseudo-Observations
+> ### Aliases: pobs
+> 
+> ### ** Examples
+> 
+> ## Simple definition of the function:
+> pobs
+function (x, na.last = "keep", ties.method = c("average", "first", 
+    "random", "max", "min"), lower.tail = TRUE) 
+{
+    U <- apply(x, 2, rank, na.last = na.last, ties.method = ties.method)/(nrow(x) + 
+        1)
+    if (lower.tail) 
+        U
+    else 1 - U
+}
+<environment: namespace:copula>
+> 
+> ## simulate data from a multivariate normal distribution
+> library(mvtnorm)
+> set.seed(1)
+> Sigma <- matrix(c(2, 1, -0.2, 1, 1, 0.3, -0.2, 0.3, 0.5), 3, 3)
+> mu <- c(-3, 2, 1)
+> dat <- rmvnorm(500, sigma = Sigma)
+> pairs(dat)  # plot observations
+> 
+> ## compute pseudo-observations for copula inference
+> udat <- pobs(dat)
+> pairs(udat)
+> # estimate vine copula model
+> fit <- RVineStructureSelect(udat, familyset = c(1, 2))
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("pobs", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+
+detaching 'package:mvtnorm'
 
 > nameEx("surClaytonCopula-class")
 > ### * surClaytonCopula-class
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: surClaytonCopula-class
 > ### Title: Classes '"surClaytonCopula"', '"r90ClaytonCopula"' and
 > ###   '"r270ClaytonCopula"'
@@ -3000,6 +3240,8 @@ The following object is masked from 'package:VineCopula':
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("surClaytonCopula-class", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 
 detaching 'package:copula'
@@ -3009,6 +3251,7 @@ detaching 'package:copula'
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: surClaytonCopula
 > ### Title: survival and rotated Clayton Copulas
 > ### Aliases: surClaytonCopula r90ClaytonCopula r270ClaytonCopula
@@ -3026,17 +3269,19 @@ The following object is masked from 'package:VineCopula':
 
 > 
 > persp(surClaytonCopula(1.5),dCopula, zlim=c(0,10))
-Warning in persp.default(xis, yis, zmat, theta = theta, phi = phi, expand = expand,  :
+Warning in persp.default(xis, yis, zmat, xlab = xlab, ylab = ylab, zlab = zlab,  :
   surface extends beyond the box
 > persp(r90ClaytonCopula(-1.5),dCopula, zlim=c(0,10))
-Warning in persp.default(xis, yis, zmat, theta = theta, phi = phi, expand = expand,  :
+Warning in persp.default(xis, yis, zmat, xlab = xlab, ylab = ylab, zlab = zlab,  :
   surface extends beyond the box
 > persp(r270ClaytonCopula(-1.5),dCopula, zlim=c(0,10))
-Warning in persp.default(xis, yis, zmat, theta = theta, phi = phi, expand = expand,  :
+Warning in persp.default(xis, yis, zmat, xlab = xlab, ylab = ylab, zlab = zlab,  :
   surface extends beyond the box
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("surClaytonCopula", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 
 detaching 'package:copula'
@@ -3046,6 +3291,7 @@ detaching 'package:copula'
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: surGumbelCopula-class
 > ### Title: Classes '"surGumbelCopula"', '"r90GumbelCopula"' and
 > ###   '"r270GumbelCopula"'
@@ -3075,17 +3321,19 @@ The following object is masked from 'package:VineCopula':
 
 > 
 > persp(surGumbelCopula(1.5),dCopula,zlim=c(0,10))
-Warning in persp.default(xis, yis, zmat, theta = theta, phi = phi, expand = expand,  :
+Warning in persp.default(xis, yis, zmat, xlab = xlab, ylab = ylab, zlab = zlab,  :
   surface extends beyond the box
 > persp(r90GumbelCopula(-1.5),dCopula,zlim=c(0,10))
-Warning in persp.default(xis, yis, zmat, theta = theta, phi = phi, expand = expand,  :
+Warning in persp.default(xis, yis, zmat, xlab = xlab, ylab = ylab, zlab = zlab,  :
   surface extends beyond the box
 > persp(r270GumbelCopula(-1.5),dCopula,zlim=c(0,10))
-Warning in persp.default(xis, yis, zmat, theta = theta, phi = phi, expand = expand,  :
+Warning in persp.default(xis, yis, zmat, xlab = xlab, ylab = ylab, zlab = zlab,  :
   surface extends beyond the box
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("surGumbelCopula-class", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 
 detaching 'package:copula'
@@ -3095,6 +3343,7 @@ detaching 'package:copula'
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: surGumbelCopula
 > ### Title: survival and rotated Gumbel Copulas
 > ### Aliases: surGumbelCopula r90GumbelCopula r270GumbelCopula
@@ -3112,17 +3361,19 @@ The following object is masked from 'package:VineCopula':
 
 > 
 > persp(surGumbelCopula(1.5),dCopula, zlim=c(0,10))
-Warning in persp.default(xis, yis, zmat, theta = theta, phi = phi, expand = expand,  :
+Warning in persp.default(xis, yis, zmat, xlab = xlab, ylab = ylab, zlab = zlab,  :
   surface extends beyond the box
 > persp(r90GumbelCopula(-1.5),dCopula, zlim=c(0,10))
-Warning in persp.default(xis, yis, zmat, theta = theta, phi = phi, expand = expand,  :
+Warning in persp.default(xis, yis, zmat, xlab = xlab, ylab = ylab, zlab = zlab,  :
   surface extends beyond the box
 > persp(r270GumbelCopula(-1.5),dCopula, zlim=c(0,10))
-Warning in persp.default(xis, yis, zmat, theta = theta, phi = phi, expand = expand,  :
+Warning in persp.default(xis, yis, zmat, xlab = xlab, ylab = ylab, zlab = zlab,  :
   surface extends beyond the box
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("surGumbelCopula", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 
 detaching 'package:copula'
@@ -3132,6 +3383,7 @@ detaching 'package:copula'
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: tawnT1Copula-class
 > ### Title: Class '"tawnT1Copula"'
 > ### Aliases: tawnT1Copula-class dduCopula,matrix,tawnT1Copula-method
@@ -3171,12 +3423,15 @@ Class "Copula", by class "copula", distance 2
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("tawnT1Copula-class", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("tawnT1Copula")
 > ### * tawnT1Copula
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: tawnT1Copula
 > ### Title: Constructor of the Tawn type 1 family and rotated versions
 > ###   thereof
@@ -3201,6 +3456,8 @@ The following object is masked from 'package:VineCopula':
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("tawnT1Copula", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 
 detaching 'package:copula'
@@ -3210,6 +3467,7 @@ detaching 'package:copula'
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: tawnT2Copula-class
 > ### Title: Class '"tawnT2Copula"'
 > ### Aliases: tawnT2Copula-class dduCopula,matrix,tawnT2Copula-method
@@ -3249,12 +3507,15 @@ Class "Copula", by class "copula", distance 2
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("tawnT2Copula-class", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("tawnT2Copula")
 > ### * tawnT2Copula
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: tawnT2Copula
 > ### Title: Constructor of the Tawn type 2 family and rotated versions
 > ###   thereof
@@ -3279,6 +3540,8 @@ The following object is masked from 'package:VineCopula':
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("tawnT2Copula", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 
 detaching 'package:copula'
@@ -3288,6 +3551,7 @@ detaching 'package:copula'
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: vineCopula-class
 > ### Title: Class '"vineCopula"'
 > ### Aliases: vineCopula-class fitCopula,vineCopula-method
@@ -3312,12 +3576,15 @@ Class "Copula", by class "copula", distance 2
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("vineCopula-class", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > cleanEx()
 > nameEx("vineCopula")
 > ### * vineCopula
 > 
 > flush(stderr()); flush(stdout())
 > 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
 > ### Name: vineCopula
 > ### Title: Constructor of the class 'vineCopula'.
 > ### Aliases: vineCopula
@@ -3337,11 +3604,13 @@ Class "Copula", by class "copula", distance 2
 > 
 > 
 > 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("vineCopula", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
 > ### * <FOOTER>
 > ###
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  12.15 0.15 12.54 NA NA 
+Time elapsed:  10.18 0.24 10.89 NA NA 
 > grDevices::dev.off()
 null device 
           1 
