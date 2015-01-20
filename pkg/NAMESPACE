@@ -61,6 +61,9 @@ export(BiCopPar2Beta)
 export(RVinePar2Beta)
 export(BetaMatrix)
 
+export(as.copuladata)
+export(pairs.copuladata)
+
 # compatibility to copula
 export(fitCopula)
 export(dduCopula,ddvCopula)
@@ -90,5 +93,9 @@ exportClasses(vineCopula)
 
 
 S3method(print, RVineMatrix)
+S3method(as.copuladata, data.frame)
+S3method(as.copuladata, matrix)
+S3method(as.copuladata, list)
+S3method(pairs, copuladata)
 
 useDynLib("VineCopula")
