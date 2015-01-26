@@ -77,22 +77,22 @@ Journal of Hydrologic Engineering, 12 (4), 347-368.
 \examples{
 \dontrun{
 # chi-plots for bivariate Gaussian copula data
-n = 500
-tau = 0.5
+n <- 500
+tau <- 0.5
 
 # simulate copula data
-fam = 1	
-theta = BiCopTau2Par(fam,tau)
-dat = BiCopSim(n,fam,theta)	
+fam <- 1  
+theta <- BiCopTau2Par(fam, tau)
+set.seed(123)
+dat <- BiCopSim(n, fam, theta)  
 
 # create chi-plots
-dev.new(width=16,height=5)
-par(mfrow=c(1,3))
-BiCopChiPlot(dat[,1],dat[,2],xlim=c(-1,1),ylim=c(-1,1),
+par(mfrow = c(1,3))
+BiCopChiPlot(dat[,1], dat[,2], xlim = c(-1,1), ylim = c(-1,1),
              main="General chi-plot")
-BiCopChiPlot(dat[,1],dat[,2],mode="lower",xlim=c(-1,1),
-             ylim=c(-1,1),main="Lower chi-plot")
-BiCopChiPlot(dat[,1],dat[,2],mode="upper",xlim=c(-1,1),
-             ylim=c(-1,1),main="Upper chi-plot")
+BiCopChiPlot(dat[,1], dat[,2], mode = "lower", xlim = c(-1,1),
+             ylim = c(-1,1), main = "Lower chi-plot")
+BiCopChiPlot(dat[,1], dat[,2], mode = "upper", xlim = c(-1,1),
+             ylim = c(-1,1), main = "Upper chi-plot")
 }
 }

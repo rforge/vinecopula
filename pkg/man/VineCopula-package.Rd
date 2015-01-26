@@ -81,11 +81,11 @@ We are especially grateful to Harry Joe for his contributions to the implementat
 Package: \tab VineCopula\cr
 Type: \tab Package\cr
 Version: \tab 1.4\cr
-Date: \tab 2015-01-20\cr
+Date: \tab 2015-01-26\cr
 License: \tab GPL (>=2)\cr
-Depends: \tab R (\eqn{\geq 2.11.0}{>= 2.11.0})
-Imports: MASS, mvtnorm, igraph, methods, copula \cr
-Suggests: \tab CDVine, TSP, ADGofTest \cr
+Depends: \tab R (\eqn{\geq 2.11.0}{>= 2.11.0})\cr
+Imports: \tab MASS, mvtnorm, igraph, methods, copula, ADGofTest\cr
+Suggests: \tab CDVine, TSP\cr
 LazyLoad: \tab yes
 }
 }

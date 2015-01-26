@@ -120,10 +120,11 @@ Econometrica 57 (2), 307-333.
 \examples{
 \dontrun{
 # simulate from a t-copula
-dat = BiCopSim(500,2,0.7,5)
+set.seed(123)
+dat <- BiCopSim(500, 2, 0.7, 5)
 
 # apply the test for families 1-10
-vcgof = BiCopVuongClarke(dat[,1],dat[,2],familyset=c(1:10))
+vcgof <- BiCopVuongClarke(dat[,1], dat[,2], familyset = c(1:10))
 
 # display the Vuong test scores
 vcgof[1,]

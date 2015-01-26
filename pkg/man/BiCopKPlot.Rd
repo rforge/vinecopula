@@ -62,23 +62,24 @@ Journal of Hydrologic Engineering, 12 (4), 347-368.
 \examples{
 \dontrun{
 # Gaussian and Clayton copulas
-n = 500
-tau = 0.5
+n <- 500
+tau <- 0.5
 
 # simulate from Gaussian copula
-fam1 = 1	
-theta1 = BiCopTau2Par(fam1,tau)
-dat1 = BiCopSim(n,fam1,theta1)	
+fam1 <- 1  
+theta1 <- BiCopTau2Par(fam1, tau)
+set.seed(123)
+dat1 <- BiCopSim(n, fam1, theta1)  
 
 # simulate from Clayton copula
-fam2 = 3
-theta2 = BiCopTau2Par(fam2,tau)
-dat2 = BiCopSim(n,fam2,theta2)
+fam2 <- 3
+theta2 <- BiCopTau2Par(fam2, tau)
+set.seed(123)
+dat2 <- BiCopSim(n, fam2, theta2)
 
 # create K-plots
-dev.new(width=10,height=5)
 par(mfrow=c(1,2))
-BiCopKPlot(dat1[,1],dat1[,2],main="Gaussian copula")
-BiCopKPlot(dat2[,1],dat2[,2],main="Clayton copula")
+BiCopKPlot(dat1[,1], dat1[,2], main = "Gaussian copula")
+BiCopKPlot(dat2[,1], dat2[,2], main = "Clayton copula")
 }
 }

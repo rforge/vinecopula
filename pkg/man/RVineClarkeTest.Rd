@@ -64,17 +64,20 @@ Political Analysis, 15, 347-363.
 
 \examples{
 \dontrun{
-# load data set
-data(daxreturns)
-
 # select the R-vine structure, families and parameters
-RVM = RVineStructureSelect(daxreturns[,1:5],c(1:6))
+RVM <- RVineStructureSelect(daxreturns[,1:5], c(1:6))
+RVM$Matrix
+RVM$par
+RVM$par2
 
 # select the C-vine structure, families and parameters
-CVM = RVineStructureSelect(daxreturns[,1:5],c(1:6),type="CVine")
+CVM <- RVineStructureSelect(daxreturns[,1:5], c(1:6), type = "CVine")
+CVM$Matrix
+CVM$par
+CVM$par2
 
 # compare the two models based on the data
-clarke = RVineClarkeTest(daxreturns[,1:5],RVM,CVM)
+clarke <- RVineClarkeTest(daxreturns[,1:5], RVM, CVM)
 clarke$statistic
 clarke$statistic.Schwarz
 clarke$p.value

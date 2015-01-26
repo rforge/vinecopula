@@ -89,34 +89,34 @@ Diploma thesis, Technische Universitaet Muenchen.\cr
 \examples{
 \dontrun{
 # Clayton and rotated Clayton copulas
-n = 1000
-tau = 0.5
+n <- 1000
+tau <- 0.5
 
 # simulate from Clayton copula
-fam = 3	
-theta = BiCopTau2Par(fam,tau)
-dat = BiCopSim(n,fam,theta)
+fam <- 3  
+theta <- BiCopTau2Par(fam, tau)
+set.seed(123)
+dat <- BiCopSim(n, fam, theta)
 
 # create lambda-function plots
-dev.new(width=16,height=5)
-par(mfrow=c(1,3))
-BiCopLambda(dat[,1],dat[,2])	# empirical lambda-function	
-BiCopLambda(family=fam,par=theta)	# theoretical lambda-function
-BiCopLambda(dat[,1],dat[,2],family=fam,par=theta)	# both
+par(mfrow = c(1,3))
+BiCopLambda(dat[,1], dat[,2])  # empirical lambda-function	
+BiCopLambda(family = fam, par = theta)	# theoretical lambda-function
+BiCopLambda(dat[,1], dat[,2], family = fam, par = theta)	# both
 
 # simulate from rotated Clayton copula (90 degrees)
-fam = 23  
-theta = BiCopTau2Par(fam,-tau)
-dat = BiCopSim(n,fam,theta)
-
+fam <- 23  
+theta <- BiCopTau2Par(fam, -tau)
+set.seed(123)
+dat <- BiCopSim(n, fam, theta)
+  
 # rotate the data to standard Clayton copula data
-rot_dat = 1-dat[,1]
+rot_dat <- 1 - dat[,1]
 
-dev.new(width=16,height=5)
-par(mfrow=c(1,3))
-BiCopLambda(rot_dat,dat[,2])  # empirical lambda-function	
-BiCopLambda(family=3,par=-theta)	# theoretical lambda-function
-BiCopLambda(rot_dat,dat[,2],family=3,par=-theta)	# both
+par(mfrow = c(1,3))
+BiCopLambda(rot_dat, dat[,2])  # empirical lambda-function	
+BiCopLambda(family=3, par = -theta)	# theoretical lambda-function
+BiCopLambda(rot_dat, dat[,2], family = 3, par = -theta)	# both
 }
 }
 

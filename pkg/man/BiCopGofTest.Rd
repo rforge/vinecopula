@@ -124,25 +124,26 @@ Econometrica, 50, 1-26.
 \seealso{\code{\link{BiCopDeriv2}}, \code{\link{BiCopDeriv}}, \code{\link{BiCopIndTest}}, \code{\link{BiCopVuongClarke}}}
 
 \examples{
-# simulate from a bivariate Clayton copula
-simdata = BiCopSim(300,3,2)
-u1 = simdata[,1]
-u2 = simdata[,2]
-
-# perform White's goodness-of-fit test for the true copula
-BiCopGofTest(u1,u2,family=3)
-
-# perform Kendall's goodness-of-fit test for the Frank copula
-BiCopGofTest(u1,u2,family=5)
+  # simulate from a bivariate Clayton copula
+  set.seed(123)
+  simdata <- BiCopSim(300, 3, 2)
+  u1 <- simdata[,1]
+  u2 <- simdata[,2]
+  
+  # perform White's goodness-of-fit test for the true copula
+  BiCopGofTest(u1, u2, family = 3)
+  
+  # perform Kendall's goodness-of-fit test for the Frank copula
+  BiCopGofTest(u1, u2, family = 5)
 
 \dontrun{
 # perform Kendall's goodness-of-fit test for the true copula
-gof = BiCopGofTest(u1,u2,family=3,method="kendall")
+gof <- BiCopGofTest(u1, u2, family = 3, method = "kendall")
 gof$p.value.CvM
 gof$p.value.KS
 
 # perform Kendall's goodness-of-fit test for the Frank copula
-gof = BiCopGofTest(u1,u2,family=5,method="kendall")
+gof <- BiCopGofTest(u1, u2, family = 5, method = "kendall")
 gof$p.value.CvM
 gof$p.value.KS
 }

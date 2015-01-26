@@ -54,18 +54,18 @@ BiCopPar2Tau(family, par, par2=0)
     \code{224} = rotated Tawn type 2 copula (90 degrees)  \cr
     \code{234} = rotated Tawn type 2 copula (270 degrees) \cr
 		}
-  \item{par}{Copula parameter.}
-  \item{par2}{Second parameter for the two parameter t-, BB1, BB6, BB7, BB8, Tawn type 1 and type 2 copulas (default: \code{par2 = 0}).
+  \item{par}{Copula parameter (vector).}
+  \item{par2}{Second parameter (vector of same length as \code{par}) for the two parameter t-, BB1, BB6, BB7, BB8, Tawn type 1 and type 2 copulas (default: \code{par2 = 0}).
     Note that the degrees of freedom parameter of the t-copula does not need to be set,
     because the theoretical Kendall's tau value of the t-copula is independent of this choice.}
 }                                                                                  
 
 \value{
-Theoretical value of Kendall's tau corresponding to the bivariate copula family and parameter(s)
+Theoretical value of Kendall's tau (vector) corresponding to the bivariate copula family and parameter(vectors)
 (\eqn{\theta} for one parameter families and the first parameter of the t-copula,
-\eqn{\theta} and \eqn{\delta} for the two parameter BB1, BB6, BB7 and BB8 copulas). 
+\eqn{\theta} and \eqn{\delta} for the two parameter BB1, BB6, BB7, BB8, Tawn type 1 and type 2 copulas). 
 \tabular{ll}{
-No. \tab Kendall's tau \cr
+No. (\code{family}) \tab Kendall's tau (\code{tau}) \cr
 \code{1, 2} \tab \eqn{\frac{2}{\pi}\arcsin(\theta)}{2 / \pi arcsin(\theta)} \cr
 \code{3, 13} \tab \eqn{\frac{\theta}{\theta+2}}{\theta / (\theta+2)} \cr
 \code{4, 14} \tab \eqn{1-\frac{1}{\theta}}{1-1/\theta} \cr
@@ -97,7 +97,7 @@ No. \tab Kendall's tau \cr
 }
 }
 
-\author{Ulf Schepsmeier}
+\author{Ulf Schepsmeier, Tobias Erhardt}
 
 \references{
 Joe, H. (1997).
@@ -113,13 +113,28 @@ Statistical Modelling, 12(3), 229-255.
 
 \examples{
 ## Example 1: Gaussian copula
-tt1 = BiCopPar2Tau(1,0.7)
+tau0 <- 0.5
+rho <- BiCopTau2Par(family = 1, tau = tau0)
 
 # transform back
-BiCopTau2Par(1,tt1)
+tau <- BiCopPar2Tau(family = 1, par = rho)
+tau - 2/pi*asin(rho)
 
 
 ## Example 2: Clayton copula
-BiCopPar2Tau(3,1.3)
+theta <- BiCopTau2Par(family = 3, tau = c(0.4,0.5,0.6))
+BiCopPar2Tau(family = 3, par = theta)
+
+
+## Example 3:
+vpar <- seq(from = 1.1, to = 10, length.out = 100)
+tauC <- BiCopPar2Tau(family = 3, par = vpar)
+tauG <- BiCopPar2Tau(family = 4, par = vpar)
+tauF <- BiCopPar2Tau(family = 5, par = vpar)
+tauJ <- BiCopPar2Tau(family = 6, par = vpar)
+plot(tauC ~ vpar, type = "l", ylim = c(0,1))
+lines(tauG ~ vpar, col = 2)
+lines(tauF ~ vpar, col = 3)
+lines(tauJ ~ vpar, col = 4)
 }
 
