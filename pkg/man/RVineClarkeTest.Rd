@@ -1,7 +1,7 @@
 \name{RVineClarkeTest}     
 \alias{RVineClarkeTest}                
 
-\title{Clarke test comparing two R-vine copula models}
+\title{Clarke Test Comparing Two R-Vine Copula Models}
 
 \description{
 This function performs a Clarke test between two d-dimensional R-vine copula models as specified by their \code{\link{RVineMatrix}} objects.
@@ -63,7 +63,8 @@ Political Analysis, 15, 347-363.
 
 
 \examples{
-\dontrun{
+\donttest{data(daxreturns)
+
 # select the R-vine structure, families and parameters
 RVM <- RVineStructureSelect(daxreturns[,1:5], c(1:6))
 RVM$Matrix

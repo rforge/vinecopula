@@ -113,8 +113,7 @@ Canadian Journal of Statistics 40 (1), 68-85.
 
 Brechmann, E. C. and C. Czado (2011).
 Risk management with high-dimensional vine copulas: An analysis of the Euro Stoxx 50.
-Statistics & Risk Modeling, to appear
-\url{http://mediatum.ub.tum.de/node?id=1079276}.
+Statistics & Risk Modeling, 30 (4), 307-342.
 
 Brechmann, E. C. and U. Schepsmeier (2013).
 Modeling Dependence with C- and D-Vine Copulas: The R Package CDVine.
@@ -161,7 +160,7 @@ Springer
 
 Schepsmeier, U. and J. Stoeber (2012).
 Derivatives and Fisher information of bivariate copulas.
-Statistical Papers.
+Statistical Papers, 55 (2), 525-542.
 \url{http://link.springer.com/article/10.1007/s00362-013-0498-x}.
 
 Schepsmeier, U. (2013)
@@ -174,7 +173,7 @@ Efficient goodness-of-fit tests in multi-dimensional vine copula models.
 \url{http://arxiv.org/abs/1309.5808}
 
 Stoeber, J. and U. Schepsmeier (2013).
-Estimating standard errors in regular vine copula models. Computational Statistics, 1-29
+Estimating standard errors in regular vine copula models. Computational Statistics, 28 (6), 2679-2707
 \url{http://link.springer.com/article/10.1007/s00180-013-0423-8#}.
 
 White, H. (1982)

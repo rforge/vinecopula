@@ -64,19 +64,20 @@
 \seealso{\code{\link[graphics]{pairs}}, \code{\link{as.copuladata}}, \code{\link{BiCopMetaContour}}}
 
 \examples{
-  data(daxreturns)
-  
-  data <- as.copuladata(daxreturns)
-  
-  ## pairs plot with default settings
-  pairs(data[1:5])
-  
-  ## pairs plot with custom settings
-  nlevels <- 20
-  pairs(data[1:5], cex.labels = 2, gap = 1,
-        pch = 20, col = "black", cex.points = 0.5,
-        method.cor = "spearman", col.cor = "green", digits.cor = 3, cex.cor = 1.5,
-        bw = 1.5, levels = seq(0.01, 0.2, length.out = nlevels),
-        margins = "t", margins.par = 5, xylim = c(-1,2),
-        col.contour = heat.colors(nlevels), col.hist = "white")
+data(daxreturns)
+
+data <- as.copuladata(daxreturns)
+
+## pairs plot with default settings
+pairs(data[1:5])
+
+## pairs plot with custom settings
+nlevels <- 20
+pairs(data[1:5], cex.labels = 2, gap = 1,
+      pch = 20, col = "black", cex.points = 0.5,
+      method.cor = "spearman", col.cor = "green",
+      digits.cor = 3, cex.cor = 1.5,
+      bw = 1.5, levels = seq(0.01, 0.2, length.out = nlevels),
+      margins = "t", margins.par = 5, xylim = c(-1,2),
+      col.contour = heat.colors(nlevels), col.hist = "white")
 }

@@ -1,14 +1,14 @@
 \name{BiCopChiPlot}   
 \alias{BiCopChiPlot}  
 
-\title{Chi-plot for bivariate copula data}
+\title{Chi-plot for Bivariate Copula Data}
 
 \description{
 This function creates a chi-plot of given bivariate copula data.
 }
 
 \usage{
-BiCopChiPlot(u1, u2, PLOT=TRUE, mode="NULL", ...)
+BiCopChiPlot(u1, u2, PLOT = TRUE, mode = "NULL", ...)
 }
 
 \arguments{
@@ -75,7 +75,6 @@ Journal of Hydrologic Engineering, 12 (4), 347-368.
 \seealso{\code{\link{BiCopMetaContour}}, \code{\link{BiCopKPlot}}, \code{\link{BiCopLambda}}}
 
 \examples{
-\dontrun{
 # chi-plots for bivariate Gaussian copula data
 n <- 500
 tau <- 0.5
@@ -94,5 +93,4 @@ BiCopChiPlot(dat[,1], dat[,2], mode = "lower", xlim = c(-1,1),
              ylim = c(-1,1), main = "Lower chi-plot")
 BiCopChiPlot(dat[,1], dat[,2], mode = "upper", xlim = c(-1,1),
              ylim = c(-1,1), main = "Upper chi-plot")
-}
 }

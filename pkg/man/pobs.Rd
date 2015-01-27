@@ -44,7 +44,7 @@ pobs
 
 ## simulate data from a multivariate normal distribution
 library(mvtnorm)
-set.seed(1)
+set.seed(123)
 Sigma <- matrix(c(2, 1, -0.2, 1, 1, 0.3, -0.2, 0.3, 0.5), 3, 3)
 mu <- c(-3, 2, 1)
 dat <- rmvnorm(500, sigma = Sigma)

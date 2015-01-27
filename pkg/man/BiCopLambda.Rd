@@ -1,19 +1,19 @@
 \name{BiCopLambda}       
 \alias{BiCopLambda}
 
-\title{Lambda-function (plot) for bivariate copula data}
+\title{Lambda-Function (Plot) for Bivariate Copula Data}
 
 \description{
-This function plots the lambda-function of given bivariate copula data.
+This function plots/returns the lambda-function of given bivariate copula data.
 }
 
 \usage{
-BiCopLambda(u1=NULL, u2=NULL, family="emp", par=0, par2=0, 
-            PLOT=TRUE, ...)
+BiCopLambda(u1 = NULL, u2 = NULL, family = "emp",
+            par = 0, par2 = 0, PLOT = TRUE, ...)
 }
 
 \arguments{
-  \item{u1,u2}{Data vectors of equal length with values in [0,1] (default: \code{u1} and \code{u2 = NULL}).}
+  \item{u1, u2}{Data vectors of equal length with values in [0,1] (default: \code{u1} and \code{u2 = NULL}).}
   \item{family}{An integer defining the bivariate copula family or indicating the empirical lambda-function: \cr
     \code{"emp"} = empirical lambda-function (default) \cr
     \code{1} = Gaussian copula; the theoretical lambda-function is simulated (no closed formula available) \cr
@@ -87,7 +87,6 @@ Diploma thesis, Technische Universitaet Muenchen.\cr
 \seealso{\code{\link{BiCopMetaContour}}, \code{\link{BiCopKPlot}}, \code{\link{BiCopChiPlot}}}
 
 \examples{
-\dontrun{
 # Clayton and rotated Clayton copulas
 n <- 1000
 tau <- 0.5
@@ -117,6 +116,5 @@ par(mfrow = c(1,3))
 BiCopLambda(rot_dat, dat[,2])  # empirical lambda-function	
 BiCopLambda(family=3, par = -theta)	# theoretical lambda-function
 BiCopLambda(rot_dat, dat[,2], family = 3, par = -theta)	# both
-}
 }
 

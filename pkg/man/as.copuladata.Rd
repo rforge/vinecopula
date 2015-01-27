@@ -25,15 +25,15 @@ as.copuladata(data)
 \seealso{\code{\link{pobs}}, \code{\link{pairs.copuladata}}}
 
 \examples{
-  data(daxreturns)
-  
-  data <- as(daxreturns, "matrix")
-  class(as.copuladata(data))
-  
-  data <- as(daxreturns, "data.frame")
-  class(as.copuladata(data))
-  
-  data <- as(daxreturns, "list")
-  names(data) <- names(daxreturns)
-  class(as.copuladata(data))
+data(daxreturns)
+
+data <- as(daxreturns, "matrix")
+class(as.copuladata(data))
+
+data <- as(daxreturns, "data.frame")
+class(as.copuladata(data))
+
+data <- as(daxreturns, "list")
+names(data) <- names(daxreturns)
+class(as.copuladata(data))
 }

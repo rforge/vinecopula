@@ -1,7 +1,7 @@
 \name{RVineVuongTest}         
 \alias{RVineVuongTest}                
 
-\title{Vuong test comparing two R-vine copula models}
+\title{Vuong Test Comparing Two R-Vine Copula Models}
 
 \description{
 This function performs a Vuong test between two d-dimensional R-vine copula models as specified by their \code{\link{RVineMatrix}} objects.
@@ -68,7 +68,7 @@ Econometrica 57 (2), 307-333.
 
 
 \examples{
-\dontrun{
+\donttest{
 # load data set
 data(daxreturns)
 

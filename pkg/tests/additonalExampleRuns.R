@@ -5,29 +5,7 @@ if(docheck){
   
 ### tests from excluded examples
 library(VineCopula)
-
-
-## Not run: 
-# chi-plots for bivariate Gaussian copula data
-n <- 500
-tau <- 0.5
-
-# simulate copula data
-fam <- 1  
-theta <- BiCopTau2Par(fam, tau)
-set.seed(123)
-dat <- BiCopSim(n, fam, theta)	
-
-# create chi-plots
-par(mfrow = c(1,3))
-BiCopChiPlot(dat[,1], dat[,2], xlim = c(-1,1), ylim = c(-1,1),
-             main="General chi-plot")
-BiCopChiPlot(dat[,1], dat[,2], mode = "lower", xlim = c(-1,1),
-             ylim = c(-1,1), main = "Lower chi-plot")
-BiCopChiPlot(dat[,1], dat[,2], mode = "upper", xlim = c(-1,1),
-             ylim = c(-1,1), main = "Upper chi-plot")
-# End(Not run)
-
+data(daxreturns)
 
 ## Not run: 
 # simulate from a bivariate Clayton copula
@@ -35,12 +13,6 @@ set.seed(123)
 simdata <- BiCopSim(300, 3, 2)
 u1 <- simdata[,1]
 u2 <- simdata[,2]
-
-# perform White's goodness-of-fit test for the true copula
-BiCopGofTest(u1, u2, family = 3)
-
-# perform Kendall's goodness-of-fit test for the Frank copula
-BiCopGofTest(u1, u2, family = 5)
 
 # perform Kendall's goodness-of-fit test for the true copula
 gof <- BiCopGofTest(u1, u2, family = 3, method = "kendall")
@@ -53,71 +25,6 @@ gof$p.value.CvM
 gof$p.value.KS
 # End(Not run)
 
-
-## Not run: 
-# Gaussian and Clayton copulas
-n <- 500
-tau <- 0.5
-
-# simulate from Gaussian copula
-fam1 <- 1  
-theta1 <- BiCopTau2Par(fam1, tau)
-set.seed(123)
-dat1 <- BiCopSim(n, fam1, theta1)	
-
-# simulate from Clayton copula
-fam2 <- 3
-theta2 <- BiCopTau2Par(fam2, tau)
-set.seed(123)
-dat2 <- BiCopSim(n, fam2, theta2)
-
-# create K-plots
-par(mfrow=c(1,2))
-BiCopKPlot(dat1[,1], dat1[,2], main = "Gaussian copula")
-BiCopKPlot(dat2[,1], dat2[,2], main = "Clayton copula")
-# End(Not run)
-
-## Not run: 
-# Clayton and rotated Clayton copulas
-n <- 1000
-tau <- 0.5
-
-# simulate from Clayton copula
-fam <- 3  
-theta <- BiCopTau2Par(fam, tau)
-set.seed(123)
-dat <- BiCopSim(n, fam, theta)
-
-# create lambda-function plots
-par(mfrow = c(1,3))
-BiCopLambda(dat[,1], dat[,2])	# empirical lambda-function	
-BiCopLambda(family = fam, par = theta)	# theoretical lambda-function
-BiCopLambda(dat[,1], dat[,2], family = fam, par = theta)	# both
-
-# simulate from rotated Clayton copula (90 degrees)
-fam <- 23  
-theta <- BiCopTau2Par(fam, -tau)
-set.seed(123)
-dat <- BiCopSim(n, fam, theta)
-
-# rotate the data to standard Clayton copula data
-rot_dat <- 1 - dat[,1]
-
-par(mfrow = c(1,3))
-BiCopLambda(rot_dat, dat[,2])  # empirical lambda-function	
-BiCopLambda(family=3, par = -theta)	# theoretical lambda-function
-BiCopLambda(rot_dat, dat[,2], family = 3, par = -theta)	# both
-# End(Not run)
-
-## Not run: 
-## Example 3: empirical data
-data(daxreturns)
-cop3 <- BiCopSelect(daxreturns[,1], daxreturns[,4],
-                    familyset = c(1:10, 13, 14, 16, 23, 24, 26, 33, 34, 36))
-cop3$family
-cop3$par
-cop3$par2
-# End(Not run)
 
 ## Not run: 
 # simulate from a t-copula
@@ -154,7 +61,7 @@ clarke$p.value.Schwarz
 
 ## Not run: 
 # White test with asymptotic p-value
-RVineGofTest(daxreturns[,1:5], RVM, B=0)
+RVineGofTest(daxreturns[,1:5], RVM, B = 0)
 
 # ECP2 test with Cramer-von-Mises test statistic and a bootstrap with 200 replications 
 # for the calculation of the p-value
@@ -202,6 +109,18 @@ mle <- RVineMLE(simdata, RVM, grad = TRUE)
 mle$RVM
 # End(Not run)
 
+## Not run: 
+# PIT data
+pit <- RVinePIT(daxreturns[,1:5], RVM)
+
+par(mfrow = c(1,2))
+plot(daxreturns[,1], daxreturns[,2])  # correlated data
+plot(pit[,1], pit[,2])	# i.i.d. data
+
+cor(daxreturns[,1:5], method = "kendall")
+cor(pit, method = "kendall")
+# End(Not run)
+
 ##TODO shorten this test, takes too long
 # # Not run: 
 # RVM <- RVineStructureSelect(daxreturns, c(1:6), progress=TRUE)
@@ -242,138 +161,5 @@ vine <- vineCopula(4L, "CVine")
 set.seed(123)
 rCopula(500, vine)
 # End(Not run)
-
-
-##  extended 26.01.2015 (Tobias)
-# Test BiCopTau2Par
-print(BiCopTau2Par(family = 0, tau = c(0.4,0.5,0.6)))
-print(BiCopTau2Par(family = 1, tau = c(0.4,0.5,0.6)))
-print(BiCopTau2Par(family = 2, tau = c(0.4,0.5,0.6)))
-print(BiCopTau2Par(family = 3, tau = c(0.4,0.5,0.6)))
-print(BiCopTau2Par(family = 4, tau = c(0.4,0.5,0.6)))
-print(BiCopTau2Par(family = 5, tau = c(0.4,0.5,0.6)))
-print(BiCopTau2Par(family = 6, tau = c(0.4,0.5,0.6)))
-print(BiCopTau2Par(family = 13, tau = c(0.4,0.5,0.6)))
-print(BiCopTau2Par(family = 14, tau = c(0.4,0.5,0.6)))
-print(BiCopTau2Par(family = 16, tau = c(0.4,0.5,0.6)))
-print(BiCopTau2Par(family = 23, tau = -c(0.4,0.5,0.6)))
-print(BiCopTau2Par(family = 24, tau = -c(0.4,0.5,0.6)))
-print(BiCopTau2Par(family = 26, tau = -c(0.4,0.5,0.6)))
-print(BiCopTau2Par(family = 33, tau = -c(0.4,0.5,0.6)))
-print(BiCopTau2Par(family = 34, tau = -c(0.4,0.5,0.6)))
-print(BiCopTau2Par(family = 36, tau = -c(0.4,0.5,0.6)))
-print(BiCopTau2Par(family = 41, tau = c(0.4,0.5,0.6)))
-print(BiCopTau2Par(family = 51, tau = c(0.4,0.5,0.6)))
-print(BiCopTau2Par(family = 61, tau = c(0.4,0.5,0.6)))
-print(BiCopTau2Par(family = 71, tau = c(0.4,0.5,0.6)))
-print(BiCopTau2Par(family = 41, tau = -c(0.4,0.5,0.6)))
-print(BiCopTau2Par(family = 51, tau = -c(0.4,0.5,0.6)))
-print(BiCopTau2Par(family = 61, tau = -c(0.4,0.5,0.6)))
-print(BiCopTau2Par(family = 71, tau = -c(0.4,0.5,0.6)))
-
-
-
-
-# Test BiCopPar2Tau (one parametric families)
-theta <- BiCopTau2Par(family = 0, tau = c(0.4,0.5,0.6))
-print(BiCopPar2Tau(family = 0, par = theta))
-theta <- BiCopTau2Par(family = 1, tau = c(0.4,0.5,0.6))
-print(BiCopPar2Tau(family = 1, par = theta))
-theta <- BiCopTau2Par(family = 3, tau = c(0.4,0.5,0.6))
-print(BiCopPar2Tau(family = 3, par = theta))
-theta <- BiCopTau2Par(family = 4, tau = c(0.4,0.5,0.6))
-print(BiCopPar2Tau(family = 4, par = theta))
-theta <- BiCopTau2Par(family = 5, tau = c(0.4,0.5,0.6))
-print(BiCopPar2Tau(family = 5, par = theta))
-theta <- BiCopTau2Par(family = 6, tau = c(0.4,0.5,0.6))
-print(BiCopPar2Tau(family = 6, par = theta))
-theta <- BiCopTau2Par(family = 13, tau = c(0.4,0.5,0.6))
-print(BiCopPar2Tau(family = 13, par = theta))
-theta <- BiCopTau2Par(family = 14, tau = c(0.4,0.5,0.6))
-print(BiCopPar2Tau(family = 14, par = theta))
-theta <- BiCopTau2Par(family = 16, tau = c(0.4,0.5,0.6))
-print(BiCopPar2Tau(family = 16, par = theta))
-theta <- BiCopTau2Par(family = 23, tau = -c(0.4,0.5,0.6))
-print(BiCopPar2Tau(family = 23, par = theta))
-theta <- BiCopTau2Par(family = 24, tau = -c(0.4,0.5,0.6))
-print(BiCopPar2Tau(family = 24, par = theta))
-theta <- BiCopTau2Par(family = 26, tau = -c(0.4,0.5,0.6))
-print(BiCopPar2Tau(family = 26, par = theta))
-theta <- BiCopTau2Par(family = 33, tau = -c(0.4,0.5,0.6))
-print(BiCopPar2Tau(family = 33, par = theta))
-theta <- BiCopTau2Par(family = 34, tau = -c(0.4,0.5,0.6))
-print(BiCopPar2Tau(family = 34, par = theta))
-theta <- BiCopTau2Par(family = 36, tau = -c(0.4,0.5,0.6))
-print(BiCopPar2Tau(family = 36, par = theta))
-theta <- BiCopTau2Par(family = 41, tau = c(0.4,0.5,0.6))
-print(BiCopPar2Tau(family = 41, par = theta))
-theta <- BiCopTau2Par(family = 51, tau = c(0.4,0.5,0.6))
-print(BiCopPar2Tau(family = 51, par = theta))
-theta <- BiCopTau2Par(family = 61, tau = c(0.4,0.5,0.6))
-print(BiCopPar2Tau(family = 61, par = theta))
-theta <- BiCopTau2Par(family = 71, tau = c(0.4,0.5,0.6))
-print(BiCopPar2Tau(family = 71, par = theta))
-theta <- BiCopTau2Par(family = 41, tau = -c(0.4,0.5,0.6))
-print(BiCopPar2Tau(family = 41, par = theta))
-theta <- BiCopTau2Par(family = 51, tau = -c(0.4,0.5,0.6))
-print(BiCopPar2Tau(family = 51, par = theta))
-theta <- BiCopTau2Par(family = 61, tau = -c(0.4,0.5,0.6))
-print(BiCopPar2Tau(family = 61, par = theta))
-theta <- BiCopTau2Par(family = 71, tau = -c(0.4,0.5,0.6))
-print(BiCopPar2Tau(family = 71, par = theta))
-
-# Test BiCopPar2Tau (two parametric families)
-theta <- BiCopTau2Par(family = 2, tau = c(0.4,0.5,0.6))
-print(BiCopPar2Tau(family = 2, par = theta))
-theta <- 1:3
-delta <- 1:3
-print(BiCopPar2Tau(family = 7, par = theta, par2 = delta))
-print(BiCopPar2Tau(family = 17, par = theta, par2 = delta))
-theta <- -(1:3)
-delta <- -(1:3)
-print(BiCopPar2Tau(family = 27, par = theta, par2 = delta))
-print(BiCopPar2Tau(family = 37, par = theta, par2 = delta))
-theta <- 2:4
-delta <- 1:3
-print(BiCopPar2Tau(family = 8, par = theta, par2 = delta))
-print(BiCopPar2Tau(family = 18, par = theta, par2 = delta))
-theta <- -(2:4)
-delta <- -(1:3)
-print(BiCopPar2Tau(family = 28, par = theta, par2 = delta))
-print(BiCopPar2Tau(family = 38, par = theta, par2 = delta))
-theta <- 1:3
-delta <- 1:3
-print(BiCopPar2Tau(family = 9, par = theta, par2 = delta))
-print(BiCopPar2Tau(family = 19, par = theta, par2 = delta))
-theta <- -(1:3)
-delta <- -(1:3)
-print(BiCopPar2Tau(family = 29, par = theta, par2 = delta))
-print(BiCopPar2Tau(family = 39, par = theta, par2 = delta))
-theta <- 2:4
-delta <- c(0.1, 0.5, 0.9)
-print(BiCopPar2Tau(family = 10, par = theta, par2 = delta))
-print(BiCopPar2Tau(family = 20, par = theta, par2 = delta))
-theta <- -(2:4)
-delta <- -c(0.1, 0.5, 0.9)
-print(BiCopPar2Tau(family = 30, par = theta, par2 = delta))
-print(BiCopPar2Tau(family = 40, par = theta, par2 = delta))
-
-theta <- 2:4
-delta <- c(0.1, 0.5, 0.9)
-print(BiCopPar2Tau(family = 104, par = theta, par2 = delta))
-print(BiCopPar2Tau(family = 114, par = theta, par2 = delta))
-theta <- -(2:4)
-delta <- c(0.1, 0.5, 0.9)
-print(BiCopPar2Tau(family = 124, par = theta, par2 = delta))
-print(BiCopPar2Tau(family = 134, par = theta, par2 = delta))
-
-theta <- 2:4
-delta <- c(0.1, 0.5, 0.9)
-print(BiCopPar2Tau(family = 204, par = theta, par2 = delta))
-print(BiCopPar2Tau(family = 214, par = theta, par2 = delta))
-theta <- -(2:4)
-delta <- c(0.1, 0.5, 0.9)
-print(BiCopPar2Tau(family = 224, par = theta, par2 = delta))
-print(BiCopPar2Tau(family = 234, par = theta, par2 = delta))
   
 }
