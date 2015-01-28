@@ -6,10 +6,9 @@
 \title{Statistical Inference of Vine Copulas}
 
 \description{
-This package provides functions for statistical inference of vine copulas.
-It contains tools for bivariate exploratory data analysis, bivariate copula selection and (vine) tree construction.
-Models can be estimated either sequentially or by joint maximum likelihood estimation.
-Sampling algorithms and plotting methods are also included.
+Tools for bivariate exploratory data analysis, bivariate copula selection and (vine) tree construction are provided.
+Vine copula models can be estimated either sequentially or by joint maximum likelihood estimation.
+Sampling algorithms and plotting methods are included.
 Data is assumed to lie in the unit hypercube (so-called copula data).
 For C- and D-vines links to the package CDVine are provided.
 }

@@ -175,7 +175,7 @@ BiCopEst <-
       if(family==2) ## t
       {
         theta1 <- sin(tau*pi/2)
-        delta1 <- min(10,(max.df+2)/2 )      # Nehme die Mitte zwischen 2S und max.df So kann man mit dem Startwert auch nicht außerhalb des vom User gesetzten Bereiches sein.
+        delta1 <- min(10,(max.df+2)/2 )      # Take the middle between 2 and max.df
         delta = MLE_intern(cbind(u1,u2),c(theta1,delta1),family=family,se=FALSE,max.df,max.BB,cor.fixed=TRUE,weights)$par[2]
       }
       else if(family==7 || family==17)	## BB1
