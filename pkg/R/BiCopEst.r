@@ -898,17 +898,18 @@ MLE_intern <- function(data, start.parm, family, se = FALSE, max.df = 30,
 MLE_intern_Tawn <- function(data, start.parm, family, se = FALSE) {
     
     n <- dim(data)[1]
-    tau <- fasttau(data[, 1], data[, 2])
     
+    ## set bounds for optimization
+    tau <- fasttau(data[, 1], data[, 2])
     if (family == 104 || family == 114 || family == 204 || family == 214) {
-        parlower <- c(1.001, max(tau, 1e-04))
-        parupper <- c(20, min(tau + 0.1, 0.99))
+        parlower <- c(1.001, max(tau - 0.1, 1e-04))
+        parupper <- c(20, min(tau + 0.2, 0.99))
     } else if (family == 124 || family == 134 || family == 224 || family == 234) {
-        parlower <- c(-20, max(-tau, 1e-04))
-        parupper <- c(-1.001, min(-tau + 0.1, 0.99))
+        parlower <- c(-20, max(-tau - 0.1, 1e-04))
+        parupper <- c(-1.001, min(-tau + 0.2, 0.99))
     }
     
-    # Hier fehlt noch die log-likelihood Funktion
+    ## log-liklihood function
     loglikfunc <- function(param) {
         ll <- .C("LL_mod2",
                  as.integer(family), 
@@ -925,6 +926,7 @@ MLE_intern_Tawn <- function(data, start.parm, family, se = FALSE) {
         return(ll)
     }
     
+    ## optimize log-likelihood
     out <- list()
     # print(start.parm)
     if (se == TRUE) {
@@ -951,6 +953,7 @@ MLE_intern_Tawn <- function(data, start.parm, family, se = FALSE) {
                           control = list(fnscale = -1, maxit = 500))
     }
     
+    ## return results
     out$par <- optimout$par
     out$value <- optimout$value
     return(out)
