@@ -1,5 +1,5 @@
-RVineCopSelect <- function(data, familyset = NA, Matrix, selectioncrit = "AIC", indeptest = FALSE, level = 0.05, trunclevel = NA) {
-    n <- dim(data)[2]
+RVineCopSelect <- function(data, familyset = NA, Matrix, selectioncrit = "AIC", indeptest = FALSE, level = 0.05, trunclevel = NA, rotations = TRUE) {
+    n <- ncol(data)
     N <- nrow(data)
     
     ## sanity checks    
@@ -22,15 +22,16 @@ RVineCopSelect <- function(data, familyset = NA, Matrix, selectioncrit = "AIC", 
         stop("Selection criterion not implemented.")
     if (level < 0 & level > 1) 
         stop("Significance level has to be between 0 and 1.")
-    
-    ## adjustement for truncated vines
     if (is.na(trunclevel)) 
         trunclevel <- n
+    
+    ## adjust familyset
     types <- familyset
     if (trunclevel == 0) 
         types <- 0
     
     ## reorder matrix to natural order
+    Matrix <- ToLowerTri(Matrix)
     M <- Matrix
     Mold <- M
     o <- diag(M)
@@ -65,10 +66,24 @@ RVineCopSelect <- function(data, familyset = NA, Matrix, selectioncrit = "AIC", 
             
             ## estimate pair-copula
             if (n + 1 - k > trunclevel) {
-                outcop <- BiCopSelect(zr2, zr1, 0, selectioncrit, indeptest, level)
+                outcop <- BiCopSelect(zr2,
+                                      zr1,
+                                      0,
+                                      selectioncrit,
+                                      indeptest,
+                                      level,
+                                      weights = NA,
+                                      rotations)
             } else {
                 # outcop = BiCopSelect(zr1,zr2,types,selectioncrit,indeptest,level)
-                outcop <- BiCopSelect(zr2, zr1, types[1:3], selectioncrit, indeptest, level)
+                outcop <- BiCopSelect(zr2,
+                                      zr1,
+                                      types,
+                                      selectioncrit,
+                                      indeptest,
+                                      level,
+                                      weights = NA,
+                                      rotations)
             }
             
             ## store results for pair-copula

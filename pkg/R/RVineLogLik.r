@@ -107,3 +107,8 @@ RVineLogLik <- function(data, RVM, par = RVM$par, par2 = RVM$par2, separate = FA
     
     return(list(loglik = loglik, V = V))
 }
+
+
+RVinePDF <- function(newdata, RVM) {
+    exp(RVineLogLik(newdata, RVM, separate = TRUE)$loglik)
+}

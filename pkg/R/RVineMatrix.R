@@ -1,11 +1,20 @@
 RVineMatrix <- function(Matrix, family = array(0, dim = dim(Matrix)), par = array(NA, dim = dim(Matrix)), par2 = array(NA, dim = dim(Matrix)), names = NULL) {
     
+    ## set NAs to zero
     Matrix[is.na(Matrix)] <- 0
     family[is.na(family)] <- 0
-    family[upper.tri(family, diag = T)] <- 0
     par[is.na(par)] <- 0
-    par[upper.tri(par, diag = T)] <- 0
     par2[is.na(par2)] <- 0
+    
+    ## convert to lower triangular matrix if necessary
+    Matrix <- ToLowerTri(Matrix)
+    family <- ToLowerTri(family)
+    par    <- ToLowerTri(par)
+    par2   <- ToLowerTri(par2)
+    
+    ## set upper triangle to zero
+    family[upper.tri(family, diag = T)] <- 0
+    par[upper.tri(par, diag = T)] <- 0
     par2[upper.tri(par2, diag = T)] <- 0
     
     if (dim(Matrix)[1] != dim(Matrix)[2]) 
@@ -553,4 +562,24 @@ RVineMatrixCheck <- function(M) {
     b <- varray2bin(ANOobj$NO)  # if OK, a binary matrix is returned here
     if (is.matrix(b)) 
         return(1) else return(-1)
+}
+
+#### -------------------------------------------------------------
+## function that converts upper triagonal matrix to lower triagonal
+ToLowerTri <- function(x) {
+    ## only change matrix if not already lower triagonal
+    if(all(x[lower.tri(x)] == 0)) {
+        x[nrow(x):1, ncol(x):1]
+    } else {
+        x
+    }
+}
+
+ToUpperTri <- function(x) {
+    ## only change matrix if not already upper triagonal
+    if(all(x[upper.tri(x)] == 0)) {
+        x[nrow(x):1, ncol(x):1]
+    } else {
+        x
+    }
 }

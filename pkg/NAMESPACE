@@ -31,6 +31,7 @@ export(BiCopHfuncDeriv2)
 export(BiCopGofTest)
 
 export(RVineLogLik)
+export(RVinePDF)
 export(RVineAIC)
 export(RVineBIC)
 export(RVineMatrix)

@@ -1,46 +1,53 @@
 RVineStructureSelect <- function(data, familyset = NA, type = 0, selectioncrit = "AIC", indeptest = FALSE, 
-                                 level = 0.05, trunclevel = NA, progress = FALSE,  weights = NA) {
+                                 level = 0.05, trunclevel = NA, progress = FALSE,  weights = NA, rotations = TRUE) { 
+    d <- n <- dim(data)[2]
+    N <- dim(data)[1]
     
+    ## sanity checks 
     if (type == 0) 
         type <- "RVine" else if (type == 1) 
             type <- "CVine"
     if (type != "RVine" & type != "CVine") 
         stop("Vine model not implemented.")
-    
-    d <- n <- dim(data)[2]
-    N <- dim(data)[1]
-    
     if (N < 2) 
         stop("Number of observations has to be at least 2.")
     if (d < 3) 
         stop("Dimension has to be at least 3.")
     if (any(data > 1) || any(data < 0)) 
         stop("Data has to be in the interval [0,1].")
-    
-    if (!is.na(familyset[1])) 
-        for (i in 1:length(familyset)) if (!(familyset[i] %in% c(0, 1:10, 13, 14, 16:20,
-                                                                 23, 24, 26:30, 33, 34, 36:40,
-                                                                 104, 114, 124, 134, 
-                                                                 204, 214, 224, 234))) 
-            stop("Copula family not implemented.")
+    if (!is.na(familyset[1])) {
+        for (i in 1:length(familyset)) { 
+            if (!(familyset[i] %in% c(0, 1:10, 13, 14, 16:20,
+                                      23, 24, 26:30, 33, 34, 36:40,
+                                      104, 114, 124, 134, 204, 214, 224, 234))) 
+                stop("Copula family not implemented.")
+        }
+    }
     if (selectioncrit != "AIC" && selectioncrit != "BIC") 
         stop("Selection criterion not implemented.")
     if (level < 0 & level > 1) 
         stop("Significance level has to be between 0 and 1.")
     
+    ## set variable names and trunclevel if not provided 
     if (is.null(colnames(data))) 
         colnames(data) <- paste("V", 1:n, sep = "")
-    
     if (is.na(trunclevel)) 
         trunclevel <- d
     
-    RVine <- list(Tree = NULL, Graph = NULL)
-    
+    ## adjust familyset 
     if (trunclevel == 0) 
         familyset <- 0
+    if (rotations) 
+        familyset <- with_rotations(familyset)
     
+    ## initialize object for results
+    RVine <- list(Tree = NULL, Graph = NULL)
+    
+    ## estimation in first tree ----------------------------
+    # find optimal tree
     g <- initializeFirstGraph(data, weights)
-    mst <- findMaximumTauTree(g, mode = type)
+    mst <- findMaximumTauTree(g, mode = type) 
+    # estimate pair-copulas
     VineTree <- fit.FirstTreeCopulas(mst, 
                                      data, 
                                      familyset,
@@ -48,20 +55,20 @@ RVineStructureSelect <- function(data, familyset = NA, type = 0, selectioncrit =
                                      indeptest, 
                                      level,
                                      weights = weights)
-    
+    # store results
     RVine$Tree[[1]] <- VineTree
     RVine$Graph[[1]] <- g
     oldVineGraph <- VineTree
     
-    
+    ## estimation in higher trees --------------------------
     for (i in 2:(n - 1)) {
-        
+        # only estimate pair-copulas if not truncated
         if (trunclevel == i - 1) 
             familyset <- 0
-        
+        # find optimal tree
         g <- buildNextGraph(VineTree, weights)
-        mst <- findMaximumTauTree(g, mode = type)
-        
+        mst <- findMaximumTauTree(g, mode = type) 
+        # estimate pair-copulas
         VineTree <- fit.TreeCopulas(mst,
                                     VineTree, 
                                     familyset, 
@@ -70,12 +77,13 @@ RVineStructureSelect <- function(data, familyset = NA, type = 0, selectioncrit =
                                     level, 
                                     progress, 
                                     weights = weights)
-        
+        # store results
         RVine$Tree[[i]] <- VineTree
         RVine$Graph[[i]] <- g
     }
     
-    return(as.RVM(RVine))
+    ## return results as 'RVineMatrix' object
+    as.RVM(RVine)
 }
 
 initializeFirstGraph <- function(data.univ, weights) {
@@ -179,11 +187,11 @@ fit.FirstTreeCopulas <- function(mst, data.univ, type, copulaSelectionBy, testFo
         
         if (is.null(V(mst)[a[1]]$name) || is.null(V(mst)[a[2]]$name)) {
             E(mst)[i]$Copula.Name <- paste(a[1], a[2], sep = " , ") 
-            } else {
-                E(mst)[i]$Copula.Name <- paste(V(mst)[a[1]]$name, 
-                                               V(mst)[a[2]]$name,
-                                               sep = " , ")
-            }
+        } else {
+            E(mst)[i]$Copula.Name <- paste(V(mst)[a[1]]$name, 
+                                           V(mst)[a[2]]$name,
+                                           sep = " , ")
+        }
     }
     
     outForACopula <- lapply(X = parameterForACopula,
@@ -451,7 +459,13 @@ intern_SchnittDifferenz <- function(liste1, liste2) {
 fit.ACopula <- function(u1, u2, familyset = NA, selectioncrit = "AIC", indeptest = FALSE, level = 0.05, weights = NA) {
     
     ## select family and estimate parameter(s) for the pair copula
-    out <- BiCopSelect(u1, u2, familyset, selectioncrit, indeptest, level, weights = weights)
+    out <- BiCopSelect(u1, u2,
+                       familyset,
+                       selectioncrit,
+                       indeptest,
+                       level,
+                       weights = weights,
+                       rotations = FALSE)
     
     ## change rotation if family is not symmetric wrt the main diagonal
     if (out$family %in% c(23, 24, 26:30, 124, 224)) {

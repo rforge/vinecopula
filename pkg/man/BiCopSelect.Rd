@@ -10,8 +10,8 @@ The corresponding parameter estimates are obtained by maximum likelihood estimat
 }
 
 \usage{
-BiCopSelect(u1, u2, familyset = NA, selectioncrit = "AIC",
-            indeptest = FALSE, level = 0.05, weights = NA)
+BiCopSelect(u1, u2, familyset = NA, selectioncrit = "AIC", indeptest = FALSE,
+            level = 0.05, weights = NA, rotations = TRUE)
 }
 
 \arguments{
@@ -67,6 +67,7 @@ BiCopSelect(u1, u2, familyset = NA, selectioncrit = "AIC",
     The independence copula is chosen if the null hypothesis of independence cannot be rejected.}
   \item{level}{Numeric; significance level of the independence test (default: \code{level = 0.05}).}
   \item{weights}{Numerical; weights for each observation (optional).}
+  \item{rotations}{If \code{TRUE}, all rotations of the families in \code{familyset} are included.}
 }
 
 \value{

@@ -1,4 +1,6 @@
-BiCopSelect <- function(u1, u2, familyset = NA, selectioncrit = "AIC", indeptest = FALSE, level = 0.05, weights = NA) {
+BiCopSelect <- function(u1, u2, familyset = NA, selectioncrit = "AIC", indeptest = FALSE, level = 0.05, weights = NA, rotations = TRUE) {
+    
+    ## sanity checks
     if (is.null(u1) == TRUE || is.null(u2) == TRUE) 
         stop("u1 and/or u2 are not set or have length zero.")
     if (length(u1) != length(u2)) 
@@ -23,9 +25,14 @@ BiCopSelect <- function(u1, u2, familyset = NA, selectioncrit = "AIC", indeptest
     if (level < 0 & level > 1) 
         stop("Significance level has to be between 0 and 1.")
     
+    ## prepare objects
     out <- list()
     data1 <- u1
     data2 <- u2
+    
+    ## adjust familyset if rotations = TRUE
+    if (rotations) familyset <- with_rotations(familyset)
+    
     
     if (!is.na(familyset[1]) & any(familyset == 0)) {
         # select independence if allowed
@@ -463,5 +470,30 @@ BiCopSelect <- function(u1, u2, familyset = NA, selectioncrit = "AIC", indeptest
     ## store and return results
     out$par2 <- out$par[2]
     out$par <- out$par[1]
+    out
+}
+
+
+##### ----------------------------------------------------------------------
+## function for augmenting a familyset with rotations
+with_rotations <- function(nums) {
+    unique(unlist(lapply(nums, get_rotations)))
+}
+
+get_rotations <- function(i) {
+    # no roations for independence, gaussian, student and frank copulas
+    out <- i
+    
+    ## rotations for other families
+    if(i %in% c(3, 13, 23, 33)) out <- c(3, 13, 23, 33)
+    if(i %in% c(4, 14, 24, 34)) out <- c(4, 14, 24, 34)
+    if(i %in% c(6, 16, 26, 36)) out <- c(6, 16, 26, 36)
+    if(i %in% c(7, 17, 27, 37)) out <- c(7, 17, 27, 37)
+    if(i %in% c(8, 18, 28, 38)) out <- c(8, 18, 28, 38)
+    if(i %in% c(9, 19, 29, 39)) out <- c(9, 19, 29, 39)
+    if(i %in% c(10, 20, 30, 40)) out <- c(10, 20, 30, 40)
+    if(i %in% c(104, 114, 124, 134)) out <- c(104, 114, 124, 134)
+    if(i %in% c(204, 214, 224, 234)) out <- c(204, 214, 224, 234)
+    
     out
 }
