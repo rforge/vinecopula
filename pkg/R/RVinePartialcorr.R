@@ -102,6 +102,7 @@ RVinePcor2cor <- function(RVM) {
     stopifnot(is(RVM, "RVineMatrix"))
     stopifnot(all(RVM$family %in% c(0, 1, 2)))
     
+    RVM <- RVineMatrixNormalize(RVM)
     oldRVM <- RVM
     oldOrder <- diag(RVM$Matrix)
     if (any(oldOrder != length(oldOrder):1)) {
@@ -177,33 +178,33 @@ RVinePcor2cor <- function(RVM) {
 }
 
 
-# #######################################
-# # for immeddeate testing run as well ##
-# #######################################
-# 
-# normalizeRVineMatrix = function(RVM){
-#   
-#   oldOrder = diag(RVM$Matrix)
-#   Matrix = reorderRVineMatrix(RVM$Matrix)
-#   
-#   names <- RVM$names
-#   if(is.null(names))
-#     names <- paste("V",1:nrow(RVM$Matrix),sep="")
-#   
-#   return(RVineMatrix(Matrix, RVM$family, RVM$par, RVM$par2, names = rev(names[oldOrder])))
-# }
-# 
-# reorderRVineMatrix = function(Matrix){
-#   oldOrder = diag(Matrix)
-#   
-#   O = apply(t(1:nrow(Matrix)),2,"==", Matrix)
-#   
-#   for(i in 1:nrow(Matrix)){
-#     Matrix[O[,oldOrder[i]]] = nrow(Matrix)-i+1
-#   }
-#   
-#   return(Matrix)
-# }
+#######################################
+# for immeddeate testing run as well ##
+#######################################
+
+normalizeRVineMatrix = function(RVM){
+  
+  oldOrder = diag(RVM$Matrix)
+  Matrix = reorderRVineMatrix(RVM$Matrix)
+  
+  names <- RVM$names
+  if(is.null(names))
+    names <- paste("V",1:nrow(RVM$Matrix),sep="")
+  
+  return(RVineMatrix(Matrix, RVM$family, RVM$par, RVM$par2, names = rev(names[oldOrder])))
+}
+
+reorderRVineMatrix = function(Matrix){
+  oldOrder = diag(Matrix)
+  
+  O = apply(t(1:nrow(Matrix)),2,"==", Matrix)
+  
+  for(i in 1:nrow(Matrix)){
+    Matrix[O[,oldOrder[i]]] = nrow(Matrix)-i+1
+  }
+  
+  return(Matrix)
+}
 # 
 # # examples/test cases
 # ######################
