@@ -470,6 +470,7 @@ BiCopSelect <- function(u1, u2, familyset = NA, selectioncrit = "AIC", indeptest
     ## store and return results
     out$par2 <- out$par[2]
     out$par <- out$par[1]
+    class(out) <- "BiCop"
     out
 }
 

@@ -3,11 +3,13 @@ import(mvtnorm)
 import(igraph)
 import(copula)
 import(methods)
+import(lattice)
 
 importFrom(ADGofTest, ad.test)
 
 export(pobs)
 
+export(BiCop)
 export(BiCopEst)
 export(BiCopMetaContour)
 export(BiCopChiPlot)
@@ -98,5 +100,6 @@ S3method(as.copuladata, data.frame)
 S3method(as.copuladata, matrix)
 S3method(as.copuladata, list)
 S3method(pairs, copuladata)
+S3method(plot, BiCop)
 
 useDynLib("VineCopula")

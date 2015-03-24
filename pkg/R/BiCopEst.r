@@ -332,7 +332,7 @@ BiCopEst <- function(u1, u2, family, method = "mle", se = FALSE, max.df = 30, ma
     }
     
     ## store estimated parameters
-    out2 <- list()
+    out2 <- list(family = family)
     if (length(theta) == 2) {
         out2$par <- theta[1]
         out2$par2 <- theta[2]
@@ -353,6 +353,7 @@ BiCopEst <- function(u1, u2, family, method = "mle", se = FALSE, max.df = 30, ma
     }
     
     ## return results
+    class(out2) <- "BiCop"
     out2
 }
 

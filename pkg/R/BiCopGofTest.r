@@ -1,10 +1,11 @@
 BiCopGofTest <- function(u1, u2, family, par = 0, par2 = 0, method = "white", max.df = 30, 
-                         B = 100) {
+                         B = 100, obj = NULL) {
     if (method == "White") 
         method <- "white"
     if (method == "Kendall") 
         method <- "kendall"
     
+    ## sanity checks for u1, u2
     if (is.null(u1) == TRUE || is.null(u2) == TRUE) 
         stop("u1 and/or u2 are not set or have length zero.")
     if (length(u1) != length(u2)) 
@@ -13,6 +14,27 @@ BiCopGofTest <- function(u1, u2, family, par = 0, par2 = 0, method = "white", ma
         stop("Data has be in the interval [0,1].")
     if (any(u2 > 1) || any(u2 < 0)) 
         stop("Data has be in the interval [0,1].")
+    
+    ## extract family and parameters if BiCop object is provided
+    if (missing(family))
+        family <- NA
+    if (!is.null(obj)) {
+        stopifnot(class(obj) == "BiCop")
+        family <- obj$family
+        par <- obj$par
+        par2 <- obj$par2
+    }
+    if (class(family) == "BiCop") {
+        # for short hand usage extract from family
+        obj <- family
+        family <- obj$family
+        par <- obj$par
+        par2 <- obj$par2
+    }
+    
+    ## sanity checks for family and parameters
+    if (is.na(family)) 
+        stop("Provide either 'family' and 'par' or 'obj'")
     if (!(family %in% c(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 13, 14, 16, 17, 18, 19, 
                         20, 23, 24, 26, 27, 28, 29, 30, 33, 34, 36, 37, 38, 39, 40, 43, 44))) 
         stop("Copula family not implemented.")

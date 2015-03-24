@@ -1,6 +1,5 @@
-BiCopCDF <- function(u1, u2, family, par, par2 = 0) {
-    
-    ## sanity checks
+BiCopCDF <- function(u1, u2, family, par, par2 = 0, obj = NULL) {
+    ## sanity checks for u1, u2
     if (is.null(u1) == TRUE || is.null(u2) == TRUE) 
         stop("u1 and/or u2 are not set or have length zero.")
     if (any(u1 > 1) || any(u1 < 0)) 
@@ -9,6 +8,29 @@ BiCopCDF <- function(u1, u2, family, par, par2 = 0) {
         stop("Data has be in the interval [0,1].")
     if (length(u1) != length(u2)) 
         stop("Lengths of 'u1' and 'u2' do not match.")
+    
+    ## extract family and parameters if BiCop object is provided
+    if (missing(family))
+        family <- NA
+    if (missing(par))
+        par <- NA
+    if (!is.null(obj)) {
+        stopifnot(class(obj) == "BiCop")
+        family <- obj$family
+        par <- obj$par
+        par2 <- obj$par2
+    }
+    if (class(family) == "BiCop") {
+        # for short hand usage extract from family
+        obj <- family
+        family <- obj$family
+        par <- obj$par
+        par2 <- obj$par2
+    }
+    
+    ## sanity checks for family and parameters
+    if (is.na(family) | is.na(par))
+        stop("Provide either 'family' and 'par' or 'obj'")
     if (family == 2) 
         stop("The CDF of the t-copula is not implemented.")
     if (!(family %in% c(0, 1, 3, 4, 5, 6, 7, 8, 9, 10, 13, 14, 16, 17, 18, 19, 20, 
@@ -181,5 +203,6 @@ BiCopCDF <- function(u1, u2, family, par, par2 = 0) {
         }
     }
     
-    return(res)
+    ## return results
+    res
 }

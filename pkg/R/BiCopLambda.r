@@ -1,9 +1,26 @@
-
-######################################################### plot of the theoretical and empirical lambda-function #
-
-BiCopLambda <- function(u1 = NULL, u2 = NULL, family = "emp", par = 0, par2 = 0,  PLOT = TRUE, ...) {
+############ plot of the theoretical and empirical lambda-function 
+BiCopLambda <- function(u1 = NULL, u2 = NULL, family = "emp", par = 0, par2 = 0, PLOT = TRUE, obj = NULL, ...) {
+    ## extract family and parameters if BiCop object is provided
+    if (!is.null(obj)) {
+        stopifnot(class(obj) == "BiCop")
+        family <- obj$family
+        par <- obj$par
+        par2 <- obj$par2
+    }
+    if (class(u1) == "BiCop") {
+        # for short hand usage extract from u1
+        if (class(u2) == "logical")
+            PLOT <- u2
+        obj <- u1
+        family <- obj$family
+        par <- obj$par
+        par2 <- obj$par2
+        u1 <- NULL
+    }
+    
     if (is.null(u1) == TRUE && is.null(u2) == TRUE && (family == 0 || par == 0)) 
-        stop("Either 'u1' and 'u2' have to be set for the emp. lambda-function or 'family' and 'par' for the theo. lambda-function.")
+        stop("Either 'u1' and 'u2' have to be set for the emp.
+             lambda-function or 'family' and 'par' for the theo. lambda-function.")
     if (length(u1) != length(u2)) 
         stop("Lengths of 'u1' and 'u2' do not match.")
     if (!(family %in% c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, "emp"))) 
@@ -20,7 +37,7 @@ BiCopLambda <- function(u1 = NULL, u2 = NULL, family = "emp", par = 0, par2 = 0,
     if (PLOT != TRUE && PLOT != FALSE) 
         stop("The parameter 'PLOT' has to be set to 'TRUE' or 'FALSE'.")
     
-    # Parameterbereiche abfragen
+    ## check for parameter consistency
     if ((family == 1 || family == 2) && abs(par) >= 1) 
         stop("The parameter of the Gaussian and t-copula has to be in the interval (-1,1).")
     if (family == 2 && par2 <= 2) 
@@ -227,10 +244,14 @@ BiCopLambda <- function(u1 = NULL, u2 = NULL, family = "emp", par = 0, par2 = 0,
 }
 
 
-################################################# lambda-function for Gaussian- and t-copula # # Input: # copula Copula family
-################################################# (1='N',2='t') # param Parameter # Output: # lambda lambda-function #
+###### lambda-function for Gaussian- and t-copula # 
+# Input: 
+# copula Copula family (1='N',2='t')
+# param Parameter
+# Output:
+# lambda lambda-function #
 
-gtLambda <- function(copula, param, len = 1000) {
+gtLambda <- function(copula, param, len = 10000) {
     v <- seq(0.001, 1, length.out = len)
     v1 <- v
     n <- length(v)

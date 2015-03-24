@@ -1,4 +1,5 @@
-BiCopDeriv <- function(u1, u2, family, par, par2 = 0, deriv = "par", log = FALSE) {
+BiCopDeriv <- function(u1, u2, family, par, par2 = 0, deriv = "par", log = FALSE, obj = NULL) {
+    ## sanity checks for u1, u2
     if (is.null(u1) == TRUE || is.null(u2) == TRUE) 
         stop("u1 and/or u2 are not set or have length zero.")
     if (length(u1) != length(u2)) 
@@ -7,13 +8,37 @@ BiCopDeriv <- function(u1, u2, family, par, par2 = 0, deriv = "par", log = FALSE
         stop("Data has be in the interval [0,1].")
     if (any(u2 > 1) || any(u2 < 0)) 
         stop("Data has be in the interval [0,1].")
+    
+    ## extract family and parameters if BiCop object is provided
+    if (missing(family))
+        family <- NA
+    if (missing(par))
+        par <- NA
+    if (!is.null(obj)) {
+        stopifnot(class(obj) == "BiCop")
+        family <- obj$family
+        par <- obj$par
+        par2 <- obj$par2
+    }
+    if (class(family) == "BiCop") {
+        # for short hand usage extract from family
+        if (class(par) == "character")
+            deriv <- par
+        obj <- family
+        family <- obj$family
+        par <- obj$par
+        par2 <- obj$par2
+    }
+    
+    ## sanity checks for family and parameters
+    if (is.na(family) | is.na(par)) 
+        stop("Provide either 'family' and 'par' or 'obj'")
     if (!(family %in% c(0, 1, 2, 3, 4, 5, 6, 13, 14, 16, 23, 24, 26, 33, 34, 36))) 
         stop("Copula family not implemented.")
     if (family == 2 && par2 == 0) 
         stop("For t-copulas, 'par2' must be set.")
     if (family %in% c(1, 3, 4, 5, 6, 13, 14, 16, 23, 24, 26, 33, 34, 36) && length(par) < 1) 
         stop("'par' not set.")
-    
     if ((family == 1 || family == 2) && abs(par[1]) >= 1) 
         stop("The parameter of the Gaussian and t-copula has to be in the interval (-1,1).")
     if (family == 2 && par2 <= 2) 
@@ -38,10 +63,8 @@ BiCopDeriv <- function(u1, u2, family, par, par2 = 0, deriv = "par", log = FALSE
     if (log == TRUE && (deriv %in% c("u1", "u2"))) 
         stop("The derivative with respect to one of the arguments are not available in the log case.")
     
-    # Unterscheidung in die verschiedenen Ableitungen
-    
+    ## call C routines for specified 'deriv' case 
     n <- length(u1)
-    
     if (log == TRUE) {
         if (deriv == "par") {
             if (family == 2) {
@@ -125,5 +148,6 @@ BiCopDeriv <- function(u1, u2, family, par, par2 = 0, deriv = "par", log = FALSE
         }
     }
     
-    return(out)
+    ## return result
+    out
 }

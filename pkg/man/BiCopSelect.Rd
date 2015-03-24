@@ -71,6 +71,7 @@ BiCopSelect(u1, u2, familyset = NA, selectioncrit = "AIC", indeptest = FALSE,
 }
 
 \value{
+An object of class \code{\link{BiCop}}, i.e., a list containing
   \item{family}{The selected bivariate copula family.}
   \item{par, par2}{The estimated bivariate copula parameter(s).}
   \item{p.value.indeptest}{P-value of the independence test if performed.}
@@ -110,7 +111,7 @@ the respective one parameter copula is taken into account instead.
 
 \author{Eike Brechmann, Jeffrey Dissmann}
 
-\seealso{\code{\link{RVineStructureSelect}}, \code{\link{RVineCopSelect}}, \code{\link{BiCopIndTest}}}
+\seealso{\code{\link{RVineStructureSelect}}, \code{\link{RVineCopSelect}}, \code{\link{BiCopIndTest}}, \code{\link{BiCop}}}
 
 \references{
 Akaike, H. (1973).

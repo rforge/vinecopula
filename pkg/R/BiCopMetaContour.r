@@ -496,7 +496,27 @@ meta.dens <- function(x1, x2, param, copula, margins, margins.par) {
 
 BiCopMetaContour <- function(u1 = NULL, u2 = NULL, bw = 1, size = 100,
                              levels = c(0.01, 0.05, 0.1, 0.15, 0.2), family = "emp",
-                             par = 0, par2 = 0, PLOT = TRUE, margins = "norm", margins.par = 0, xylim = NA, ...) {
+                             par = 0, par2 = 0, PLOT = TRUE, margins = "norm",
+                             margins.par = 0, xylim = NA, obj = NULL,...) {
+    ## extract family and parameters if BiCop object is provided
+    if (!is.null(obj)) {
+        stopifnot(class(obj) == "BiCop")
+        family <- obj$family
+        par <- obj$par
+        par2 <- obj$par2
+    }
+    if (class(u1) == "BiCop") {
+        # for short hand usage extract from family
+        obj <- u1
+        family <- obj$family
+        par <- obj$par
+        par2 <- obj$par2
+        u1 <- NULL
+    }
+    
+    ## sanity checks for family and parameters
+    if (is.na(family) | is.na(par)) 
+        stop("Provide either 'family' and 'par' or 'obj'")
     ## sanity checks
     if ((is.null(u1) == TRUE || is.null(u2) == TRUE) && family == "emp") 
         stop("'u1' and/or 'u2' not set or of length zero.")

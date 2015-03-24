@@ -1,4 +1,26 @@
-BiCopPar2TailDep <- function(family, par, par2 = 0) {
+BiCopPar2TailDep <- function(family, par, par2 = 0, obj = NULL) {
+    ## extract family and parameters if BiCop object is provided
+    if (missing(family))
+        family <- NA
+    if (missing(par))
+        par <- NA
+    if (!is.null(obj)) {
+        stopifnot(class(obj) == "BiCop")
+        family <- obj$family
+        par <- obj$par
+        par2 <- obj$par2
+    }
+    if (class(family) == "BiCop") {
+        # for short hand usage extract from family
+        obj <- family
+        family <- obj$family
+        par <- obj$par
+        par2 <- obj$par2
+    }
+    
+    ## sanity checks for family and parameters
+    if (is.na(family) ||u is.na(par)) 
+        stop("Provide either 'family' and 'par' or 'obj'")
     if (!(family %in% c(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
                         13, 14, 16, 17, 18, 19, 20,
                         23, 24, 26, 27, 28, 29, 30, 33, 34, 36, 37, 38, 39, 40, 

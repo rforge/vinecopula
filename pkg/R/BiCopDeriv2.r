@@ -1,4 +1,5 @@
-BiCopDeriv2 <- function(u1, u2, family, par, par2 = 0, deriv = "par") {
+BiCopDeriv2 <- function(u1, u2, family, par, par2 = 0, deriv = "par", obj = NULL) {
+    ## sanity checks for u1, u2
     if (is.null(u1) == TRUE || is.null(u2) == TRUE) 
         stop("u1 and/or u2 are not set or have length zero.")
     if (length(u1) != length(u2)) 
@@ -7,6 +8,31 @@ BiCopDeriv2 <- function(u1, u2, family, par, par2 = 0, deriv = "par") {
         stop("Data has be in the interval [0,1].")
     if (any(u2 > 1) || any(u2 < 0)) 
         stop("Data has be in the interval [0,1].")
+    
+    ## extract family and parameters if BiCop object is provided
+    if (missing(family))
+        family <- NA
+    if (missing(par))
+        par <- NA
+    if (!is.null(obj)) {
+        stopifnot(class(obj) == "BiCop")
+        family <- obj$family
+        par <- obj$par
+        par2 <- obj$par2
+    }
+    if (class(family) == "BiCop") {
+        # for short hand usage extract from family
+        if (class(par) == "character")
+            deriv <- par
+        obj <- family
+        family <- obj$family
+        par <- obj$par
+        par2 <- obj$par2
+    }
+    
+    ## sanity checks for family and parameters
+    if (is.na(family) | is.na(par)) 
+        stop("Provide either 'family' and 'par' or 'obj'")
     if (!(family %in% c(0, 1, 2, 3, 4, 5, 6, 13, 14, 16, 23, 24, 26, 33, 34,  36))) 
         stop("Copula family not implemented.")
     if (family == 2 && par2 == 0) 
