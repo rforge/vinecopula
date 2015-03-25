@@ -19,7 +19,7 @@ BiCopPar2TailDep <- function(family, par, par2 = 0, obj = NULL) {
     }
     
     ## sanity checks for family and parameters
-    if (is.na(family) ||u is.na(par)) 
+    if (is.na(family) || is.na(par)) 
         stop("Provide either 'family' and 'par' or 'obj'")
     if (!(family %in% c(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
                         13, 14, 16, 17, 18, 19, 20,
