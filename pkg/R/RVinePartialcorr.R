@@ -98,21 +98,27 @@ RVineCor2pcor <- function(RVM, corMat) {
 
 RVinePcor2cor <- function(RVM) {
     d <- nrow(RVM$Matrix)
-    
+    ## sanity checks
     stopifnot(is(RVM, "RVineMatrix"))
     stopifnot(all(RVM$family %in% c(0, 1, 2)))
     
-    RVM <- RVineMatrixNormalize(RVM)
+    ## store variable names and set to V1:5 if any non-default name occurs
+    oldNames <- RVM$names
+    if (!all(oldNames %in% paste("V", 1:d, sep = "")))
+        RVM$names <- paste("V", 1:d, sep = "")
+    
+    ## normalize RVM object to make the algorithm work properly
+    RVM <- normalizeRVineMatrix(RVM)
+    
+    ## store normalized object and extract order
     oldRVM <- RVM
     oldOrder <- diag(RVM$Matrix)
-    if (any(oldOrder != length(oldOrder):1)) {
-        RVM <- normalizeRVineMatrix(RVM)
-    }
     
-    # rotate towards notation in Kurowicka and Joe (2011), p. 9
+    ## rotate towards notation in Kurowicka and Joe (2011), p. 9
     A <- RVM$Matrix[d:1, d:1]
     pc <- RVM$par[d:1, d:1]
     
+    ## if d=2 there is nothing to compute
     if (d <= 2) {
         iorder <- diag(RVM$Matrix)
         corMat <- matrix(c(1,
@@ -122,6 +128,7 @@ RVinePcor2cor <- function(RVM) {
         return(corMat)
     }
     
+    ## initialize correlation matrix with correlation parameters of the model
     corMat <- matrix(0, d, d)
     diag(corMat) <- 1
     for (j in 2:d) {
@@ -130,7 +137,7 @@ RVinePcor2cor <- function(RVM) {
         corMat[j, a1] <- pc[1, j]
     }
     
-    # tree 2
+    ## calculations for second tree
     for (j in 3:d) {
         a1 <- A[1, j]
         a2 <- A[2, j]
@@ -138,43 +145,47 @@ RVinePcor2cor <- function(RVM) {
         corMat[a2, j] <- corMat[j, a2]
     }
     
-    # remaining trees
-    for (ell in 3:(d - 1)) {
-        for (j in (ell + 1):d) {
-            given <- A[1:(ell - 1), j]
-            S11 <- corMat[given, given]
-            anew <- A[ell, j]
-            jk <- c(anew, j)
-            S12 <- corMat[given, jk]
-            S21 <- corMat[jk, given]
-            S22 <- corMat[jk, jk]
-            tem <- solve(S11, S12)
-            Om212 <- S21 %*% tem
-            om11 <- 1 - Om212[1, 1]
-            om22 <- 1 - Om212[2, 2]
-            tem12 <- pc[ell, j] * sqrt(om11 * om22)
-            corMat[anew, j] <- tem12 + Om212[1, 2]
-            corMat[j, anew] <- corMat[anew, j]
-        }
-    }
-    
-    corMat <- corMat[rev(oldOrder), rev(oldOrder)]
-    
-    nameOrder <- NULL
-    if (!is.null(oldRVM$names)) {
-        if (any(!(oldRVM$names %in% paste("V", 1:d, sep = "")))) {
-            warning("RVM$names are not default and cannot be checked. Make sure
-                    to interpret the correlation matrix in the same ordering of 
-                    variables as given in the RVineMatrix.")
-        } else {
-            nameOrder <- order(oldRVM$names)
-            if (any(nameOrder != 1:length(oldRVM$names))) {
-                corMat <- corMat[nameOrder, nameOrder]
+    ## remaining trees
+    if (d > 3) {
+        for (ell in 3:(d - 1)) {
+            for (j in (ell + 1):d) {
+                given <- A[1:(ell - 1), j]
+                S11 <- corMat[given, given]
+                anew <- A[ell, j]
+                jk <- c(anew, j)
+                S12 <- corMat[given, jk]
+                S21 <- corMat[jk, given]
+                S22 <- corMat[jk, jk]
+                tem <- solve(S11, S12)
+                Om212 <- S21 %*% tem
+                om11 <- 1 - Om212[1, 1]
+                om22 <- 1 - Om212[2, 2]
+                tem12 <- pc[ell, j] * sqrt(om11 * om22)
+                corMat[anew, j] <- tem12 + Om212[1, 2]
+                corMat[j, anew] <- corMat[anew, j]
             }
         }
     }
     
-    return(corMat)
+    ## revert matrix to appropriate order
+    corMat <- corMat[rev(oldOrder), rev(oldOrder)]
+    nameOrder <- order(oldRVM$names)
+    corMat <- corMat[nameOrder, nameOrder]
+    
+    
+    ## warn about matrix ordering if non-default names were provided
+    if (!is.null(oldNames)) {
+        if (any(!(oldNames %in% paste("V", 1:d, sep = "")))) {
+            warning("Some RVM$names are not default (such as ''V5'') and their order cannot be checked. 
+Make sure to interpret the correlation matrix as indicated by the row and column names.")    
+            rownames(corMat) <- colnames(corMat) <- oldNames
+        } else {
+            rownames(corMat) <- colnames(corMat) <- paste("V", 1:d, sep = "")
+        }
+    }
+    
+    ## return results
+    corMat
 }
 
 
