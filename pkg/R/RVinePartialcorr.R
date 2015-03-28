@@ -39,9 +39,8 @@ RVineCor2pcor <- function(RVM, corMat) {
     
     if (d <= 2) 
         return(corMat)
-    
     pp <- matrix(0, d, d)
-    
+        
     oldRVM <- RVM
     oldOrder <- diag(RVM$Matrix)
     if (any(oldOrder != length(oldOrder):1)) {
@@ -101,7 +100,9 @@ RVinePcor2cor <- function(RVM) {
     ## sanity checks
     stopifnot(is(RVM, "RVineMatrix"))
     stopifnot(all(RVM$family %in% c(0, 1, 2)))
-    
+    if (is.null(RVM$names))
+        RVM$names <- paste("V", 1:d, sep = "")
+        
     ## store variable names and set to V1:5 if any non-default name occurs
     oldNames <- RVM$names
     if (!all(oldNames %in% paste("V", 1:d, sep = "")))
