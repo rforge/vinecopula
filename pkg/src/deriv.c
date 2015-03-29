@@ -129,6 +129,10 @@ if((*copula)==43)		// special copula; all rotations of Clayton are combined in o
 // Reference: Schepsmeier and Stoeber (2012, 2013)
 /////////////////////////////////////////////////////////////
 
+// the stepwise calculation is due to performance and numerical stability reasons (t1,t2,...)
+// for Gauss some of the step can be found in the reference
+// for the archimedean copulas one gets this optimization with Maple
+
 void diffPDF(double* u, double* v, int* n, double* param, int* copula, double* out)
 {
 	int j;
@@ -145,7 +149,7 @@ void diffPDF(double* u, double* v, int* n, double* param, int* copula, double* o
 		{
 			out[j]=0;
 		}
-		else if(*copula==1)		// gauss
+		else if(*copula==1)		// gauss, formula see reference
 		{
 			t1 = qnorm(u[j],0.0,1.0,1,0); 
 			t2 = qnorm(v[j],0.0,1.0,1,0);
@@ -161,7 +165,7 @@ void diffPDF(double* u, double* v, int* n, double* param, int* copula, double* o
 			out[j] = (-2.0*(theta*t3-t1*t2)*t9-t15/(t8*t8)*theta)*t22/t24+t22/t24/t8*theta;
 		}
 		// t-copula is separate; very complicated
-		else if(*copula==3)
+		else if(*copula==3)	// the archimedean copula derivatives are derived by Maple 
 		{
 			t1 = u[j]*v[j];
 			t2 = -theta-1.0;
