@@ -1,5 +1,4 @@
 BiCopSelect <- function(u1, u2, familyset = NA, selectioncrit = "AIC", indeptest = FALSE, level = 0.05, weights = NA, rotations = TRUE) {
-    
     ## sanity checks
     if (is.null(u1) == TRUE || is.null(u2) == TRUE) 
         stop("u1 and/or u2 are not set or have length zero.")
@@ -31,8 +30,8 @@ BiCopSelect <- function(u1, u2, familyset = NA, selectioncrit = "AIC", indeptest
     data2 <- u2
     
     ## adjust familyset if rotations = TRUE
-    if (rotations) familyset <- with_rotations(familyset)
-    
+    if (rotations) 
+        familyset <- with_rotations(familyset)
     
     if (!is.na(familyset[1]) & any(familyset == 0)) {
         # select independence if allowed

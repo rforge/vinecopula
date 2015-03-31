@@ -473,8 +473,8 @@ MLE_intern <- function(data, start.parm, family, se = FALSE, max.df = 30,
                          PACKAGE = "VineCopula")[[7]] %*% weights
             }
             
-            if (is.infinite(ll) || is.na(ll) || ll < -10^300) 
-                ll <- -10^300
+            if (is.infinite(ll) || is.na(ll) || ll < -10^250) 
+                ll <- -10^250
             
             return(ll)
         }
@@ -643,9 +643,9 @@ MLE_intern <- function(data, start.parm, family, se = FALSE, max.df = 30,
                              as.double(rep(0, n)), 
                              PACKAGE = "VineCopula")[[7]] %*% weights
                 }
-                
-                if (is.infinite(ll) || is.na(ll) || ll < -10^300) 
-                    ll <- -10^300
+
+                if (is.infinite(ll) || is.na(ll) || ll < -10^250) 
+                    ll <- -10^250
                 
                 return(ll)
             }
@@ -712,8 +712,8 @@ MLE_intern <- function(data, start.parm, family, se = FALSE, max.df = 30,
                          as.double(rep(0, n)), 
                          PACKAGE = "VineCopula")[[7]] %*% weights
             }
-            if (is.infinite(ll) || is.na(ll) || ll < -10^300) 
-                ll <- -10^300
+            if (is.infinite(ll) || is.na(ll) || ll < -10^250) 
+                ll <- -10^250
             
             return(ll)
         }
