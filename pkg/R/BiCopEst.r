@@ -737,66 +737,66 @@ MLE_intern <- function(data, start.parm, family, se = FALSE, max.df = 30,
         } else if (family %in% c(3, 13)) {
             low <- 1e-04
             up <- BiCopTau2Par(family, 0.99)
-            if (t_LL(up) == -10^300) 
+            if (t_LL(up) == -10^250) 
                 up <- BiCopTau2Par(family, 0.95)
-            if (t_LL(up) == -10^300) 
+            if (t_LL(up) == -10^250) 
                 up <- BiCopTau2Par(family, 0.9)
         } else if (family %in% c(4, 14)) {
             low <- 1.0001
             up <- BiCopTau2Par(family, 0.99)
-            if (t_LL(up) == -10^300) 
+            if (t_LL(up) == -10^250) 
                 up <- BiCopTau2Par(family, 0.95)
-            if (t_LL(up) == -10^300) 
+            if (t_LL(up) == -10^250) 
                 up <- BiCopTau2Par(family, 0.9)
         } else if (family %in% c(5)) {
             low <- BiCopTau2Par(family, -0.99)
-            if (t_LL(low) == -10^300) 
+            if (t_LL(low) == -10^250) 
                 low <- BiCopTau2Par(family, -0.95)
-            if (t_LL(low) == -10^300) 
+            if (t_LL(low) == -10^250) 
                 low <- BiCopTau2Par(family, -0.9)
             up <- BiCopTau2Par(family, 0.99)
-            if (t_LL(up) == -10^300) 
+            if (t_LL(up) == -10^250) 
                 up <- BiCopTau2Par(family, 0.95)
-            if (t_LL(up) == -10^300) 
+            if (t_LL(up) == -10^250) 
                 up <- BiCopTau2Par(family, 0.9)
         } else if (family %in% c(6, 16)) {
             low <- 1.0001
             up <- BiCopTau2Par(family, 0.99)
-            if (t_LL(up) == -10^300) 
+            if (t_LL(up) == -10^250) 
                 up <- BiCopTau2Par(family, 0.95)
-            if (t_LL(up) == -10^300) 
+            if (t_LL(up) == -10^250) 
                 up <- BiCopTau2Par(family, 0.9)
         } else if (family %in% c(23, 33)) {
             up <- -1e-04
             low <- BiCopTau2Par(family, -0.99)
-            if (t_LL(low) == -10^300) 
+            if (t_LL(low) == -10^250) 
                 low <- BiCopTau2Par(family, -0.95)
-            if (t_LL(low) == -10^300) 
+            if (t_LL(low) == -10^250) 
                 low <- BiCopTau2Par(family, -0.9)
         } else if (family %in% c(24, 34)) {
             up <- -1.0001
             low <- BiCopTau2Par(family, -0.99)
-            if (t_LL(low) == -10^300) 
+            if (t_LL(low) == -10^250) 
                 low <- BiCopTau2Par(family, -0.95)
-            if (t_LL(low) == -10^300) 
+            if (t_LL(low) == -10^250) 
                 low <- BiCopTau2Par(family, -0.9)
         } else if (family %in% c(26, 36)) {
             up <- -1.0001
             low <- BiCopTau2Par(family, -0.99)
-            if (t_LL(low) == -10^300) 
+            if (t_LL(low) == -10^250) 
                 low <- BiCopTau2Par(family, -0.95)
-            if (t_LL(low) == -10^300) 
+            if (t_LL(low) == -10^250) 
                 low <- BiCopTau2Par(family, -0.9)
         } else if (family %in% c(41, 51)) {
             low <- 1e-04
             up <- BiCopTau2Par(family, 0.85)
-            # if(t_LL(up)==-10^300) up=BiCopTau2Par(family,0.95) if(t_LL(up)==-10^300) up=BiCopTau2Par(family,0.9)
+            # if(t_LL(up)==-10^250) up=BiCopTau2Par(family,0.95) if(t_LL(up)==-10^250) up=BiCopTau2Par(family,0.9)
         } else if (family %in% c(61, 71)) {
             up <- -1e-04
             low <- BiCopTau2Par(family, -0.85)
-            if (t_LL(low) == -10^300) 
+            if (t_LL(low) == -10^250) 
                 low <- BiCopTau2Par(family, -0.95)
-            if (t_LL(low) == -10^300) 
+            if (t_LL(low) == -10^250) 
                 low <- BiCopTau2Par(family, -0.9)
         }
         
@@ -921,8 +921,8 @@ MLE_intern_Tawn <- function(data, start.parm, family, se = FALSE) {
                  as.double(param[2]), 
                  as.double(0), 
                  PACKAGE = "VineCopula")[[7]]
-        if (is.infinite(ll) || is.na(ll) || ll < -10^300) 
-            ll <- -10^300
+        if (is.infinite(ll) || is.na(ll) || ll < -10^250) 
+            ll <- -10^250
         # print(param) print(ll)
         return(ll)
     }
