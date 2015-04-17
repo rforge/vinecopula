@@ -103,7 +103,7 @@ RVinePcor2cor <- function(RVM) {
     if (is.null(RVM$names))
         RVM$names <- paste("V", 1:d, sep = "")
         
-    ## store variable names and set to V1:5 if any non-default name occurs
+    ## store variable names and set to V1:d if any non-default name occurs
     oldNames <- RVM$names
     if (!all(oldNames %in% paste("V", 1:d, sep = "")))
         RVM$names <- paste("V", 1:d, sep = "")
@@ -122,10 +122,9 @@ RVinePcor2cor <- function(RVM) {
     ## if d=2 there is nothing to compute
     if (d <= 2) {
         iorder <- diag(RVM$Matrix)
-        corMat <- matrix(c(1,
-                           pc[iorder[1], iorder[2]],
-                           pc[iorder[1], iorder[2]],
-                           1))
+        corMat <- matrix(c(1, pc[iorder[1], iorder[2]],
+                           pc[iorder[1], iorder[2]], 1),
+                         nrow = 2, ncol = 2)
         return(corMat)
     }
     
@@ -170,14 +169,13 @@ RVinePcor2cor <- function(RVM) {
     
     ## revert matrix to appropriate order
     corMat <- corMat[rev(oldOrder), rev(oldOrder)]
-    nameOrder <- order(oldRVM$names)
+    nameOrder <- order(as.numeric(sub("V", "", oldRVM$names)))
     corMat <- corMat[nameOrder, nameOrder]
-    
     
     ## warn about matrix ordering if non-default names were provided
     if (!is.null(oldNames)) {
         if (any(!(oldNames %in% paste("V", 1:d, sep = "")))) {
-            warning("Some RVM$names are not default (such as ''V5'') and their order cannot be checked. 
+            warning("Some RVM$names are not default (such as ''V5'') and their initial ordering cannot be checked. 
 Make sure to interpret the correlation matrix as indicated by the row and column names.")    
             rownames(corMat) <- colnames(corMat) <- oldNames
         } else {
