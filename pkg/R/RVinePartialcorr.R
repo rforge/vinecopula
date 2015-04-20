@@ -98,6 +98,7 @@ RVineCor2pcor <- function(RVM, corMat) {
 RVinePcor2cor <- function(RVM) {
     d <- nrow(RVM$Matrix)
     ## sanity checks
+    stopifnot(d > 1)
     stopifnot(is(RVM, "RVineMatrix"))
     stopifnot(all(RVM$family %in% c(0, 1, 2)))
     if (is.null(RVM$names))
@@ -120,10 +121,8 @@ RVinePcor2cor <- function(RVM) {
     pc <- RVM$par[d:1, d:1]
     
     ## if d=2 there is nothing to compute
-    if (d <= 2) {
-        iorder <- diag(RVM$Matrix)
-        corMat <- matrix(c(1, pc[iorder[1], iorder[2]],
-                           pc[iorder[1], iorder[2]], 1),
+    if (d == 2) {
+        corMat <- matrix(c(1, rep(RVM$par[2, 1], 2), 1),
                          nrow = 2, ncol = 2)
         return(corMat)
     }
