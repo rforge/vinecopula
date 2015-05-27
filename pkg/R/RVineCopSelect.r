@@ -22,6 +22,11 @@ RVineCopSelect <- function(data, familyset = NA, Matrix, selectioncrit = "AIC", 
         stop("Selection criterion not implemented.")
     if (level < 0 & level > 1) 
         stop("Significance level has to be between 0 and 1.")
+    
+    ## set variable names and trunclevel if not provided 
+    if (is.null(colnames(data))) 
+        colnames(data) <- paste("V", 1:n, sep = "")
+    varnames <- colnames(data)
     if (is.na(trunclevel)) 
         trunclevel <- n
     
@@ -118,7 +123,6 @@ RVineCopSelect <- function(data, familyset = NA, Matrix, selectioncrit = "AIC", 
     }
     
     ## return results
-    varnames <- paste("V", 1:n, sep = "")
     print(Types)
     RVM <- RVineMatrix(Mold, 
                        family = Types,

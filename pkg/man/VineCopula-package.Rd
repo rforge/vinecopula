@@ -79,18 +79,18 @@ We are especially grateful to Harry Joe for his contributions to the implementat
 \tabular{ll}{
 Package: \tab VineCopula\cr
 Type: \tab Package\cr
-Version: \tab 1.4\cr
-Date: \tab 2015-01-26\cr
+Version: \tab 1.5\cr
+Date: \tab 2015-05-27\cr
 License: \tab GPL (>=2)\cr
 Depends: \tab R (\eqn{\geq 2.11.0}{>= 2.11.0})\cr
-Imports: \tab MASS, mvtnorm, igraph, methods, copula, ADGofTest\cr
+Imports: \tab MASS, mvtnorm, igraph, methods, copula, ADGofTest, lattice\cr
 Suggests: \tab CDVine, TSP\cr
 LazyLoad: \tab yes
 }
 }
 
 \author{
-Ulf Schepsmeier, Jakob Stoeber, Eike Christian Brechmann, Benedikt Graeler
+Ulf Schepsmeier, Jakob Stoeber, Eike Christian Brechmann, Benedikt Graeler, Thomas Nagler
 }
 
 \references{ 
@@ -167,9 +167,9 @@ A goodness-of-fit test for regular vine copula models.
 Preprint
 \url{http://arxiv.org/abs/1306.0818}
 
-Schepsmeier, U. (2013)
-Efficient goodness-of-fit tests in multi-dimensional vine copula models. 
-\url{http://arxiv.org/abs/1309.5808}
+Schepsmeier, U. (2015)
+Efficient information based goodness-of-fit tests for vine copula models with fixed margins. 
+Journal of Multivariate Analysis 138, 34–52.
 
 Stoeber, J. and U. Schepsmeier (2013).
 Estimating standard errors in regular vine copula models. Computational Statistics, 28 (6), 2679-2707
