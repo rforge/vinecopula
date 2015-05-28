@@ -12,19 +12,45 @@
       lower.panel = lp.copuladata,
       upper.panel = up.copuladata,
       diag.panel = dp.copuladata,
-      label.pos = 0.85, cex.labels = 1, gap = 0)
+      label.pos = 0.85, cex.labels = 1, gap = 0,
+      method = "kendall", ccols = terrain.colors(30),
+      margins = "norm", margins.par = 0)
 }
 
 \arguments{
   \item{x}{\code{copuladata} object.}
   \item{labels}{variable names/labels.}
   \item{\dots}{other graphical parameters (see \code{\link[graphics]{par}}).}
-  \item{lower.panel}{panel function to be used on the lower diagonal panels}
-  \item{upper.panel}{panel function to be used on the upper diagonal panels}
-  \item{diag.panel}{panel function to be used on the diagonal panels}
+  \item{lower.panel}{panel function to be used on the lower diagonal panels (if not supplied, a default function is used)}
+  \item{upper.panel}{panel function to be used on the upper diagonal panels (if not supplied, a default function is used)}
+  \item{diag.panel}{panel function to be used on the diagonal panels (if not supplied, a default function is used)}
   \item{label.pos}{y position of labels in the diagonal panel; default: \code{label.pos = 0.85}.}
   \item{cex.labels}{magnification to be used for the labels of the diagonal panel; default: \code{cex.labels = 1}.}
   \item{gap}{distance between subplots, in margin lines; default: \code{gap = 0}.}
+If the default panel function \code{upper.panel} is used, the following parameters can be set additionally:
+\item{method}{a character string indicating which correlation coefficients are computed. One of \code{"pearson"}, \code{"kendall"} (default), or \code{"spearman"}}
+If the default panel function \code{lower.panel} (see \code{\link{BiCopMetaContour}}) is used, the following parameters can be set additionally:
+\item{ccols}{colour to be used for the contour plots; default: \code{ccols = terrain.colors(30)}.}
+\item{margins}{character; margins for the contour plots. Possible margins are:\cr
+                 \code{"norm"} = standard normal margins (default)\cr
+                 \code{"t"} = Student t margins with degrees of freedom as specified by \code{margins.par}\cr
+                 \code{"gamma"} = Gamma margins with shape and scale as specified by \code{margins.par}\cr
+                 \code{"exp"} = Exponential margins with rate as specified by \code{margins.par}\cr
+                 \code{"unif"} = uniform margins}
+  \item{margins.par}{parameter(s) of the distribution of the margins (of the contour plots) if necessary (default: \code{margins.par = 0}), i.e., 
+                     \itemize{
+                       \item a positive real number for the degrees of freedom of Student t margins (see \code{\link{dt}}),
+                        \item a 2-dimensional vector of positive real numbers for the shape and scale parameters of Gamma margins (see \code{\link{dgamma}}),
+                        \item a positive real number for the rate parameter of exponential margins (see \code{\link{dexp}}). 
+                     }}
+}
+
+\note{
+If the default panel functions are used \cr
+\itemize{
+\item \code{col} changes only the colour of the points in the scatter plot (\code{upper.panel}) \cr
+\item \code{cex} changes only the magnification of the points in the scatter plot (\code{upper.panel})
+}
 }
 
 
@@ -36,19 +62,22 @@
 data(daxreturns)
 
 data <- as.copuladata(daxreturns)
+sel <- c(4,5,14,15)
 
 ## pairs plot with default settings
-pairs(data[1:5])
+pairs(data[sel])
 
 ## pairs plot with custom settings
 nlevels <- 20
-pairs(data[1:5], cex = 2, pch = 1,
+pairs(data[sel], cex = 2, pch = 1, col = "black",
       diag.panel = NULL, label.pos = 0.5,
-      cex.labels = 2.5, gap = 1)
+      cex.labels = 2.5, gap = 1,
+      method = "pearson", ccols = heat.colors(nlevels),
+      margins = "gamma", margins.par = c(1,1))
       
 ## pairs plot with own panel functions
-up.copuladata <- function(x, y) {
-  # lower panel: empirical contour plot
+up <- function(x, y) {
+  # upper panel: empirical contour plot
   op <- par(usr = c(-3, 3, -3, 3), new = TRUE)
   BiCopMetaContour(x, y, bw = 2, levels = c(0.01, 0.05, 0.1, 0.15, 0.2),
                     # exponential margins
@@ -57,8 +86,8 @@ up.copuladata <- function(x, y) {
   on.exit(par(op))
 }
 
-lp.copuladata <- function(x, y) {
-  # upper panel: scatter plot (copula data) and correlation
+lp <- function(x, y) {
+  # lower panel: scatter plot (copula data) and correlation
   op <- par(usr = c(0, 1, 0, 1), new = TRUE)
   points(x, y, pch = 1, col = "black")
   r <- cor(x, y, method = "spearman") # Spearman's rho
@@ -67,16 +96,15 @@ lp.copuladata <- function(x, y) {
   on.exit(par(op))
 }
 
-dp.copuladata <- function(x) {
+dp <- function(x) {
   # diagonal panel: histograms (copula data)
   op <- par(usr = c(0, 1, 0, 1.5), new = TRUE)
-  hist(x, freq = FALSE, add = TRUE, col = "brown", border = "white", main = "")
+  hist(x, freq = FALSE, add = TRUE, col = "brown", border = "black", main = "")
   abline(h = 1, col = "black", lty = 2)
   on.exit(par(op))
 }
 
 nlevels <- 20
-pairs(data[1:5],
-      lower.panel = lp.copuladata, upper.panel = up.copuladata,
-      diag.panel = dp.copuladata, gap = 0.5)
+pairs(data[sel],
+      lower.panel = lp, upper.panel = up, diag.panel = dp, gap = 0.5)
 }

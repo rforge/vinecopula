@@ -46,9 +46,9 @@ Rosenblatt, M. (1952).
 Remarks on a Multivariate Transformation. The Annals
 of Mathematical Statistics 23 (3), 470-472.
 
-Schepsmeier, U. (2013)
-Efficient goodness-of-fit tests in multi-dimensional vine copula models. 
-\url{http://arxiv.org/abs/1309.5808}
+Schepsmeier, U. (2015)
+Efficient information based goodness-of-fit tests for vine copula models with fixed margins.
+Journal of Multivariate Analysis 138, 34-52.
 }
 
 \examples{

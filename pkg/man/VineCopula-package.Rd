@@ -14,7 +14,7 @@ For C- and D-vines links to the package CDVine are provided.
 }
 
 \section{Remark}{
-The package VineCopula is a continuation of the package CDVine by U. Schepsmeier and E. C. Brechmann (see Brechmann and Schepsmeier (2013)).
+The package \code{VineCopula} is a continuation of the package \code{CDVine} by U. Schepsmeier and E. C. Brechmann (see Brechmann and Schepsmeier (2013)).
 It includes all functions implemented in CDVine for the bivariate case (BiCop-functions).
 }
 
@@ -159,7 +159,7 @@ Springer
 
 Schepsmeier, U. and J. Stoeber (2012).
 Derivatives and Fisher information of bivariate copulas.
-Statistical Papers, 55 (2), 525-542.
+Statistical Papers, 55 (2), 525-542. \cr
 \url{http://link.springer.com/article/10.1007/s00362-013-0498-x}.
 
 Schepsmeier, U. (2013)
@@ -168,11 +168,11 @@ Preprint
 \url{http://arxiv.org/abs/1306.0818}
 
 Schepsmeier, U. (2015)
-Efficient information based goodness-of-fit tests for vine copula models with fixed margins. 
-Journal of Multivariate Analysis 138, 34–52.
+Efficient information based goodness-of-fit tests for vine copula models with fixed margins.
+Journal of Multivariate Analysis 138, 34-52.
 
 Stoeber, J. and U. Schepsmeier (2013).
-Estimating standard errors in regular vine copula models. Computational Statistics, 28 (6), 2679-2707
+Estimating standard errors in regular vine copula models. Computational Statistics, 28 (6), 2679-2707 \cr
 \url{http://link.springer.com/article/10.1007/s00180-013-0423-8#}.
 
 White, H. (1982)

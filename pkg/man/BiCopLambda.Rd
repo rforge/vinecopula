@@ -111,6 +111,7 @@ BiCopLambda(dat[, 1], dat[, 2], family = fam, par = theta)	# both
 
 # lambda-function of estimated copula
 fit <- BiCopSelect(dat[, 1], dat[, 2])
+par(mfrow = c(1, 1))
 BiCopLambda(fit)
 
 # simulate from rotated Clayton copula (90 degrees)
