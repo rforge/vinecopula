@@ -34,13 +34,16 @@ partcor <- function(S, given, j, k) {
 RVineCor2pcor <- function(RVM, corMat) {
     d <- nrow(corMat)
     stopifnot(d == nrow(RVM$Matrix))
+    stopifnot(d > 1)
     stopifnot(is(RVM, "RVineMatrix"))
     stopifnot(all(RVM$family %in% c(0, 1, 2)))
     
-    if (d <= 2) 
-        return(corMat)
+    if (d == 2) {
+        RVM$par <- matrix(c(0, corMat[2, 1], 0, 0), 2, 2)
+        return(RVM)
+    }
     pp <- matrix(0, d, d)
-        
+    
     oldRVM <- RVM
     oldOrder <- diag(RVM$Matrix)
     if (any(oldOrder != length(oldOrder):1)) {
@@ -50,11 +53,18 @@ RVineCor2pcor <- function(RVM, corMat) {
     
     if (!is.null(oldRVM$names)) {
         if (any(!(oldRVM$names %in% paste("V", 1:d, sep = "")))) {
-            warning("RVM$names are not default and cannot be checked. Make sure
-                    that the correlation matrix has the same ordering of 
-                    variables as the RVM.")
+            if (!is.null(rownames(corMat))) {
+                nameOrder <- rev(pmatch(rownames(corMat), oldRVM$names))
+                if (any(nameOrder != 1:length(oldRVM$names))) {
+                    corMat <- corMat[nameOrder, nameOrder]
+                }
+            } else {
+                warning(
+                    "RVM$names are not default and the correlation matrix is unnamed. Make sure that
+the correlation matrix has the same ordering of variables as the RVM.")
+            }
         } else {
-            nameOrder <- order(oldRVM$names)
+            nameOrder <- order(as.numeric(sub("V", "", oldRVM$names)))
             if (any(nameOrder != 1:length(oldRVM$names))) {
                 corMat <- corMat[nameOrder, nameOrder]
             }
@@ -78,9 +88,11 @@ RVineCor2pcor <- function(RVM, corMat) {
     
     # remaining trees
     for (ell in 3:(d - 1)) {
-        for (j in (ell + 1):d) {
-            given <- A[1:(ell - 1), j]
-            pp[ell, j] <- partcor(corMat, given, A[ell, j], j)  # assuming A[j,j]=j
+        if (ell < d) {
+            for (j in (ell + 1):d) {
+                given <- A[1:(ell - 1), j]
+                pp[ell, j] <- partcor(corMat, given, A[ell, j], j)  # assuming A[j,j]=j
+            }
         }
     }
     
@@ -103,7 +115,7 @@ RVinePcor2cor <- function(RVM) {
     stopifnot(all(RVM$family %in% c(0, 1, 2)))
     if (is.null(RVM$names))
         RVM$names <- paste("V", 1:d, sep = "")
-        
+    
     ## store variable names and set to V1:d if any non-default name occurs
     oldNames <- RVM$names
     if (!all(oldNames %in% paste("V", 1:d, sep = "")))
