@@ -5,7 +5,7 @@ Former authors: Eike Brechmann and Jakob Stoeber
 Maintainer: Tobias Erhardt <tobias.erhardt@tum.de> and Thomas Nagler <thomas.nagler@tum.de>
 
 
-Version 1.5 (May 27, 2015)
+Version 1.5 (June 2, 2015)
 
 - New functionality:
   * as.copuladata: coerce to class copuladata
@@ -22,7 +22,7 @@ Version 1.5 (May 27, 2015)
   * BiCopEst: extend search interval for Tawn MLE to avoid optim-errors
   * BiCopEst: fix for optim error ('non-finite value supplied')
   * RVineSim: reorder U so that it corresponds to the order of RVM
-  * RVineCor2pcor: include normalization step for a more intuitive behavior
+  * RVineCor2pcor: include normalization step for a more intuitive behavior, bug fix for d = 2, 3 and d >= 10
   * RVinePcor2cor: bug fixes for d=2 and d>9
   * RVineCopSelect: RVM object now uses variable names as provided by data
 

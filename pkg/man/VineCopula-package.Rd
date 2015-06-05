@@ -10,7 +10,7 @@ Tools for bivariate exploratory data analysis, bivariate copula selection and (v
 Vine copula models can be estimated either sequentially or by joint maximum likelihood estimation.
 Sampling algorithms and plotting methods are included.
 Data is assumed to lie in the unit hypercube (so-called copula data).
-For C- and D-vines links to the package CDVine are provided.
+For C- and D-vines links to the package 'CDVine' are provided.
 }
 
 \section{Remark}{
@@ -80,7 +80,7 @@ We are especially grateful to Harry Joe for his contributions to the implementat
 Package: \tab VineCopula\cr
 Type: \tab Package\cr
 Version: \tab 1.5\cr
-Date: \tab 2015-05-27\cr
+Date: \tab 2015-06-05\cr
 License: \tab GPL (>=2)\cr
 Depends: \tab R (\eqn{\geq 2.11.0}{>= 2.11.0})\cr
 Imports: \tab MASS, mvtnorm, igraph, methods, copula, ADGofTest, lattice\cr
@@ -90,7 +90,7 @@ LazyLoad: \tab yes
 }
 
 \author{
-Ulf Schepsmeier, Jakob Stoeber, Eike Christian Brechmann, Benedikt Graeler, Thomas Nagler
+Ulf Schepsmeier, Jakob Stoeber, Eike Christian Brechmann, Benedikt Graeler, Thomas Nagler, Tobias Erhardt
 }
 
 \references{ 

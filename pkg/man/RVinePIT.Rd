@@ -52,19 +52,18 @@ Journal of Multivariate Analysis 138, 34-52.
 }
 
 \examples{
-\donttest{# load data set
+# load data set
 data(daxreturns)
 
 # select the R-vine structure, families and parameters
-RVM <- RVineStructureSelect(daxreturns[,1:5], c(1:6))
+RVM <- RVineStructureSelect(daxreturns[,1:3], c(1:6))
 
 # PIT data
-pit <- RVinePIT(daxreturns[,1:5], RVM)
+pit <- RVinePIT(daxreturns[,1:3], RVM)
 
 par(mfrow = c(1,2))
 plot(daxreturns[,1], daxreturns[,2])	# correlated data
 plot(pit[,1], pit[,2])	# i.i.d. data
 
 cor(pit, method = "kendall")
-}
 }

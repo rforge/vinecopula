@@ -85,6 +85,6 @@ BiCopPDF(u1, u2, 2, -0.7, par2 = 4)
 
 ## estimate a bivariate copula from the data and evaluate its PDF
 cop <- BiCopSelect(u1, u2)
-BiCopPDF(u1, u2, cop)
+round(BiCopPDF(u1, u2, cop), 8)
 }
 

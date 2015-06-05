@@ -125,13 +125,13 @@ data(daxreturns)
 # we allow for the copula families: Gauss, t, Clayton, Gumbel, Frank and Joe
 RVM <- RVineStructureSelect(daxreturns[1:750,1:4], c(1:6), progress = TRUE)
 
-# specify a C-vine copula model with only Clayton, Gumbel and Frank copulas
 \dontrun{
+# specify a C-vine copula model with only Clayton, Gumbel and Frank copulas (time-consuming)
 CVM <- RVineStructureSelect(daxreturns, c(3,4,5), "CVine")
 }
 
-# determine the order of the nodes in a D-vine using the package TSP
 \dontrun{
+# determine the order of the nodes in a D-vine using the package TSP (time-consuming)
 library(TSP)
 d <- dim(daxreturns)[2]
 M <- 1 - abs(TauMatrix(daxreturns))

@@ -166,7 +166,10 @@ Econometrica, 50, 1-26.
 \seealso{\code{\link{BiCopGofTest}}, \code{\link{RVinePIT}}}
 
 \examples{
-\donttest{# load data set
+\dontrun{
+# time-consuming example
+
+# load data set
 data(daxreturns)
 
 # select the R-vine structure, families and parameters

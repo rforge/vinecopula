@@ -1,11 +1,12 @@
 RVineMLE <- function(data, RVM, start = RVM$par, start2 = RVM$par2, maxit = 200, max.df = 30, 
                      max.BB = list(BB1 = c(5, 6), BB6 = c(6, 6), BB7 = c(5, 6),  BB8 = c(6, 1)),
                      grad = FALSE, hessian = FALSE, se = FALSE, ...) {
+  
+    ## sanity checks
     if (is(RVM)[1] != "RVineMatrix") 
         stop("'RVM' has to be an RVineMatrix object.")
     if (maxit <= 0) 
         stop("'maxit' has to be greater than zero.")
-    
     if (max.df <= 2) 
         stop("The upper bound for the degrees of freedom parameter has to be larger than 2.")
     if (!is.list(max.BB)) 
@@ -27,9 +28,8 @@ RVineMLE <- function(data, RVM, start = RVM$par, start2 = RVM$par2, maxit = 200,
     if (max.BB$BB8[2] < 0.001 || max.BB$BB8[2] > 1) 
         stop("The upper bound for the second parameter of the BB1 copula should be in the interval [0,1].")
     
-    
+    ## sanity checks for start parameters
     Matrix <- RVM$Matrix
-    
     if (!all(start %in% c(0, NA))) {
         for (i in 2:dim(Matrix)[1]) {
             for (j in 1:(i - 1)) {
@@ -102,6 +102,7 @@ RVineMLE <- function(data, RVM, start = RVM$par, start2 = RVM$par2, maxit = 200,
         }
     }
     
+    ## sanity checks for input data
     data <- as.matrix(data)
     if (any(data > 1) || any(data < 0)) 
         stop("Data has be in the interval [0,1].")
@@ -114,6 +115,7 @@ RVineMLE <- function(data, RVM, start = RVM$par, start2 = RVM$par2, maxit = 200,
     if (T < 2) 
         stop("Number of observations has to be at least 2.")
     
+    ## normalization of R-vine matrix
     o <- diag(RVM$Matrix)
     oldRVM <- RVM
     RVM <- normalizeRVineMatrix(RVM)
@@ -123,36 +125,36 @@ RVineMLE <- function(data, RVM, start = RVM$par, start2 = RVM$par2, maxit = 200,
     n <- dim(RVM)
     N <- dim(data)[1]
     
+    ## sequential estimation of start parameters if not provided
     if (all(start == 0)) {
         est_start <- RVineSeqEst(data, RVM, max.df = max.df, max.BB = max.BB)
         start <- est_start$RVM$par
         start2 <- est_start$RVM$par2
     }
     
+    ## Position of parameters in R-vine matrix
     posParams <- (RVM$family > 0)
     posParams2 <- (RVM$family %in% c(2, 7, 8, 9, 10, 17, 18, 19, 20,
                                      27, 28, 29, 30, 37, 38, 39, 40,
                                      104, 114, 124, 134, 204, 214, 224, 234))
-    
     posParams[is.na(posParams)] <- FALSE
     posParams2[is.na(posParams2)] <- FALSE
     
+    ## number of parameters
     nParams <- sum(posParams, na.rm = TRUE)
     nParams2 <- sum(posParams2, na.rm = TRUE)
     
+    ## vectors of start parameters and corresponding pair-copula families
     startpar <- double(nParams + nParams2)
-    
     Copula.Types <- RVM$family[posParams]
-    
     startpar[1:nParams] <- start[posParams]
     if (nParams2 > 0) {
         startpar[(nParams + 1):(nParams + nParams2)] <- start2[posParams2]
     }
     
-    # Grenzen
+    ## lower and upper bounds
     lb <- double(nParams + nParams2)
     ub <- double(nParams + nParams2)
-    
     for (i in 1:nParams) {
         if (Copula.Types[i] %in% c(1, 2)) {
             # Normal
@@ -231,7 +233,6 @@ RVineMLE <- function(data, RVM, start = RVM$par, start2 = RVM$par2, maxit = 200,
             lb[i] <- -20
             ub[i] <- -1.001
         }
-        
     }
     
     if (nParams2 > 0) {
@@ -282,11 +283,9 @@ RVineMLE <- function(data, RVM, start = RVM$par, start2 = RVM$par2, maxit = 200,
         }
     }
     
-    startpar1 <- startpar[Copula.Types != 0]
-    
-    # calcupdate=NA V=NA
-    
+    ## log-likelihood function to be maximized
     optim_LL <- function(parm, data, posParams, posParams2, Copula.Types, start, start2, RVM, calcupdate = NA) {
+      # calcupdate=NA V=NA
         
         nParams <- sum(posParams, na.rm = TRUE)
         nParams2 <- sum(posParams2, na.rm = TRUE)
@@ -318,7 +317,7 @@ RVineMLE <- function(data, RVM, start = RVM$par, start2 = RVM$par2, maxit = 200,
         }
     }
     
-    
+    ## gradient
     ableitung <- function(parm, data, posParams, posParams2, Copula.Types, start, start2, RVM, calcupdate) {
         nParams <- sum(posParams, na.rm = TRUE)
         nParams2 <- sum(posParams2, na.rm = TRUE)
@@ -347,6 +346,7 @@ RVineMLE <- function(data, RVM, start = RVM$par, start2 = RVM$par2, maxit = 200,
         return(grad)
     }
     
+    ## default values for parscale (see optim)
     pscale <- numeric()
     for (i in 1:nParams) {
         pscale[i] <- ifelse(Copula.Types[i] %in% c(1, 2, 43, 44), 0.01, 1)
@@ -359,14 +359,20 @@ RVineMLE <- function(data, RVM, start = RVM$par, start2 = RVM$par2, maxit = 200,
         pscale <- c(pscale, pscale2)
     }
     
-    if (!exists("factr")) factr <- 1e+08  # Toleranz etwas hoch setzen (groeber)
+    ## (default) values for control parameters of optim
+    ctrl <- list(fnscale = -1, 
+                 maxit = maxit,
+                 trace = 1,
+                 parscale = pscale, 
+                 factr = 1e+08)
+    ctrl <- modifyList(ctrl, list(...))
     
-    
+    ## optimization
     if (all(Copula.Types %in% c(0, 1, 2, 3:6, 13, 14, 16, 23, 24, 26, 33, 34, 36, 43, 44)) && grad == TRUE) {
         
         # n=dim(RVM) calcupdate=array(0,dim=c(n,n,n,n)) for(i in (n-1):1){ for(k in n:(i+1)){ calcupdate[, ,k,i ]=RVineMatrixUpdate(RVM,k,i) } }
         if (hessian == TRUE || se == TRUE) {
-            out1 <- optim(par = startpar1, 
+            out1 <- optim(par = startpar, 
                           fn = optim_LL, 
                           gr = ableitung,
                           data = data,
@@ -376,16 +382,12 @@ RVineMLE <- function(data, RVM, start = RVM$par, start2 = RVM$par2, maxit = 200,
                           start2 = start2, 
                           RVM = RVM,
                           method = "L-BFGS-B",
-                          control = list(fnscale = -1, 
-                                         maxit = maxit,
-                                         trace = 1,
-                                         parscale = pscale, 
-                                         factr = factr),
+                          control = ctrl,
                           lower = lb, 
                           upper = ub,
                           hessian = TRUE)
         } else {
-            out1 <- optim(par = startpar1,
+            out1 <- optim(par = startpar,
                           fn = optim_LL,
                           gr = ableitung,
                           data = data, 
@@ -396,17 +398,13 @@ RVineMLE <- function(data, RVM, start = RVM$par, start2 = RVM$par2, maxit = 200,
                           start2 = start2, 
                           RVM = RVM,
                           method = "L-BFGS-B",
-                          control = list(fnscale = -1, 
-                                         maxit = maxit, 
-                                         trace = 1, 
-                                         parscale = pscale,
-                                         factr = factr), 
+                          control = ctrl, 
                           lower = lb,
                           upper = ub)
         }
     } else {
         if (hessian == TRUE || se == TRUE) {
-            out1 <- optim(par = startpar1, 
+            out1 <- optim(par = startpar, 
                           fn = optim_LL, 
                           data = data,
                           posParams = posParams,
@@ -417,18 +415,12 @@ RVineMLE <- function(data, RVM, start = RVM$par, start2 = RVM$par2, maxit = 200,
                           RVM = RVM, 
                           calcupdate = NA, 
                           method = "L-BFGS-B",
-                          control = list(fnscale = -1,
-                                         maxit = maxit,
-                                         trace = 1,
-                                         parscale = pscale, 
-                                         factr = factr,
-                                         ...), 
+                          control = ctrl, 
                           lower = lb, 
                           upper = ub,
                           hessian = TRUE)
         } else {
-            # print('startpar1') print(startpar1) print('lower') print(lb) print('upper') print(ub)
-            out1 <- optim(par = startpar1,
+            out1 <- optim(par = startpar,
                           fn = optim_LL,
                           data = data, 
                           posParams = posParams,
@@ -439,23 +431,20 @@ RVineMLE <- function(data, RVM, start = RVM$par, start2 = RVM$par2, maxit = 200,
                           RVM = RVM, 
                           calcupdate = NA,
                           method = "L-BFGS-B", 
-                          control = list(fnscale = -1,
-                                         maxit = maxit,
-                                         trace = 1,
-                                         parscale = pscale,
-                                         factr = factr,
-                                         ...),
+                          control = ctrl,
                           lower = lb,
                           upper = ub)
         }
     }
     
+    ## list for final output
     out <- list()
-    
+
     out$value <- out1$value
     out$convergence <- out1$convergence
     out$message <- out1$message
     out$counts <- out1$counts
+    
     if (hessian == TRUE) 
         out$hessian <- out1$hessian
     

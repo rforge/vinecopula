@@ -137,16 +137,15 @@ BiCopGofTest(u1, u2, family = 3)
 
 # perform Kendall's goodness-of-fit test for the Frank copula
 BiCopGofTest(u1, u2, family = 5)
-\donttest{
+
 # perform Kendall's goodness-of-fit test for the true copula
-gof <- BiCopGofTest(u1, u2, family = 3, method = "kendall")
+gof <- BiCopGofTest(u1, u2, family = 3, method = "kendall", B=50)
 gof$p.value.CvM
 gof$p.value.KS
 
 # perform Kendall's goodness-of-fit test for the Frank copula
-gof <- BiCopGofTest(u1, u2, family = 5, method = "kendall")
+gof <- BiCopGofTest(u1, u2, family = 5, method = "kendall", B=50)
 gof$p.value.CvM
 gof$p.value.KS
-}
 }
 
