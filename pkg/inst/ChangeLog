@@ -4,6 +4,9 @@ Current authors: Ulf Schepsmeier, Thomas Nagler, Tobias Erhardt and Benedikt Gra
 Former authors: Eike Brechmann and Jakob Stoeber
 Maintainer: Tobias Erhardt <tobias.erhardt@tum.de> and Thomas Nagler <thomas.nagler@tum.de>
 
+Version 1.6 (July 1, 2015)
+- Bug fix:
+  * Definition of "C" in BiCopCDF for tawn copulas used constants u1 und u2 instead of arguments u and v
 
 Version 1.5 (June 2, 2015)
 
