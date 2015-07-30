@@ -98,18 +98,18 @@ BiCopSim <- function(N, family, par, par2 = 0, obj = NULL) {
         stop("Please choose 'par2' of the Tawn copula in [0,1].")
     
     ## simulate data
-    if (!any(family %in% c(2, 7:10, 17:20, 27:30, 37:40, 104, 114, 124, 134, 204, 214, 224, 234))) {
-        # one-parameter families
-        tmp <- .C("pcc",
-                  as.integer(N), 
-                  as.integer(2), 
-                  as.integer(family), 
-                  as.integer(1), 
-                  as.double(par), 
-                  as.double(0),
-                  as.double(rep(0, N * 2)),
-                  PACKAGE = "VineCopula")[[7]] 
-    } else {
+#     if (!any(family %in% c(2, 7:10, 17:20, 27:30, 37:40, 104, 114, 124, 134, 204, 214, 224, 234))) {
+#         # one-parameter families
+#         tmp <- .C("pcc",
+#                   as.integer(N), 
+#                   as.integer(2), 
+#                   as.integer(family), 
+#                   as.integer(1), 
+#                   as.double(par), 
+#                   as.double(0),
+#                   as.double(rep(0, N * 2)),
+#                   PACKAGE = "VineCopula")[[7]] 
+#     } else {
         # two-parameter families
         tmp <- .C("pcc", 
                   as.integer(N), 
@@ -120,7 +120,7 @@ BiCopSim <- function(N, family, par, par2 = 0, obj = NULL) {
                   as.double(par2), 
                   as.double(rep(0, N * 2)),
                   PACKAGE = "VineCopula")[[7]]
-    }
+    # }
     
     ## return results
     U <- matrix(tmp, ncol = 2)

@@ -57,7 +57,7 @@ void ta(double* t, int* n, double* par, double* par2, double* par3, double* out)
 // out		Pickands A for the Tawn copula
 //////////////////////////////
 
-void Tawn(double* t, int* n, double* par, double* par2, double* par3, double* out)		//für CDF
+void Tawn(double* t, int* n, double* par, double* par2, double* par3, double* out)		//f?r CDF
 {
 	int i=0, T=1;
 	double t1,t2,t3,t4;
@@ -106,7 +106,7 @@ void TawnCDF(double* u, double* v, int* n, double* par, double* par2, double* pa
 // some more help function for the PDF
 // see reference for details
 
-void ta2(double* t, int* n, double* par, double* par2, double* par3, double* out)	//für PDF
+void ta2(double* t, int* n, double* par, double* par2, double* par3, double* out)	//f?r PDF
 {
 	int i=0;
 	double t1,t2;
@@ -118,9 +118,10 @@ void ta2(double* t, int* n, double* par, double* par2, double* par3, double* out
 	}
 }
 
+
 // something like the first derivative of the ta function
 
-void d1ta(double* t, int* n, double* par, double* par2, double* par3, double* out)	//für PDF
+void d1ta(double* t, int* n, double* par, double* par2, double* par3, double* out)	//f?r PDF
 {
 	int i=0;
 	double t1,t2;
@@ -134,7 +135,7 @@ void d1ta(double* t, int* n, double* par, double* par2, double* par3, double* ou
 
 //d1ta<-function(t,par,par2,par3) {par*(par3*(par3*t)^(par-1)-par2*(par2*(1-t))^(par-1))}
 
-void d2ta(double* t, int* n, double* par, double* par2, double* par3, double* out)	//für PDF
+void d2ta(double* t, int* n, double* par, double* par2, double* par3, double* out)	//f?r PDF
 {
 	int i=0;
 	double t1,t2;
@@ -149,7 +150,9 @@ void d2ta(double* t, int* n, double* par, double* par2, double* par3, double* ou
 //d2ta<-function(t,par,par2,par3) {par*(par-1)*(par3^2*(par3*t)^(par-2)+par2^2*(par2*(1-t))^(par-2))}
 
 // I guess this was some kind of derivative of A (I don't remember, see master thesis)
-void Tawn2(double* t, int* n, double* par, double* par2, double* par3, double* out)		//für PDF
+// looks like a change in parameters: par2 <-> par3, a parallel version to the definition 
+// of Tawn above, as for all ...2 versions
+void Tawn2(double* t, int* n, double* par, double* par2, double* par3, double* out)		//for PDF
 {
 	int i=0, T=1;
 	double t1,t2,t3,t4;
@@ -165,7 +168,7 @@ void Tawn2(double* t, int* n, double* par, double* par2, double* par3, double* o
 
 //Tawn<-function(t,par,par2,par3) {(1-par2)*(1-t)+(1-par3)*t+ta(t,par,par2,par3)^(1/par)}
 
-void d1Tawn(double* t, int* n, double* par, double* par2, double* par3, double* out)	//für PDF
+void d1Tawn(double* t, int* n, double* par, double* par2, double* par3, double* out)	//for PDF
 {
 	int i=0, T=1;
 	double t2,t1;
@@ -179,7 +182,7 @@ void d1Tawn(double* t, int* n, double* par, double* par2, double* par3, double* 
 
 //d1Tawn<-function(t,par,par2,par3) {par2-par3+1/par*ta(t,par,par2,par3)^(1/par-1)*d1ta(t,par,par2,par3)}  Wie in Afunc2Deriv
 
-void d2Tawn(double* t, int* n, double* par, double* par2, double* par3, double* out)	//für PDF
+void d2Tawn(double* t, int* n, double* par, double* par2, double* par3, double* out)	//f?r PDF
 {
 	int i=0, T=1;
 	double t2,t1,t3;
@@ -248,7 +251,7 @@ void dA_dudv(double* u, double* v, int* n, double* par, double* par2, double* pa
 //d2A_dudv<-function(u,v,par,par2,par3) {evcBiCopAfunc2Deriv(w(u,v),fam,par,par2,par3)*dw_dv(u,v)*dw_du(u,v)+evcBiCopAfuncDeriv(w(u,v),fam,par,par2,par3)*d2w_dudv(u,v)}
 
 
-void TawnC(double* u, double* v, int* n, double* par, double* par2, double* par3, double* out)	// für PDF
+void TawnC(double* u, double* v, int* n, double* par, double* par2, double* par3, double* out)	// CDF for PDF
 {
 	int i=0, T=1;
 	double w, A;

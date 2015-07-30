@@ -4,6 +4,10 @@ Current authors: Ulf Schepsmeier, Thomas Nagler, Tobias Erhardt and Benedikt Gra
 Former authors: Eike Brechmann and Jakob Stoeber
 Maintainer: Tobias Erhardt <tobias.erhardt@tum.de> and Thomas Nagler <thomas.nagler@tum.de>
 
+Version 1.7 (July 30, 2015)
+- Bug fix:
+  * The S4-class objets of the Tawn copulas pointed to Archimedean CDFs, now corrected to true CDFs based on c-code
+
 Version 1.6 (July 16, 2015)
 
 - Imports

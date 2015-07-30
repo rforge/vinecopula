@@ -43,9 +43,9 @@ setMethod("dCopula", signature("matrix","tawnT1Copula"),
 ## jcdf ##
 setMethod("pCopula", signature("numeric","tawnT1Copula"), 
           function(u, copula, ...) {
-            linkVineCop.CDF(matrix(u,ncol=copula@dimension),copula)
+            linkVineCop.CDFtawn(matrix(u,ncol=copula@dimension),copula)
           })
-setMethod("pCopula", signature("matrix","tawnT1Copula"), linkVineCop.CDF)
+setMethod("pCopula", signature("matrix","tawnT1Copula"), linkVineCop.CDFtawn)
 
 ## partial derivatives ##
 # ddu
@@ -98,9 +98,9 @@ setMethod("dCopula", signature("matrix","surTawnT1Copula"),
 ## jcdf ##
 setMethod("pCopula", signature("numeric","surTawnT1Copula"), 
           function(u, copula, ...) {
-            linkVineCop.CDF(matrix(u,ncol=copula@dimension),copula)
+            linkVineCop.CDFtawn(matrix(u,ncol=copula@dimension),copula)
           })
-setMethod("pCopula", signature("matrix","surTawnT1Copula"), linkVineCop.CDF)
+setMethod("pCopula", signature("matrix","surTawnT1Copula"), linkVineCop.CDFtawn)
 
 ## partial derivatives ##
 # ddu
@@ -153,9 +153,9 @@ setMethod("dCopula", signature("matrix","r90TawnT1Copula"),
 ## jcdf ##
 setMethod("pCopula", signature("numeric","r90TawnT1Copula"), 
           function(u, copula, ...) {
-            linkVineCop.CDF(matrix(u,ncol=copula@dimension),copula)
+            linkVineCop.CDFtawn(matrix(u,ncol=copula@dimension),copula)
           })
-setMethod("pCopula", signature("matrix","r90TawnT1Copula"), linkVineCop.CDF)
+setMethod("pCopula", signature("matrix","r90TawnT1Copula"), linkVineCop.CDFtawn)
 
 ## partial derivatives ##
 # ddu
@@ -208,9 +208,9 @@ setMethod("dCopula", signature("matrix","r270TawnT1Copula"),
 ## jcdf ##
 setMethod("pCopula", signature("numeric","r270TawnT1Copula"), 
           function(u, copula, ...) {
-            linkVineCop.CDF(matrix(u,ncol=copula@dimension),copula)
+            linkVineCop.CDFtawn(matrix(u,ncol=copula@dimension),copula)
           })
-setMethod("pCopula", signature("matrix","r270TawnT1Copula"), linkVineCop.CDF)
+setMethod("pCopula", signature("matrix","r270TawnT1Copula"), linkVineCop.CDFtawn)
 
 ## partial derivatives ##
 # ddu
@@ -265,9 +265,9 @@ setMethod("dCopula", signature("matrix","tawnT2Copula"),
 ## jcdf ##
 setMethod("pCopula", signature("numeric","tawnT2Copula"), 
           function(u, copula, ...) {
-            linkVineCop.CDF(matrix(u,ncol=copula@dimension),copula)
+            linkVineCop.CDFtawn(matrix(u,ncol=copula@dimension),copula)
           })
-setMethod("pCopula", signature("matrix","tawnT2Copula"), linkVineCop.CDF)
+setMethod("pCopula", signature("matrix","tawnT2Copula"), linkVineCop.CDFtawn)
 
 ## partial derivatives ##
 # ddu
@@ -320,9 +320,9 @@ setMethod("dCopula", signature("matrix","surTawnT2Copula"),
 ## jcdf ##
 setMethod("pCopula", signature("numeric","surTawnT2Copula"), 
           function(u, copula, ...) {
-            linkVineCop.CDF(matrix(u,ncol=copula@dimension),copula)
+            linkVineCop.CDFtawn(matrix(u,ncol=copula@dimension),copula)
           })
-setMethod("pCopula", signature("matrix","surTawnT2Copula"), linkVineCop.CDF)
+setMethod("pCopula", signature("matrix","surTawnT2Copula"), linkVineCop.CDFtawn)
 
 ## partial derivatives ##
 # ddu
@@ -375,9 +375,9 @@ setMethod("dCopula", signature("matrix","r90TawnT2Copula"),
 ## jcdf ##
 setMethod("pCopula", signature("numeric","r90TawnT2Copula"), 
           function(u, copula, ...) {
-            linkVineCop.CDF(matrix(u,ncol=copula@dimension),copula)
+            linkVineCop.CDFtawn(matrix(u,ncol=copula@dimension),copula)
           })
-setMethod("pCopula", signature("matrix","r90TawnT2Copula"), linkVineCop.CDF)
+setMethod("pCopula", signature("matrix","r90TawnT2Copula"), linkVineCop.CDFtawn)
 
 ## partial derivatives ##
 # ddu
@@ -430,9 +430,9 @@ setMethod("dCopula", signature("matrix","r270TawnT2Copula"),
 ## jcdf ##
 setMethod("pCopula", signature("numeric","r270TawnT2Copula"), 
           function(u, copula, ...) {
-            linkVineCop.CDF(matrix(u,ncol=copula@dimension),copula)
+            linkVineCop.CDFtawn(matrix(u,ncol=copula@dimension),copula)
           })
-setMethod("pCopula", signature("matrix","r270TawnT2Copula"), linkVineCop.CDF)
+setMethod("pCopula", signature("matrix","r270TawnT2Copula"), linkVineCop.CDFtawn)
 
 ## partial derivatives ##
 # ddu
