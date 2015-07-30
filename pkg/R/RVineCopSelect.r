@@ -123,7 +123,6 @@ RVineCopSelect <- function(data, familyset = NA, Matrix, selectioncrit = "AIC", 
     }
     
     ## return results
-    print(Types)
     RVM <- RVineMatrix(Mold, 
                        family = Types,
                        par = Params,

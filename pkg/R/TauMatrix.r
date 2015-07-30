@@ -15,8 +15,8 @@
 TauMatrix <- function(data, weights = NA) {
     data <- as.matrix(data)
     if (any(is.na(weights))) {
-        if (any(data > 1) || any(data < 0)) 
-            stop("Data has be in the interval [0,1].")
+        # if (any(data > 1) || any(data < 0)) 
+        #     stop("Data has be in the interval [0,1].")
         d <- dim(data)[2]
         N <- dim(data)[1]
         

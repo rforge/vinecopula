@@ -135,6 +135,7 @@ simdata <- RVineSim(1000, RVM)
 
 # determine the pair-copula families and parameters
 RVM1 <- RVineCopSelect(simdata, familyset = c(1, 3, 4, 5 ,6), Matrix)
-
+RVM1$family
+round(RVM1$par, 2)
 }
 

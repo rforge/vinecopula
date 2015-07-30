@@ -1,5 +1,5 @@
 ## switch for testing the following (time consuming) examples
-docheck <- TRUE
+docheck <- FALSE
 
 if(docheck){
   
