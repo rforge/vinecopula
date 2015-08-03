@@ -68,6 +68,14 @@ setMethod("rCopula", signature("numeric","tawnT1Copula"), linkVineCop.r)
 setMethod("tau",signature("tawnT1Copula"),linkVineCop.tau)
 setMethod("tailIndex",signature("tawnT1Copula"),linkVineCop.tailIndex)
 
+# Pickand's A
+# c-code: Tawn2(double* t, int* n, double* par, double* par2, double* par3, double* out)
+setMethod("A", signature("tawnT1Copula"), function(copula, w) {
+  .C("Tawn2",as.double(w), as.integer(length(w)), 
+     as.double(copula@parameters[1]), as.double(copula@parameters[2]),
+     as.double(1), as.double(rep(0,length(w))), PACKAGE = "VineCopula")[[6]]
+})
+
 #################################
 ## Tawn type 1 survival copula ##
 #################################
@@ -122,6 +130,19 @@ setMethod("rCopula", signature("numeric","surTawnT1Copula"), linkVineCop.r)
 
 setMethod("tau",signature("surTawnT1Copula"),linkVineCop.tau)
 setMethod("tailIndex",signature("surTawnT1Copula"),linkVineCop.tailIndex)
+
+# Pickand's A
+# c-code: Tawn2(double* t, int* n, double* par, double* par2, double* par3, double* out)
+setMethod("A", signature("surTawnT1Copula"), function(copula, w) {
+  u <- -expm1(-1+w)
+  v <- -expm1(-w)
+  
+  surA <- .C("Tawn2",as.double(log(v)/log(u*v)), as.integer(length(w)), 
+             as.double(copula@parameters[1]), as.double(copula@parameters[2]),
+             as.double(1), as.double(rep(0,length(w))), PACKAGE = "VineCopula")[[6]]
+  -log(1-u + 1-v - 1 + (u*v)^surA)
+  # -log(1-u + 1-v - 1 + VineCopula:::linkVineCop.CDFtawn(cbind(u,v), tawnT1Copula(copula@parameters)))
+})
 
 #######################################
 ## Tawn type 1 90 deg. rotate copula ##
@@ -290,8 +311,17 @@ setMethod("rCopula", signature("numeric","tawnT2Copula"), linkVineCop.r)
 setMethod("tau",signature("tawnT2Copula"),linkVineCop.tau)
 setMethod("tailIndex",signature("tawnT2Copula"),linkVineCop.tailIndex)
 
+# Pickand's A
+# c-code: Tawn2(double* t, int* n, double* par, double* par2, double* par3, double* out)
+setMethod("A", signature("tawnT2Copula"), function(copula, w) {
+  .C("Tawn2",as.double(w), as.integer(length(w)), 
+     as.double(copula@parameters[1]), as.double(1),
+     as.double(copula@parameters[2]),
+     as.double(rep(0,length(w))), PACKAGE = "VineCopula")[[6]]
+})
+
 #################################
-## Tawn type 1 survival copula ##
+## Tawn type 2 survival copula ##
 #################################
 
 setClass("surTawnT2Copula",
@@ -345,8 +375,21 @@ setMethod("rCopula", signature("numeric","surTawnT2Copula"), linkVineCop.r)
 setMethod("tau",signature("surTawnT2Copula"),linkVineCop.tau)
 setMethod("tailIndex",signature("surTawnT2Copula"),linkVineCop.tailIndex)
 
+# Pickand's A
+# c-code: Tawn2(double* t, int* n, double* par, double* par2, double* par3, double* out)
+setMethod("A", signature("surTawnT2Copula"), function(copula, w) {
+  u <- -expm1(-1+w) # 1-u
+  v <- -expm1(-w)   # 1-v
+  
+  surA <- .C("Tawn2",as.double(log(v)/log(u*v)), as.integer(length(w)), 
+             as.double(copula@parameters[1]), as.double(1),
+             as.double(copula@parameters[2]), 
+             as.double(rep(0,length(w))), PACKAGE = "VineCopula")[[6]]
+  -log(1-u + 1-v - 1 + (u*v)^surA)
+})
+
 #######################################
-## Tawn type 1 90 deg. rotate copula ##
+## Tawn type 2 90 deg. rotate copula ##
 #######################################
 
 setClass("r90TawnT2Copula",
@@ -401,7 +444,7 @@ setMethod("tau",signature("r90TawnT2Copula"),linkVineCop.tau)
 setMethod("tailIndex",signature("r90TawnT2Copula"),linkVineCop.tailIndex)
 
 ########################################
-## Tawn type 1 270 deg. rotate copula ##
+## Tawn type 2 270 deg. rotate copula ##
 ########################################
 
 setClass("r270TawnT2Copula",

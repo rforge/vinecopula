@@ -9,6 +9,7 @@ Version 1.7 (July 30, 2015)
   * The S4-class objets of the Tawn copulas pointed to Archimedean CDFs, now corrected to true CDFs based on c-code
   * TauMatrix: restriction for input data to be in [0,1] removed
   * RVineCopSelect: no printing of family-Matrix
+  * Added methods for Pickand's dependence function "A" for tawnT1Copula, surTawnT1Copula, tawnT2Copula and surTawnT2Copula
 
 Version 1.6 (July 16, 2015)
 
