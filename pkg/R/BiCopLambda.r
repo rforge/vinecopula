@@ -38,40 +38,17 @@ BiCopLambda <- function(u1 = NULL, u2 = NULL, family = "emp", par = 0, par2 = 0,
         stop("The parameter 'PLOT' has to be set to 'TRUE' or 'FALSE'.")
     
     ## check for parameter consistency
-    if ((family == 1 || family == 2) && abs(par) >= 1) 
-        stop("The parameter of the Gaussian and t-copula has to be in the interval (-1,1).")
-    if (family == 2 && par2 <= 2) 
-        stop("The degrees of freedom parameter of the t-copula has to be larger than 2.")
-    if (family == 3 && par <= 0) 
-        stop("The parameter of the Clayton copula has to be positive.")
-    if (family == 4 && par < 1) 
-        stop("The parameter of the Gumbel copula has to be in the interval [1,oo).")
-    if (family == 6 && par <= 1) 
-        stop("The parameter of the Joe copula has to be in the interval (1,oo).")
-    if (family == 5 && par == 0) 
-        stop("The parameter of the Frank copula has to be unequal to 0.")
-    if ((family == 7 || family == 17) && par <= 0) 
-        stop("The first parameter of the BB1 copula has to be positive.")
-    if ((family == 7 || family == 17) && par2 < 1) 
-        stop("The second parameter of the BB1 copula has to be in the interval [1,oo).")
-    if ((family == 8 || family == 18) && par <= 0) 
-        stop("The first parameter of the BB6 copula has to be in the interval [1,oo).")
-    if ((family == 8 || family == 18) && par2 < 1) 
-        stop("The second parameter of the BB6 copula has to be in the interval [1,oo).")
-    if ((family == 9 || family == 19) && par < 1) 
-        stop("The first parameter of the BB7 copula has to be in the interval [1,oo).")
-    if ((family == 9 || family == 19) && par2 <= 0) 
-        stop("The second parameter of the BB7 copula has to be positive.")
-    if ((family == 10 || family == 20) && par < 1) 
-        stop("The first parameter of the BB8 copula has to be in the interval [1,oo).")
-    if ((family == 10 || family == 20) && (par2 <= 0 || par2 > 1)) 
-        stop("The second parameter of the BB8 copula has to be in the interval (0,1].")
+    if (family != "emp")
+        BiCopCheck(family, par, par2)
     
+    ## create grids
     if (!is.null(u1)) 
         v <- seq(0.001, 1, length.out = length(u1)) else v <- seq(0.001, 1, 0.001)
     v1 <- v
     theoLambda <- rep(0, length(v))
     lambdaFull <- rep(0, length(v))
+    
+    ## calculate theoretical lambda
     main <- ""
     for (i in 2:length(v)) {
         if (family == 3) {
@@ -131,8 +108,8 @@ BiCopLambda <- function(u1 = NULL, u2 = NULL, family = "emp", par = 0, par2 = 0,
         lambdaFull <- gtLambda(2, c(0, par2), len = len)
     }
     
+    ## calculate empircal lambda
     if (family == "emp" || is.null(u1) == FALSE) {
-        # empirical
         n <- length(v)
         nn <- length(u1)
         empLambda <- rep(0, n)
@@ -157,7 +134,7 @@ BiCopLambda <- function(u1 = NULL, u2 = NULL, family = "emp", par = 0, par2 = 0,
         
     }
     
-    # Plot
+    ## create plot
     if (PLOT) {
         if (family == "emp") {
             # only empirical one

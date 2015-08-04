@@ -499,24 +499,19 @@ BiCopMetaContour <- function(u1 = NULL, u2 = NULL, bw = 1, size = 100,
                              par = 0, par2 = 0, PLOT = TRUE, margins = "norm",
                              margins.par = 0, xylim = NA, obj = NULL,...) {
     ## extract family and parameters if BiCop object is provided
+    if (class(family) == "BiCop")
+        obj <- family
     if (!is.null(obj)) {
         stopifnot(class(obj) == "BiCop")
         family <- obj$family
         par <- obj$par
         par2 <- obj$par2
     }
-    if (class(u1) == "BiCop") {
-        # for short hand usage extract from family
-        obj <- u1
-        family <- obj$family
-        par <- obj$par
-        par2 <- obj$par2
-        u1 <- NULL
-    }
     
-    ## sanity checks for family and parameters
-    if (is.na(family) | is.na(par)) 
-        stop("Provide either 'family' and 'par' or 'obj'")
+    ## check plot option
+    if (PLOT != TRUE && PLOT != FALSE) 
+        stop("The parameter 'PLOT' has to be set to 'TRUE' or 'FALSE'.")
+    
     ## sanity checks
     if ((is.null(u1) == TRUE || is.null(u2) == TRUE) && family == "emp") 
         stop("'u1' and/or 'u2' not set or of length zero.")
@@ -530,13 +525,8 @@ BiCopMetaContour <- function(u1 = NULL, u2 = NULL, bw = 1, size = 100,
                         40, 41, 42, 51, 52,  61, 62, 71, 72, 104, 114, 124, 134,
                         204, 214, 224, 234, "emp"))) 
         stop("Copula family not implemented.")
-    if (c(2, 7, 8, 9, 10, 17, 18, 19, 20, 27, 28, 29, 30, 37, 38, 39, 40, 42, 52, 
-          62, 72, 104, 114, 124, 134, 204, 214, 224, 234) %in% family && par2 == 0) 
-        stop("For t-, BB1, BB6, BB7, BB8 and Tawn copulas, 'par2' must be set.")
-    if (c(1, 3, 4, 5, 6, 11, 13, 14, 16, 23, 24, 26, 33, 34, 36, 41, 51, 61, 71) %in% family && length(par) < 1) 
-        stop("'par' not set.")
-    
-    ## Limits for size parameter
+
+    ## limits for size parameter
     if (size > 1000) 
         stop("Size parameter should not be greater than 1000. Otherwise computational time and memory space are too large.")
     if (size < 50) 
@@ -548,86 +538,14 @@ BiCopMetaContour <- function(u1 = NULL, u2 = NULL, bw = 1, size = 100,
     if (bw > 5) 
         stop("The bandwidth parameter 'bw' should not be greater than 5.")
     
-    ## sanity checks for pair-copula parameters
-    if ((family == 1 || family == 2) && abs(par[1]) >= 1) 
-        stop("The parameter of the Gaussian and t-copula has to be in the interval (-1,1).")
-    if (family == 2 && par2 <= 2) 
-        stop("The degrees of freedom parameter of the t-copula has to be larger than 2.")
-    if ((family == 3 || family == 13) && par <= 0) 
-        stop("The parameter of the Clayton copula has to be positive.")
-    if ((family == 4 || family == 14) && par < 1) 
-        stop("The parameter of the Gumbel copula has to be in the interval [1,oo).")
-    if ((family == 6 || family == 16) && par <= 1) 
-        stop("The parameter of the Joe copula has to be in the interval (1,oo).")
-    if (family == 5 && par == 0) 
-        stop("The parameter of the Frank copula has to be unequal to 0.")
-    if ((family == 7 || family == 17) && par <= 0) 
-        stop("The first parameter of the BB1 copula has to be positive.")
-    if ((family == 7 || family == 17) && par2 < 1) 
-        stop("The second parameter of the BB1 copula has to be in the interval [1,oo).")
-    if ((family == 8 || family == 18) && par <= 0) 
-        stop("The first parameter of the BB6 copula has to be in the interval [1,oo).")
-    if ((family == 8 || family == 18) && par2 < 1) 
-        stop("The second parameter of the BB6 copula has to be in the interval [1,oo).")
-    if ((family == 9 || family == 19) && par < 1) 
-        stop("The first parameter of the BB7 copula has to be in the interval [1,oo).")
-    if ((family == 9 || family == 19) && par2 <= 0) 
-        stop("The second parameter of the BB7 copula has to be positive.")
-    if ((family == 10 || family == 20) && par < 1) 
-        stop("The first parameter of the BB8 copula has to be in the interval [1,oo).")
-    if ((family == 10 || family == 20) && (par2 <= 0 || par2 > 1)) 
-        stop("The second parameter of the BB8 copula has to be in the interval (0,1].")
-    if ((family == 23 || family == 33) && par >= 0) 
-        stop("The parameter of the rotated Clayton copula has to be negative.")
-    if ((family == 24 || family == 34) && par > -1) 
-        stop("The parameter of the rotated Gumbel copula has to be in the interval (-oo,-1].")
-    if ((family == 26 || family == 36) && par >= -1) 
-        stop("The parameter of the rotated Joe copula has to be in the interval (-oo,-1).")
-    if ((family == 27 || family == 37) && par >= 0) 
-        stop("The first parameter of the rotated BB1 copula has to be negative.")
-    if ((family == 27 || family == 37) && par2 > -1) 
-        stop("The second parameter of the rotated BB1 copula has to be in the interval (-oo,-1].")
-    if ((family == 28 || family == 38) && par >= 0) 
-        stop("The first parameter of the rotated BB6 copula has to be in the interval (-oo,-1].")
-    if ((family == 28 || family == 38) && par2 > -1) 
-        stop("The second parameter of the rotated BB6 copula has to be in the interval (-oo,-1].")
-    if ((family == 29 || family == 39) && par > -1) 
-        stop("The first parameter of the rotated BB7 copula has to be in the interval (-oo,-1].")
-    if ((family == 29 || family == 39) && par2 >= 0) 
-        stop("The second parameter of the rotated BB7 copula has to be negative.")
-    if ((family == 30 || family == 40) && par > -1) 
-        stop("The first parameter of the rotated BB8 copula has to be in the interval (-oo,-1].")
-    if ((family == 30 || family == 40) && (par2 >= 0 || par2 < (-1))) 
-        stop("The second parameter of the rotated BB8 copula has to be in the interval [-1,0).")
-    if ((family == 41 || family == 51) && par <= 0) 
-        stop("The parameter of the reflection asymmetric copula has to be positive.")
-    if ((family == 61 || family == 71) && par >= 0) 
-        stop("The parameter of the rotated reflection asymmetric copula has to be negative.")
-    if (family == 42) {
-        a <- par
-        b <- par2
-        limA <- (b - 3 - sqrt(9 + 6 * b - 3 * b^2))/2
-        if (abs(b) > 1) 
-            stop("The second parameter of the two-parametric asymmetric copulas has to be in the interval [-1,1]")
-        if (a > 1 || a < limA) 
-            stop("The first parameter of the two-parametric asymmetric copula has to be in the interval [limA(par2),1]")
-    }
-    if ((family == 104 || family == 114 || family == 204 || family == 214) && par < 1) 
-        stop("Please choose 'par' of the Tawn copula in [1,oo).")
-    if ((family == 104 || family == 114 || family == 204 || family == 214) && (par2 < 0 || par2 > 1)) 
-        stop("Please choose 'par2' of the Tawn copula in [0,1].")
-    if ((family == 124 || family == 134 || family == 224 || family == 234) && par > -1) 
-        stop("Please choose 'par' of the Tawn copula in (-oo,-1].")
-    if ((family == 124 || family == 134 || family == 224 || family == 234) && (par2 < 0 || par2 > 1)) 
-        stop("Please choose 'par2' of the Tawn copula in [0,1].")
+    ## sanity checks for copula parameters
+    if (family != "emp")
+        BiCopCheck(family, par, par2)
     
-    if (PLOT != TRUE && PLOT != FALSE) 
-        stop("The parameter 'PLOT' has to be set to 'TRUE' or 'FALSE'.")
-    
+    ## check for appropriate call w.r.t. margins
     if (margins != "norm" && margins != "t" && margins != "exp" && margins != "gamma" && 
             margins != "unif") 
         stop("The function only supports Gaussian ('norm'), Student t ('t'), exponential ('exp'), Gamma ('gamma') and uniform ('unif') margins.")
-    
     if (margins == "t" && margins.par <= 0) 
         stop("The degrees of freedom parameter for the Student t margins has to positive.")
     if (margins == "Gamma" && length(margins.par) != 2) 
@@ -637,15 +555,15 @@ BiCopMetaContour <- function(u1 = NULL, u2 = NULL, bw = 1, size = 100,
     if (margins == "unif" && family == 0) 
         stop("The combination independence copula and uniform margins is not possible because all z-values are equal.")
     
+    ## set margins for theoretical contour plot
     if (is.null(u1) && is.null(u2) && family != "emp") {
-        # margins for theoretical contour plot
         u1 <- runif(1000)
         u2 <- runif(1000)
     }
-    
     if (!is.na(xylim) && length(xylim) != 2) 
         stop("'xylim' has to be a vector of length 2.")
     
+    ## transform grid marginally
     if (margins == "norm") {
         x1 <- qnorm(p = u1)
         x2 <- qnorm(p = u2)
@@ -676,7 +594,7 @@ BiCopMetaContour <- function(u1 = NULL, u2 = NULL, bw = 1, size = 100,
     x <- y <- seq(from = xylim[1], to = xylim[2], length.out = size)
     
     if (family != "emp") {
-        ## theoretical contours
+        ## calculate theoretical contours
         if (family %in% c(2, 7, 8, 9, 10, 17, 18, 19, 20, 27, 28, 29, 30, 37, 38, 
                           39, 40, 42, 52, 62, 72, 104, 114, 124, 134, 204, 214, 224, 234)) {
             z <- matrix(data = meta.dens(x1 = rep(x = x, each = size),
@@ -698,11 +616,10 @@ BiCopMetaContour <- function(u1 = NULL, u2 = NULL, bw = 1, size = 100,
                         byrow = TRUE)
         }
     } else {
-        ## empirical contours
+        ## calculate empirical contours 
         bw1 <- bw * bandwidth.nrd(x1)
         bw2 <- bw * bandwidth.nrd(x2)
         
-        ## 2-dimensional kernel density estimation
         kd.est <- kde2d(x = x1, y = x2, h = c(bw1, bw2), n = size)
         
         x <- kd.est$x

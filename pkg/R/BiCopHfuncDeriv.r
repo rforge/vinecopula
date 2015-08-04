@@ -14,17 +14,11 @@ BiCopHfuncDeriv <- function(u1, u2, family, par, par2 = 0, deriv = "par", obj = 
         family <- NA
     if (missing(par))
         par <- NA
+    # for short hand usage extract obj from family
+    if (class(family) == "BiCop")
+        obj <- family
     if (!is.null(obj)) {
         stopifnot(class(obj) == "BiCop")
-        family <- obj$family
-        par <- obj$par
-        par2 <- obj$par2
-    }
-    if (class(family) == "BiCop") {
-        # for short hand usage extract from family
-        if (class(par) == "character")
-            deriv <- par
-        obj <- family
         family <- obj$family
         par <- obj$par
         par2 <- obj$par2

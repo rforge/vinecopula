@@ -14,17 +14,11 @@ BiCopDeriv <- function(u1, u2, family, par, par2 = 0, deriv = "par", log = FALSE
         family <- NA
     if (missing(par))
         par <- NA
+    # for short hand usage extract obj from family
+    if (class(family) == "BiCop")
+        obj <- family
     if (!is.null(obj)) {
         stopifnot(class(obj) == "BiCop")
-        family <- obj$family
-        par <- obj$par
-        par2 <- obj$par2
-    }
-    if (class(family) == "BiCop") {
-        # for short hand usage extract from family
-        if (class(par) == "character")
-            deriv <- par
-        obj <- family
         family <- obj$family
         par <- obj$par
         par2 <- obj$par2
@@ -39,29 +33,11 @@ BiCopDeriv <- function(u1, u2, family, par, par2 = 0, deriv = "par", log = FALSE
         stop("For t-copulas, 'par2' must be set.")
     if (family %in% c(1, 3, 4, 5, 6, 13, 14, 16, 23, 24, 26, 33, 34, 36) && length(par) < 1) 
         stop("'par' not set.")
-    if ((family == 1 || family == 2) && abs(par[1]) >= 1) 
-        stop("The parameter of the Gaussian and t-copula has to be in the interval (-1,1).")
-    if (family == 2 && par2 <= 2) 
-        stop("The degrees of freedom parameter of the t-copula has to be larger than 2.")
-    if ((family == 3 || family == 13) && par <= 0) 
-        stop("The parameter of the Clayton copula has to be positive.")
-    if ((family == 4 || family == 14) && par < 1) 
-        stop("The parameter of the Gumbel copula has to be in the interval [1,oo).")
-    if ((family == 6 || family == 16) && par <= 1) 
-        stop("The parameter of the Joe copula has to be in the interval (1,oo).")
-    if (family == 5 && par == 0) 
-        stop("The parameter of the Frank copula has to be unequal to 0.")
-    if ((family == 23 || family == 33) && par >= 0) 
-        stop("The parameter of the rotated Clayton copula has to be negative.")
-    if ((family == 24 || family == 34) && par > -1) 
-        stop("The parameter of the rotated Gumbel copula has to be in the interval (-oo,-1].")
-    if ((family == 26 || family == 36) && par >= -1) 
-        stop("The parameter of the rotated Joe copula has to be in the interval (-oo,-1).")
-    
     if (deriv == "par2" && family != 2) 
         stop("The derivative with respect to the second parameter can only be derived for the t-copula.")
     if (log == TRUE && (deriv %in% c("u1", "u2"))) 
         stop("The derivative with respect to one of the arguments are not available in the log case.")
+    BiCopCheck(family, par, par2)
     
     ## call C routines for specified 'deriv' case 
     n <- length(u1)
