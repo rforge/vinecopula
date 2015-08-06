@@ -566,14 +566,16 @@ MLE_intern <- function(data, start.parm, family, se = FALSE, max.df = 30,
                                         par = param[1],
                                         par2 = param[2], 
                                         deriv = "par",
-                                        log = TRUE))
+                                        log = TRUE,
+                                        check.pars = FALSE))
                 gr[2] <- sum(BiCopDeriv(data[, 1], 
                                         data[, 2], 
                                         family = 2, 
                                         par = param[1],
                                         par2 = param[2], 
                                         deriv = "par2",
-                                        log = TRUE))
+                                        log = TRUE,
+                                        check.pars = FALSE))
                 return(gr)
             }
             
@@ -657,7 +659,8 @@ MLE_intern <- function(data, start.parm, family, se = FALSE, max.df = 30,
                                      par = start.parm[1],
                                      par2 = param[1], 
                                      deriv = "par2", 
-                                     log = TRUE))
+                                     log = TRUE,
+                                     check.pars = FALSE))
                 return(gr)
             }
             
@@ -724,7 +727,8 @@ MLE_intern <- function(data, start.parm, family, se = FALSE, max.df = 30,
                                  family = family, 
                                  par = param,
                                  deriv = "par", 
-                                 log = TRUE))
+                                 log = TRUE,
+                                 check.pars = FALSE))
             return(gr)
         }
         

@@ -393,13 +393,15 @@ BiCopSelect <- function(u1, u2, familyset = NA, selectioncrit = "AIC", indeptest
                                                    data2, 
                                                    i, 
                                                    optiout[[i]]$par[1], 
-                                                   optiout[[i]]$par[2])))
+                                                   optiout[[i]]$par[2],
+                                                   check.pars = FALSE)))
                         } else {
                             ll <- sum(log(BiCopPDF(data1, 
                                                    data2, 
                                                    i,
                                                    optiout[[i]]$par[1], 
-                                                   optiout[[i]]$par[2])) %*% weights)
+                                                   optiout[[i]]$par[2],
+                                                   check.pars = FALSE)) %*% weights)
                         }
                         AICs[i] <- -2 * ll + 4
                     } else {
@@ -407,12 +409,14 @@ BiCopSelect <- function(u1, u2, familyset = NA, selectioncrit = "AIC", indeptest
                             ll <- sum(log(BiCopPDF(data1,
                                                    data2,
                                                    i, 
-                                                   optiout[[i]]$par)))
+                                                   optiout[[i]]$par,
+                                                   check.pars = FALSE)))
                         } else {
                             ll <- sum(log(BiCopPDF(data1, 
                                                    data2,
                                                    i,
-                                                   optiout[[i]]$par)) %*% weights)
+                                                   optiout[[i]]$par,
+                                                   check.pars = FALSE)) %*% weights)
                         }
                         AICs[i] <- -2 * ll + 2
                     }
@@ -431,13 +435,15 @@ BiCopSelect <- function(u1, u2, familyset = NA, selectioncrit = "AIC", indeptest
                                                        data2,
                                                        i, 
                                                        optiout[[i]]$par[1], 
-                                                       optiout[[i]]$par[2])))
+                                                       optiout[[i]]$par[2],
+                                                       check.pars = FALSE)))
                             } else {
                                 ll <- sum(log(BiCopPDF(data1, 
                                                        data2, 
                                                        i,
                                                        optiout[[i]]$par[1], 
-                                                       optiout[[i]]$par[2])) %*% weights)
+                                                       optiout[[i]]$par[2],
+                                                       check.pars = FALSE)) %*% weights)
                             }
                             BICs[i] <- -2 * ll + 2 * log(length(data1))
                         } else {
@@ -445,12 +451,14 @@ BiCopSelect <- function(u1, u2, familyset = NA, selectioncrit = "AIC", indeptest
                                 ll <- sum(log(BiCopPDF(data1,
                                                        data2,
                                                        i,
-                                                       optiout[[i]]$par)))
+                                                       optiout[[i]]$par,
+                                                       check.pars = FALSE)))
                             } else {
                                 ll <- sum(log(BiCopPDF(data1,
                                                        data2,
                                                        i,
-                                                       optiout[[i]]$par)) %*% weights)
+                                                       optiout[[i]]$par,
+                                                       check.pars = FALSE)) %*% weights)
                             }
                             BICs[i] <- -2 * ll + log(length(data1))
                         }
