@@ -12,7 +12,7 @@ BiCopTau2Par(family, tau)
 }
 
 \arguments{
-  \item{family}{An integer defining the bivariate copula family:\cr
+  \item{family}{integer; single number or vector of size \code{m}; defines the bivariate copula family: \cr
 		\code{0} = independence copula \cr
     \code{1} = Gaussian copula \cr
     \code{2} = Student t copula (Here only the first parameter can be computed) \cr
@@ -30,7 +30,7 @@ BiCopTau2Par(family, tau)
 		\code{34} = rotated Gumbel copula (270 degrees) \cr
 		\code{36} = rotated Joe copula (270 degrees)\cr
     Note that (with exception of the t-copula) two parameter bivariate copula families cannot be used.}
-    \item{tau}{Kendall's tau value (vector with elements in [-1,1]).}
+    \item{tau}{numeric; single number or vector of size \code{m}; Kendall's tau value (vector with elements in [-1,1]).}
 }
 
 \value{

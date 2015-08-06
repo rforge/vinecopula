@@ -8,12 +8,12 @@ This function evaluates the probability density function (PDF) of a given parame
 }
 
 \usage{
-BiCopPDF(u1, u2, family, par, par2 = 0, obj = NULL)
+BiCopPDF(u1, u2, family, par, par2 = 0, obj = NULL, check.pars = TRUE)
 }
 
 \arguments{
-  \item{u1, u2}{Numeric vectors of equal length with values in [0,1].}
-  \item{family}{An integer defining the bivariate copula family: \cr
+  \item{u1,u2}{numeric vectors of equal length with values in [0,1].}
+  \item{family}{integer; single number or vector of size \code{length(u1)}; defines the bivariate copula family: \cr
 		\code{0} = independence copula \cr
 	        \code{1} = Gaussian copula \cr
 	        \code{2} = Student t copula (t-copula) \cr
@@ -21,7 +21,7 @@ BiCopPDF(u1, u2, family, par, par2 = 0, obj = NULL)
 	        \code{4} = Gumbel copula \cr
 	        \code{5} = Frank copula \cr
 	        \code{6} = Joe copula \cr 
-		\code{7} = BB1 copula \cr
+		\code{7} = BB1 copula \cr/
 		\code{8} = BB6 copula \cr
 		\code{9} = BB7 copula \cr
 		\code{10} = BB8 copula \cr
@@ -55,13 +55,19 @@ BiCopPDF(u1, u2, family, par, par2 = 0, obj = NULL)
     \code{224} = rotated Tawn type 2 copula (90 degrees)  \cr
     \code{234} = rotated Tawn type 2 copula (270 degrees) \cr
 		}
-  \item{par}{Copula parameter.}
-  \item{par2}{Second parameter for the two parameter t-, BB1, BB6, BB7, BB8, Tawn type 1 and type 2 copulas (default: \code{par2 = 0}).}
+  \item{par}{numeric; single number or vector of size \code{length(u1)}; copula parameter.}
+  \item{par2}{numeric; single number or vector of size \code{length(u1)}; second parameter for bivariate copulas with two parameters (t, BB1, BB6, BB7, BB8, Tawn type 1 and type 2; default: \code{par2 = 0}). \code{par2} should be an positive integer for the Students's t copula \code{family = 2}.}
   \item{obj}{\code{BiCop} object containing the family and parameter specification.}
+\item{check.pars}{logical; default is \code{TRUE}; if \code{FALSE}, checks for family/parameter-consistency are ommited (should only be used with care).}
 }
 
 \value{
-A numeric vector of the bivariate copula density evaluated at \code{u1} and \code{u2}.
+A numeric vector of the bivariate copula density 
+\itemize{
+    \item{of the copula \code{family}}
+    \item{with  parameter(s) \code{par}, \code{par2}}
+    \item{evaluated at \code{u1} and \code{u2}.}
+}
 }
 
 \details{

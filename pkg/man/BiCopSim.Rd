@@ -8,12 +8,12 @@ This function simulates from a given parametric bivariate copula.
 }
 
 \usage{
-BiCopSim(N, family, par, par2 = 0, obj = NULL)
+BiCopSim(N, family, par, par2 = 0, obj = NULL, check.pars = TRUE)
 }
 
 \arguments{
   \item{N}{Number of bivariate observations simulated.}
-  \item{family}{An integer defining the bivariate copula family: \cr
+  \item{family}{integer; single number or vector of size \code{N}; defines the bivariate copula family: \cr
 		\code{0} = independence copula \cr
 		\code{1} = Gaussian copula \cr
 	        \code{2} = Student t copula (t-copula) \cr
@@ -55,13 +55,14 @@ BiCopSim(N, family, par, par2 = 0, obj = NULL)
     \code{224} = rotated Tawn type 2 copula (90 degrees)  \cr
     \code{234} = rotated Tawn type 2 copula (270 degrees) \cr
 		}
-  \item{par}{Copula parameter.}
-  \item{par2}{Second parameter for the two parameter BB1, BB6, BB7, BB8, Tawn type 1 and type 2 copulas (default: \code{par2 = 0}).}
+  \item{par}{numeric; single number or vector of size \code{N}; copula parameter.}
+  \item{par2}{numeric; single number or vector of size \code{N}; second parameter for bivariate copulas with two parameters (t, BB1, BB6, BB7, BB8, Tawn type 1 and type 2; default: \code{par2 = 0}). \code{par2} should be an positive integer for the Students's t copula \code{family = 2}.}
   \item{obj}{\code{BiCop} object containing the family and parameter specification.}
+\item{check.pars}{logical; default is \code{TRUE}; if \code{FALSE}, checks for family/parameter-consistency are ommited (should only be used with care).}
 }
 
 \value{
-An \code{N} x 2 matrix of data simulated from the bivariate copula.
+An \code{N} x 2 matrix of data simulated from the bivariate copula with \code{family} and parameter(s) \code{par}, \code{par2}.
 }
 
 \details{

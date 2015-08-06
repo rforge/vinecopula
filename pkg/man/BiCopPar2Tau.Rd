@@ -8,11 +8,11 @@ This function computes the theoretical Kendall's tau value of a bivariate copula
 }
 
 \usage{
-BiCopPar2Tau(family, par, par2 = 0, obj = NULL)
+BiCopPar2Tau(family, par, par2 = 0, obj = NULL, check.pars = TRUE)
 }
 
 \arguments{
-  \item{family}{An integer defining the bivariate copula family:\cr
+  \item{family}{integer; single number or vector of size \code{m}; defines the bivariate copula family: \cr
 		\code{0} = independence copula \cr
 	        \code{1} = Gaussian copula \cr
 	        \code{2} = Student t copula (t-copula) \cr
@@ -54,11 +54,12 @@ BiCopPar2Tau(family, par, par2 = 0, obj = NULL)
     \code{224} = rotated Tawn type 2 copula (90 degrees)  \cr
     \code{234} = rotated Tawn type 2 copula (270 degrees) \cr
 		}
-  \item{par}{Copula parameter (vector).}
-  \item{par2}{Second parameter (vector of same length as \code{par}) for the two parameter t-, BB1, BB6, BB7, BB8, Tawn type 1 and type 2 copulas (default: \code{par2 = 0}).
+  \item{par}{numeric; single number or vector of size \code{m}; copula parameter.}
+  \item{par2}{numeric; single number or vector of size \code{m}; second parameter for bivariate copulas with two parameters (t, BB1, BB6, BB7, BB8, Tawn type 1 and type 2; default: \code{par2 = 0}).
     Note that the degrees of freedom parameter of the t-copula does not need to be set,
     because the theoretical Kendall's tau value of the t-copula is independent of this choice.}
   \item{obj}{\code{BiCop} object containing the family and parameter specification.}
+  \item{check.pars}{logical; default is \code{TRUE}; if \code{FALSE}, checks for family/parameter-consistency are ommited (should only be used with care).}
 }                                                                                  
 
 \details{
@@ -67,10 +68,12 @@ If the family and parameter specification is stored in a \code{\link{BiCop}} obj
 can be used.
 }
 
+\note{
+The number \code{m} can be chosen arbitrarily. 
+}
+
 \value{
-Theoretical value of Kendall's tau (vector) corresponding to the bivariate copula family and parameter(vectors)
-(\eqn{\theta} for one parameter families and the first parameter of the t-copula,
-\eqn{\theta} and \eqn{\delta} for the two parameter BB1, BB6, BB7, BB8, Tawn type 1 and type 2 copulas). 
+Theoretical value of Kendall's tau (vector) corresponding to the bivariate copula \code{family} and parameter vector \eqn{(\theta, \delta) =} \code{(par, par2)}.
 \tabular{ll}{
 No. (\code{family}) \tab Kendall's tau (\code{tau}) \cr
 \code{1, 2} \tab \eqn{\frac{2}{\pi}\arcsin(\theta)}{2 / \pi arcsin(\theta)} \cr

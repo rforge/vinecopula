@@ -8,12 +8,13 @@ This function evaluates the second derivative of a given conditional parametric 
 }
 
 \usage{
-BiCopHfuncDeriv2(u1, u2, family, par, par2 = 0, deriv = "par", obj = NULL)
+BiCopHfuncDeriv2(u1, u2, family, par, par2 = 0, deriv = "par",
+                 obj = NULL, check.pars = TRUE)
 }
 
 \arguments{
-  \item{u1, u2}{Numeric vectors of equal length with values in [0,1].}
-  \item{family}{An integer defining the bivariate copula family: \cr
+  \item{u1,u2}{numeric vectors of equal length with values in [0,1].}
+  \item{family}{integer; single number or vector of size \code{length(u1)}; defines the bivariate copula family: \cr
 		\code{0} = independence copula \cr
 	        \code{1} = Gaussian copula \cr
 	        \code{2} = Student t copula (t-copula) \cr
@@ -31,8 +32,8 @@ BiCopHfuncDeriv2(u1, u2, family, par, par2 = 0, deriv = "par", obj = NULL)
 		\code{34} = rotated Gumbel copula (270 degrees) \cr
 		\code{36} = rotated Joe copula (270 degrees) \cr
 		}
-  \item{par}{Copula parameter.}
-  \item{par2}{Second parameter for bivariate t-copula; default: \code{par2 = 0}.}
+  \item{par}{numeric; single number or vector of size \code{length(u1)}; copula parameter.}
+  \item{par2}{integer; single number or vector of size \code{length(u1)}; second parameter for the t-Copula; default is \code{par2 = 0}, should be an positive integer for the Students's t copula \code{family = 2}.}
   \item{deriv}{Derivative argument \cr
   	\code{"par"} = second derivative with respect to the first parameter (default)\cr
   	\code{"par2"} = second derivative with respect to the second parameter (only available for the t-copula) \cr
@@ -42,10 +43,18 @@ BiCopHfuncDeriv2(u1, u2, family, par, par2 = 0, deriv = "par", obj = NULL)
 	\code{"par2u2"} = second derivative with respect to the second parameter and the second argument (only available for the t-copula) \cr
   	}
   \item{obj}{\code{BiCop} object containing the family and parameter specification.}
+  \item{check.pars}{logical; default is \code{TRUE}; if \code{FALSE}, checks for family/parameter-consistency are ommited (should only be used with care).}  
+
 }
 
 \value{
-A numeric vector of the second conditional bivariate copula derivative with respect to \code{deriv} evaluated at \code{u1} and \code{u2} with parameter(s) \code{par} and \code{par2}.
+A numeric vector of the second-order conditional bivariate copula derivative 
+\itemize{
+    \item{of the copula \code{family}}
+    \item{with  parameter(s) \code{par}, \code{par2}}
+    \item{with respect to \code{deriv}}
+    \item{evaluated at \code{u1} and \code{u2}.}
+}
 }
 
 \details{

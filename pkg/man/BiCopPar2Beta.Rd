@@ -8,11 +8,11 @@ This function computes the theoretical Blomqvist's beta value of a bivariate cop
 }
 
 \usage{
-BiCopPar2Beta(family, par, par2 = 0, obj = NULL)
+BiCopPar2Beta(family, par, par2 = 0, obj = NULL, check.pars = TRUE)
 }
 
 \arguments{
-  \item{family}{An integer defining the bivariate copula family:\cr
+  \item{family}{integer; single number or vector of size \code{m}; defines the bivariate copula family: \cr
 		\code{0} = independence copula \cr
 	        \code{1} = Gaussian copula \cr
 	        \code{3} = Clayton copula \cr
@@ -54,20 +54,25 @@ BiCopPar2Beta(family, par, par2 = 0, obj = NULL)
     \code{234} = rotated Tawn type 2 copula (270 degrees) \cr
     Note that the Student's t-copula is not allowed since the CDF of the t-copula is not implemented (see \code{\link{BiCopCDF}}).
 		}
-  \item{par}{Copula parameter.}
-  \item{par2}{Second parameter for the two parameter BB1, BB6, BB7, BB8, Tawn type 1 and type 2 copulas (default: \code{par2 = 0}).}
+  \item{par}{numeric; single number or vector of size \code{m}; copula parameter.}
+  \item{par2}{numeric; single number or vector of size \code{m}; second parameter for the two parameter BB1, BB6, BB7, BB8, Tawn type 1 and type 2 copulas (default: \code{par2 = 0}).}
   \item{obj}{\code{BiCop} object containing the family and parameter specification.}
+  \item{check.pars}{logical; default is \code{TRUE}; if \code{FALSE}, checks for family/parameter-consistency are ommited (should only be used with care).}
 }                                                                                  
 
 
 \value{
-Theoretical value of Blomqvist's beta corresponding to the bivariate copula family and parameter(s)
+Theoretical value of Blomqvist's beta corresponding to the bivariate copula \code{family} and parameter(s) \code{par}, \code{par2}.
 }
 
 \details{
 If the family and parameter specification is stored in a \code{\link{BiCop}} object \code{obj}, the alternative version \cr
 \preformatted{BiCopPar2Beta(obj)} 
 can be used.
+}
+
+\note{
+The number \code{m} can be chosen arbitrarily. 
 }
 
 \author{Ulf Schepsmeier}

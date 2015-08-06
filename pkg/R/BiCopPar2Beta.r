@@ -1,4 +1,4 @@
-BiCopPar2Beta <- function(family, par, par2 = 0, obj = NULL) {
+BiCopPar2Beta <- function(family, par, par2 = 0, obj = NULL, check.pars = TRUE) {
     ## extract family and parameters if BiCop object is provided
     if (missing(family))
         family <- NA
@@ -21,5 +21,11 @@ BiCopPar2Beta <- function(family, par, par2 = 0, obj = NULL) {
         stop("Input lengths don't match")
     
     ## calculate beta
-    4 * BiCopCDF(rep(0.5, n), rep(0.5, n), family, par, par2) - 1
+    Cuv <- BiCopCDF(rep(0.5, n),
+                    rep(0.5, n),
+                    family,
+                    par,
+                    par2,
+                    check.pars = check.pars)
+    4 * Cuv - 1
 }

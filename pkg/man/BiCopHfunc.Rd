@@ -8,12 +8,12 @@ This function evaluates the conditional distribution function (h-function) of a 
 }
 
 \usage{
-BiCopHfunc(u1, u2, family, par, par2 = 0, obj = NULL)
+BiCopHfunc(u1, u2, family, par, par2 = 0, obj = NULL, check.pars = TRUE)
 }
 
 \arguments{
-  \item{u1, u2}{Numeric vectors of equal length with values in [0,1].}
-  \item{family}{An integer defining the bivariate copula family: \cr
+  \item{u1,u2}{numeric vectors of equal length with values in [0,1].}
+  \item{family}{integer; single number or vector of size \code{length(u1)}; defines the bivariate copula family: \cr
 		\code{0} = independence copula \cr
 		\code{1} = Gaussian copula \cr
 	        \code{2} = Student t copula (t-copula) \cr
@@ -55,10 +55,10 @@ BiCopHfunc(u1, u2, family, par, par2 = 0, obj = NULL)
     \code{224} = rotated Tawn type 2 copula (90 degrees)  \cr
     \code{234} = rotated Tawn type 2 copula (270 degrees) \cr
 		}
-  \item{par}{Copula parameter.}
-  \item{par2}{Second parameter for bivariate copulas with two parameters (t, BB1, BB6, BB7, BB8, Tawn type 1 and type 2; default: \code{par2 = 0}).}
+  \item{par}{numeric; single number or vector of size \code{length(u1)}; copula parameter.}
+  \item{par2}{numeric; single number or vector of size \code{length(u1)}; second parameter for bivariate copulas with two parameters (t, BB1, BB6, BB7, BB8, Tawn type 1 and type 2; default: \code{par2 = 0}). \code{par2} should be an positive integer for the Students's t copula \code{family = 2}.}
   \item{obj}{\code{BiCop} object containing the family and parameter specification.}
-
+\item{check.pars}{logical; default is \code{TRUE}; if \code{FALSE}, checks for family/parameter-consistency are ommited (should only be used with care).}
 }
 
 \details{
@@ -71,8 +71,8 @@ h(u|v,\theta) := F(u|v) =
 \partial C(u,v) / \partial v,
 }
 where \eqn{C} is a bivariate copula distribution function with parameter(s) \eqn{\boldsymbol{\theta}}{\theta}.  
-For more details see Aas et al. (2009). 
-\cr \cr
+For more details see Aas et al. (2009). \cr \cr
+
 If the family and parameter specification is stored in a \code{\link{BiCop}} object \code{obj}, the alternative version \cr
 \preformatted{BiCopHfunc(u1, u2, obj)} 
 can be used.
@@ -80,8 +80,8 @@ can be used.
 
 
 \value{
-\item{hfunc1}{Numeric vector of the conditional distribution function (h-function) evaluated at \code{u2} given \code{u1}, i.e., \eqn{h(\code{u2}|\code{u1},\boldsymbol{\theta})}{h(u2|u1,\theta)}.}
-\item{hfunc2}{Numeric vector of the conditional distribution function (h-function) evaluated at \code{u1} given \code{u2}, i.e., \eqn{h(\code{u1}|\code{u2},\boldsymbol{\theta})}{h(u1|u2,\theta)}.}
+\item{hfunc1}{Numeric vector of the conditional distribution function (h-function) of the copula \code{family} with  parameter(s) \code{par}, \code{par2} evaluated at \code{u2} given \code{u1}, i.e., \eqn{h(\code{u2}|\code{u1},\boldsymbol{\theta})}{h(u2|u1,\theta)}.}
+\item{hfunc2}{Numeric vector of the conditional distribution function (h-function) of the copula \code{family} with  parameter(s) \code{par}, \code{par2} evaluated at \code{u1} given \code{u2}, i.e., \eqn{h(\code{u1}|\code{u2},\boldsymbol{\theta})}{h(u1|u2,\theta)}.}
 }
 
 \references{ 
