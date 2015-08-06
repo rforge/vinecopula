@@ -1,4 +1,4 @@
-BiCopPDF <- function(u1, u2, family, par, par2 = 0, obj = NULL) {       
+BiCopPDF <- function(u1, u2, family, par, par2 = 0, obj = NULL, check.pars = TRUE) {       
     ## sanity checks for u1, u2
     if (is.null(u1) == TRUE || is.null(u2) == TRUE) 
         stop("u1 and/or u2 are not set or have length zero.")
@@ -8,6 +8,7 @@ BiCopPDF <- function(u1, u2, family, par, par2 = 0, obj = NULL) {
         stop("Data has be in the interval [0,1].")
     if (any(u2 > 1) || any(u2 < 0)) 
         stop("Data has be in the interval [0,1].")
+    n <- length(u1)
     
     ## extract family and parameters if BiCop object is provided
     if (missing(family))
@@ -24,19 +25,54 @@ BiCopPDF <- function(u1, u2, family, par, par2 = 0, obj = NULL) {
         par2 <- obj$par2
     }
     
-    ## sanity checks for family and parameters
-    BiCopCheck(family, par, par2)
+    ## check for reasonable input
+    if (any(is.na(family)) | any(is.na(par)))
+        stop("Provide either 'family' and 'par' or 'obj'")
+    
+    ## adjust length for parameter vectors; stop if not matching
+    if (any(c(length(family), length(par), length(par2)) == n)) {
+        if (length(family) == 1) 
+            family <- rep(family, n)
+        if (length(par) == 1) 
+            par <- rep(par, n)
+        if (length(par2) == 1)
+            par2 <- rep(par2, n)
+    }
+    if (!(length(family) %in% c(1, n)))
+        stop("'family' has to be a single number or a size n vector")
+    if (!(length(par) %in% c(1, n)))
+        stop("'par' has to be a single number or a size n vector")
+    if (!(length(par2) %in% c(1, n)))
+        stop("'par2' has to be a single number or a size n vector")
+    
+    ## check for family/parameter consistency
+    if (check.pars)
+        BiCopCheck(family, par, par2)
     
     ## evaluate log-density
-    coplik <- .C("LL_mod_seperate",
-                 as.integer(family),
-                 as.integer(length(u1)),
-                 as.double(u1), 
-                 as.double(u2),
-                 as.double(par),
-                 as.double(par2), 
-                 as.double(rep(0, length(u1))), 
-                 PACKAGE = "VineCopula")[[7]]
+    if (length(par) == 1) {
+        # unvectorized call
+        coplik <- .C("LL_mod_seperate",
+                     as.integer(family),
+                     as.integer(n),
+                     as.double(u1), 
+                     as.double(u2),
+                     as.double(par),
+                     as.double(par2), 
+                     as.double(rep(0, n)), 
+                     PACKAGE = "VineCopula")[[7]]
+    } else {
+        # vectorized call
+        coplik <- .C("LL_mod_seperate_vec",
+                     as.integer(family),
+                     as.integer(n),
+                     as.double(u1), 
+                     as.double(u2),
+                     as.double(par),
+                     as.double(par2), 
+                     as.double(rep(0, n)), 
+                     PACKAGE = "VineCopula")[[7]]
+    }
     
     ## return density
     exp(coplik)

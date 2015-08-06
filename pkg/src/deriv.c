@@ -111,7 +111,22 @@ if((*copula)==43)		// special copula; all rotations of Clayton are combined in o
   free(nparam);
 }
 
-
+// vectorized version
+void diffPDF_mod_vec(double* u, double* v, int* n, double* par, double* par2, int* copula, double* out)
+{
+    int nn = 1;
+    double* ipars = (double *) malloc(2*sizeof(double));
+    for (int i = 0; i < (*n); ++i) {
+        if (copula[i] == 2) {
+            ipars[0] = par[i];
+            ipars[1] = par2[i];
+            diffPDF_rho_tCopula(&u[i], &v[i], &nn, ipars, &copula[i], &out[i]);
+        } else {
+            diffPDF_mod(&u[i], &v[i], &nn, &par[i], &copula[i], &out[i]);
+        }
+    };
+    free(ipars);
+}
 
 
 //////////////////////////////////////////////////
@@ -266,7 +281,6 @@ void diffPDF(double* u, double* v, int* n, double* param, int* copula, double* o
 
 }
 
-
 ////////////////////////////////////////////////////////////////////
 //
 // 1. Ableitung von c nach u
@@ -353,6 +367,19 @@ if((*copula)==43)
   free(negv);
   free(negu);
   free(nparam);
+}
+
+// vectorized version
+void diffPDF_u_mod_vec(double* u, double* v, int* n, double* par, double* par2, int* copula, double* out) {
+    int nn = 1;
+    double* ipars = (double *) malloc(2*sizeof(double));
+    
+    for (int i = 0; i < (*n); ++i) {
+        ipars[0] = par[i];
+        ipars[1] = par2[i];
+        diffPDF_u_mod(&u[i], &v[i], &nn, ipars, &copula[i], &out[i]);
+    };
+    free(ipars);
 }
 
 
@@ -573,5 +600,18 @@ if((*copula)==43)
   free(negv);
   free(negu);
   free(nparam);
+}
+
+// vectorized version
+void diffPDF_v_mod_vec(double* u, double* v, int* n, double* par, double* par2, int* copula, double* out) {
+    int nn = 1;
+    double* ipars = (double *) malloc(2*sizeof(double));
+    
+    for (int i = 0; i < (*n); ++i) {
+        ipars[0] = par[i];
+        ipars[1] = par2[i];
+        diffPDF_v_mod(&u[i], &v[i], &nn, ipars, &copula[i], &out[i]);
+    };
+    free(ipars);
 }
 

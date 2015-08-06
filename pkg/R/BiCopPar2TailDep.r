@@ -1,4 +1,4 @@
-BiCopPar2TailDep <- function(family, par, par2 = 0, obj = NULL) {
+BiCopPar2TailDep <- function(family, par, par2 = 0, obj = NULL, check.pars = TRUE) {
     ## extract family and parameters if BiCop object is provided
     if (missing(family))
         family <- NA
@@ -14,28 +14,37 @@ BiCopPar2TailDep <- function(family, par, par2 = 0, obj = NULL) {
         par2 <- obj$par2
     }
     
-    ## sanity checks for family and parameters
-    if (is.na(family) || is.na(par)) 
-        stop("Provide either 'family' and 'par' or 'obj'")
-    if (!(family %in% c(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
-                        13, 14, 16, 17, 18, 19, 20,
-                        23, 24, 26, 27, 28, 29, 30, 33, 34, 36, 37, 38, 39, 40, 
-                        41, 42, 51, 52, 61, 62, 71, 72,
-                        104, 114, 124, 134, 204, 214, 224, 234))) 
-        stop("Copula family not implemented.")
-    if (c(2, 7, 8, 9, 10,
-          17, 18, 19, 20, 
-          27, 28, 29, 30, 
-          37, 38, 39, 40,
-          42, 52, 62, 72,
-          104, 114, 124, 134, 
-          204, 214, 224, 234) %in% family && par2 == 0) 
-        stop("For t-, BB1, BB6, BB7, BB8 and Tawn copulas, 'par2' must be set.")
-    if (c(1, 3, 4, 5, 6, 11, 13, 14, 16, 23, 24, 26, 33, 34, 36, 41, 51, 61, 71) %in% 
-            family && length(par) < 1) 
-        stop("'par' not set.")
-    BiCopCheck(family, par, par2)
+    ## adjust length for parameter vectors; stop if not matching
+    n <- max(length(family), length(par), length(par2))
+    if (length(family) == 1) 
+        family <- rep(family, n)
+    if (length(par) == 1) 
+        par <- rep(par, n)
+    if (length(par2) == 1)
+        par2 <- rep(par2, n)
+    if (!all(c(length(family), length(par), length(par2)) %in% c(1, n)))
+        stop("Input lenghts don't match")
     
+    ## check for family/parameter consistency
+    if (check.pars)
+        BiCopCheck(family, par, par2)
+    
+    ## calculate tail dependence coefficient
+    if (length(par) == 1) {
+        # call for single parameters
+        out <- matrix(calcTD(family, par, par2), ncol = 2)
+    } else {
+        # vectorized call
+        out <- t(vapply(1:length(par),
+                        function(i) calcTD(family[i], par[i], par2[i]),
+                        numeric(2)))
+    }
+    
+    ## return result
+    list(lower = out[, 1], upper = out[, 2])
+}
+
+calcTD <- function(family, par, par2) {
     if (family == 0 | family == 1 | family == 5 | family %in% c(23, 24, 26, 27, 28, 29,
                                                                 30, 33, 34, 36, 37, 38, 39,
                                                                 40, 124, 134, 224, 234)) {
@@ -82,8 +91,7 @@ BiCopPar2TailDep <- function(family, par, par2 = 0, obj = NULL) {
     } else if (family == 20) {
         if (par2 == 1) 
             lower <- 2 - 2^(1/par) else lower <- 0
-        
-        upper <- 0
+            upper <- 0
     } else if (family == 104) {
         par3 <- 1
         upper <- par2 + par3 - 2 * ((0.5 * par2)^par + (0.5 * par3)^par)^(1/par)
@@ -104,5 +112,6 @@ BiCopPar2TailDep <- function(family, par, par2 = 0, obj = NULL) {
         upper <- 0
     }
     
-    return(list(lower = lower, upper = upper))
+    ## return result
+    c(upper, lower)
 }

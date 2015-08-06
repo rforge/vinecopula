@@ -493,6 +493,20 @@ void diffPDF_nu_tCopula_new(double* u, double* v, int* n, double* param, int* co
 
 }
 
+// vectorized version
+void diffPDF_nu_tCopula_new_vec(double* u, double* v, int* n, double* par, double* par2, int* copula, double* out)
+{
+    int nn = 1;
+    double* ipars = (double *) malloc(2*sizeof(double));
+    
+    for (int i = 0; i < (*n); ++i) {
+        ipars[0] = par[i];
+        ipars[1] = par2[i];
+        diffPDF_nu_tCopula_new(&u[i], &v[i], &nn, ipars, &copula[i], &out[i]);
+    };
+    free(ipars);
+}
+
 
 // Ableitung von c nach u
 
@@ -606,6 +620,20 @@ void diff2PDF_nu_tCopula_new(double* u, double* v, int* n, double* param, int* c
 	}
 }
 
+// vectorized version
+void diff2PDF_nu_tCopula_new_vec(double* u, double* v, int* n, double* par, double* par2, int* copula, double* out)
+{
+    int nn = 1;
+    double* ipars = (double *) malloc(2*sizeof(double));
+    
+    for (int i = 0; i < (*n); ++i) {
+        ipars[0] = par[i];
+        ipars[1] = par2[i];
+        diff2PDF_nu_tCopula_new(&u[i], &v[i], &nn, ipars, &copula[i], &out[i]);
+    };
+    free(ipars);
+}
+
 
 // 2. Ableitung von c nach rho und nu
 
@@ -646,9 +674,21 @@ void diff2PDF_rho_nu_tCopula_new(double* u, double* v, int* n, double* param, in
 
 		out[j]=c*t9+t6*t7/c;	
 	}
-
 }
 
+// vectorized version
+void diff2PDF_rho_nu_tCopula_new_vec(double* u, double* v, int* n, double* par, double* par2, int* copula, double* out)
+{
+    int nn = 1;
+    double* ipars = (double *) malloc(2*sizeof(double));
+    
+    for (int i = 0; i < (*n); ++i) {
+        ipars[0] = par[i];
+        ipars[1] = par2[i];
+        diff2PDF_rho_nu_tCopula_new(&u[i], &v[i], &nn, ipars, &copula[i], &out[i]);
+    };
+    free(ipars);
+}
 
 // 2. Ableitung von c nach rho und u
 
@@ -730,6 +770,21 @@ void diff2PDF_nu_u_tCopula_new(double* u, double* v, int* n, double* param, int*
 		out[j]=t9*t10 - t11*(t12+t13);
 	}
 	
+}
+
+// vectorized version
+
+void diff2PDF_nu_u_tCopula_new_vec(double* u, double* v, int* n, double* par, double* par2, int* copula, double* out)
+{
+    int nn = 1;
+    double* ipars = (double *) malloc(2*sizeof(double));
+    
+    for (int i = 0; i < (*n); ++i) {
+        ipars[0] = par[i];
+        ipars[1] = par2[i];
+        diff2PDF_nu_u_tCopula_new(&u[i], &v[i], &nn, ipars, &copula[i], &out[i]);
+    };
+    free(ipars);
 }
 
 
@@ -837,6 +892,10 @@ void diff2PDF_nu_v_tCopula_new(double* u, double* v, int* n, double* param, int*
        diff2PDF_nu_u_tCopula_new(v, u, n, param, copula, out);
 }
 
+void diff2PDF_nu_v_tCopula_new_vec(double* u, double* v, int* n, double* par, double* par2, int* copula, double* out)
+{
+    diff2PDF_nu_u_tCopula_new_vec(v, u, n, par, par2, copula, out);
+}
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -884,6 +943,20 @@ void diffhfunc_nu_tCopula_new(double* u, double* v, int* n, double* param, int* 
 	}
 }
 
+// vectorized version
+
+void diffhfunc_nu_tCopula_new_vec(double* u, double* v, int* n, double* par, double* par2, int* copula, double* out)
+{
+    int nn = 1;
+    double* ipars = (double *) malloc(2*sizeof(double));
+    
+    for (int i = 0; i < (*n); ++i) {
+        ipars[0] = par[i];
+        ipars[1] = par2[i];
+        diffhfunc_nu_tCopula_new(&u[i], &v[i], &nn, ipars, &copula[i], &out[i]);
+    };
+    free(ipars);
+}
 
 // Ableitung von h nach v
 
@@ -1022,6 +1095,20 @@ void diff2hfunc_nu_tCopula_new(double* u, double* v, int* n, double* param, int*
 	}
 }
 
+// vectorized version
+void diff2hfunc_nu_tCopula_new_vec(double* u, double* v, int* n, double* par, double* par2, int* copula, double* out)
+{
+    int nn = 1;
+    double* ipars = (double *) malloc(2*sizeof(double));
+    
+    for (int i = 0; i < (*n); ++i) {
+        ipars[0] = par[i];
+        ipars[1] = par2[i];
+        diff2hfunc_nu_tCopula_new(&u[i], &v[i], &nn, ipars, &copula[i], &out[i]);
+    };
+    free(ipars);
+}
+
 
 // 2.Ableitung von h nach v
 
@@ -1116,6 +1203,18 @@ void diff2hfunc_rho_nu_tCopula_new(double* u, double* v, int* n, double* param, 
 	}
 }
 
+void diff2hfunc_rho_nu_tCopula_new_vec(double* u, double* v, int* n, double* par, double* par2, int* copula, double* out)
+{
+    int nn = 1;
+    double* ipars = (double *) malloc(2*sizeof(double));
+    
+    for (int i = 0; i < (*n); ++i) {
+        ipars[0] = par[i];
+        ipars[1] = par2[i];
+        diff2hfunc_rho_nu_tCopula_new(&u[i], &v[i], &nn, ipars, &copula[i], &out[i]);
+    };
+    free(ipars);
+}
 
 // 2.Ableitung von h nach rho und v
 
@@ -1214,4 +1313,17 @@ void diff2hfunc_nu_v_tCopula_new(double* u, double* v, int* n, double* param, in
 	}
 }
 
+// vectorized version
+void diff2hfunc_nu_v_tCopula_new_vec(double* u, double* v, int* n, double* par, double* par2, int* copula, double* out)
+{
+    int nn = 1;
+    double* ipars = (double *) malloc(2*sizeof(double));
+    
+    for (int i = 0; i < (*n); ++i) {
+        ipars[0] = par[i];
+        ipars[1] = par2[i];
+        diff2hfunc_nu_v_tCopula_new(&u[i], &v[i], &nn, ipars, &copula[i], &out[i]);
+    };
+    free(ipars);
+}
 

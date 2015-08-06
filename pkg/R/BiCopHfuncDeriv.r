@@ -1,4 +1,4 @@
-BiCopHfuncDeriv <- function(u1, u2, family, par, par2 = 0, deriv = "par", obj = NULL) {
+BiCopHfuncDeriv <- function(u1, u2, family, par, par2 = 0, deriv = "par", obj = NULL, check.pars = TRUE) {
     ## sanity checks for u1, u2
     if (is.null(u1) == TRUE || is.null(u2) == TRUE) 
         stop("u1 and/or u2 are not set or have length zero.")
@@ -8,6 +8,7 @@ BiCopHfuncDeriv <- function(u1, u2, family, par, par2 = 0, deriv = "par", obj = 
         stop("Data has be in the interval [0,1].")
     if (any(u2 > 1) || any(u2 < 0)) 
         stop("Data has be in the interval [0,1].")
+    n <- length(u1)
     
     ## extract family and parameters if BiCop object is provided
     if (missing(family))
@@ -24,83 +25,117 @@ BiCopHfuncDeriv <- function(u1, u2, family, par, par2 = 0, deriv = "par", obj = 
         par2 <- obj$par2
     }
     
-    ## sanity checks for family and parameters
-    if (is.na(family) | is.na(par)) 
+    ## check for reasonable input
+    if (any(is.na(family)) | any(is.na(par))) 
         stop("Provide either 'family' and 'par' or 'obj'")
-    if (!(family %in% c(0, 1, 2, 3, 4, 5, 6, 13, 14, 16, 23, 24, 26, 33, 34, 36))) 
+    if (!all(family %in% c(0, 1, 2, 3, 4, 5, 6, 13, 14, 16, 23, 24, 26, 33, 34, 36))) 
         stop("Copula family not implemented.")
-    if (family == 2 && par2 == 0) 
+    if (any((family == 2) & (par2 == 0))) 
         stop("For t-copulas, 'par2' must be set.")
-    if (c(1, 3, 4, 5, 6, 13, 14, 16, 23, 24, 26, 33, 34, 36) %in% family && length(par) < 1) 
-        stop("'par' not set.")
-    
-    if ((family == 1 || family == 2) && abs(par[1]) >= 1) 
-        stop("The parameter of the Gaussian and t-copula has to be in the interval (-1,1).")
-    if (family == 2 && par2 <= 2) 
-        stop("The degrees of freedom parameter of the t-copula has to be larger than 2.")
-    if ((family == 3 || family == 13) && par <= 0) 
-        stop("The parameter of the Clayton copula has to be positive.")
-    if ((family == 4 || family == 14) && par < 1) 
-        stop("The parameter of the Gumbel copula has to be in the interval [1,oo).")
-    if ((family == 6 || family == 16) && par <= 1) 
-        stop("The parameter of the Joe copula has to be in the interval (1,oo).")
-    if (family == 5 && par == 0) 
-        stop("The parameter of the Frank copula has to be unequal to 0.")
-    if ((family == 23 || family == 33) && par >= 0) 
-        stop("The parameter of the rotated Clayton copula has to be negative.")
-    if ((family == 24 || family == 34) && par > -1) 
-        stop("The parameter of the rotated Gumbel copula has to be in the interval (-oo,-1].")
-    if ((family == 26 || family == 36) && par >= -1) 
-        stop("The parameter of the rotated Joe copula has to be in the interval (-oo,-1).")
-    
-    if (deriv == "par2" && family != 2) 
+    if ((deriv == "par2") && any(family != 2)) 
         stop("The derivative with respect to the second parameter can only be derived for the t-copula.")
     
-    # Unterscheidung in die verschiedenen Ableitungen
+    ## adjust length for parameter vectors; stop if not matching
+    if (any(c(length(family), length(par), length(par2)) == n)) {
+        if (length(family) == 1) 
+            family <- rep(family, n)
+        if (length(par) == 1) 
+            par <- rep(par, n)
+        if (length(par2) == 1)
+            par2 <- rep(par2, n)
+    }
+    if (!(length(family) %in% c(1, n)))
+        stop("'family' has to be a single number or a size n vector")
+    if (!(length(par) %in% c(1, n)))
+        stop("'par' has to be a single number or a size n vector")
+    if (!(length(par2) %in% c(1, n)))
+        stop("'par2' has to be a single number or a size n vector")
     
-    n <- length(u1)
+    ## check for family/parameter consistency
+    if (check.pars)
+        BiCopCheck(family, par, par2)
     
-    if (deriv == "par") {
-        if (family == 2) {
-            out <- .C("diffhfunc_rho_tCopula",
+    ## call C routines for specified 'deriv' case 
+    if (length(par) == 1) {
+        ## call for single parameters
+        if (deriv == "par") {
+            if (family == 2) {
+                out <- .C("diffhfunc_rho_tCopula",
+                          as.double(u1), 
+                          as.double(u2), 
+                          as.integer(n), 
+                          as.double(c(par, par2)), 
+                          as.integer(2),
+                          as.double(rep(0, n)),
+                          PACKAGE = "VineCopula")[[6]]
+            } else {
+                out <- .C("diffhfunc_mod", 
+                          as.double(u1),
+                          as.double(u2),
+                          as.integer(n), 
+                          as.double(par),
+                          as.integer(family),
+                          as.double(rep(0, n)), 
+                          PACKAGE = "VineCopula")[[6]]
+            }
+        } else if (deriv == "par2") {
+            out <- .C("diffhfunc_nu_tCopula_new",
+                      as.double(u1),
+                      as.double(u2), 
+                      as.integer(n), 
+                      as.double(c(par, par2)),
+                      as.integer(2),
+                      as.double(rep(0, n)),
+                      PACKAGE = "VineCopula")[[6]]
+        } else if (deriv == "u2") {
+            out <- .C("diffhfunc_v_mod",
                       as.double(u1), 
                       as.double(u2), 
                       as.integer(n), 
                       as.double(c(par, par2)), 
-                      as.integer(2),
+                      as.integer(family), 
                       as.double(rep(0, n)),
                       PACKAGE = "VineCopula")[[6]]
         } else {
-            out <- .C("diffhfunc_mod", 
+            stop("This kind of derivative is not implemented")
+        }
+    } else {
+        # vectorized call
+        if (deriv == "par") {
+                out <- .C("diffhfunc_mod_vec", 
+                          as.double(u1),
+                          as.double(u2),
+                          as.integer(n), 
+                          as.double(par),
+                          as.double(par2),
+                          as.integer(family),
+                          as.double(rep(0, n)), 
+                          PACKAGE = "VineCopula")[[7]]
+        } else if (deriv == "par2") {
+            out <- .C("diffhfunc_nu_tCopula_new_vec",
                       as.double(u1),
-                      as.double(u2),
+                      as.double(u2), 
                       as.integer(n), 
                       as.double(par),
+                      as.double(par2),
                       as.integer(family),
-                      as.double(rep(0, n)), 
-                      PACKAGE = "VineCopula")[[6]]
+                      as.double(rep(0, n)),
+                      PACKAGE = "VineCopula")[[7]]
+        } else if (deriv == "u2") {
+            out <- .C("diffhfunc_v_mod_vec",
+                      as.double(u1), 
+                      as.double(u2), 
+                      as.integer(n), 
+                      as.double(par),
+                      as.double(par2),
+                      as.integer(family), 
+                      as.double(rep(0, n)),
+                      PACKAGE = "VineCopula")[[7]]
+        } else {
+            stop("This kind of derivative is not implemented")
         }
-    } else if (deriv == "par2") {
-        out <- .C("diffhfunc_nu_tCopula_new",
-                  as.double(u1),
-                  as.double(u2), 
-                  as.integer(n), 
-                  as.double(c(par, par2)),
-                  as.integer(2),
-                  as.double(rep(0, n)),
-                  PACKAGE = "VineCopula")[[6]]
-    } else if (deriv == "u2") {
-        out <- .C("diffhfunc_v_mod",
-                  as.double(u1), 
-                  as.double(u2), 
-                  as.integer(n), 
-                  as.double(c(par, par2)), 
-                  as.integer(family), 
-                  as.double(rep(0, n)),
-                  PACKAGE = "VineCopula")[[6]]
-    } else {
-        stop("This kind of derivative is not implemented")
     }
     
-    return(out)
+    ## return results
+    out
 }

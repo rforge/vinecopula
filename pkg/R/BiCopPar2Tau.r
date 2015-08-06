@@ -1,4 +1,4 @@
-BiCopPar2Tau <- function(family, par, par2 = 0, obj = NULL) {
+BiCopPar2Tau <- function(family, par, par2 = 0, obj = NULL, check.pars = TRUE) {
     ## extract family and parameters if BiCop object is provided
     if (missing(family))
         family <- NA
@@ -14,21 +14,40 @@ BiCopPar2Tau <- function(family, par, par2 = 0, obj = NULL) {
         par2 <- obj$par2
     }
     
-    ## sanity checks for family and parameters
-    if (is.na(family) || any(is.na(par)))
-        stop("Provide either 'family' and 'par' or 'obj'")
-    if (length(family) != 1) 
-        stop("Input for family has to be a scalar/integer.")
-    if (length(par2) > 1 && (length(par) != length(par2)))
-        stop("Input for 'par' and 'par2 has to be vectors of same length.")
-    # set arbitrary par2 for t-copula
-    if (family == 2)
-        par2 <- par2 + 4
-    if (length(par) > 1 && length(par2) == 1)
-        par2 <- rep(par2, length(par))
-    for (i in seq.int(length(par)))
-        BiCopCheck(family, par[i], par2[i])
+    ## adjust length for parameter vectors; stop if not matching
+    n <- max(length(family), length(par), length(par2))
+    if (length(family) == 1) 
+        family <- rep(family, n)
+    if (length(par) == 1) 
+        par <- rep(par, n)
+    if (length(par2) == 1)
+        par2 <- rep(par2, n)
+    if (!all(c(length(family), length(par), length(par2)) %in% c(1, n)))
+        stop("Input lenghts don't match")
     
+    # set arbitrary par2 for t-copula
+    par2[family == 2] <- par2[family == 2] + 4
+    
+    ## check for family/parameter consistency
+    if (check.pars)
+        BiCopCheck(family, par, par2)
+    
+    ## calculate Kendall's tau
+    if (length(par) == 1) {
+        # call for single parameters
+        out <- calcTau(family, par, par2)
+    } else {
+        # vectorized call
+        out <- vapply(1:length(par),
+                      function(i) calcTau(family[i], par[i], par2[i]),
+                      numeric(1))
+    }
+    
+    ## return result
+    out
+}
+
+calcTau <- function(family, par, par2) {
     ## calculation of tau(s) depending on pair-copula family
     if (family == 0) {
         tau <- rep(0, times = length(par))
@@ -217,5 +236,6 @@ BiCopPar2Tau <- function(family, par, par2 = 0, obj = NULL) {
         tau <- -tau
     }
     
-    return(tau)
+    ## return result
+    tau
 }

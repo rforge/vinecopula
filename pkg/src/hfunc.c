@@ -375,6 +375,22 @@ void  Hfunc2(int* family,int* n,double* v,double* u,double* theta,double* nu,dou
     free(negu);
 }
 
+// vectorized versions
+void Hfunc1_vec(int* family,int* n,double* u,double* v,double* theta,double* nu,double* out)
+{
+    int nn=1;
+    for(int i=0; i<(*n); i++){
+        Hfunc1(&family[i], &nn, &u[i], &v[i], &theta[i], &nu[i], &out[i]);
+    };
+}
+
+void Hfunc2_vec(int* family,int* n,double* u,double* v,double* theta,double* nu,double* out)
+{
+    int nn=1;
+    for(int i=0; i<(*n); i++){
+        Hfunc2(&family[i], &nn, &u[i], &v[i], &theta[i], &nu[i], &out[i]);
+    };
+}
 
 
 //////////////////////////////////////////////////////////////
@@ -1133,6 +1149,24 @@ void Hinv2(int* family, int* n, double* v, double* u, double* theta, double* nu,
     free(negv);
     free(negu);
 }
+
+// vectorized versions
+void Hinv1_vec(int* family, int* n, double* u, double* v, double* theta, double* nu, double* out)
+{
+    int nn=1;
+    for(int i=0; i<(*n); i++){
+        Hinv1(&family[i], &nn, &u[i], &v[i], &theta[i], &nu[i], &out[i]);
+    };
+}
+
+void Hinv2_vec(int* family, int* n, double* u, double* v, double* theta, double* nu, double* out)
+{
+    int nn=1;
+    for(int i=0; i<(*n); i++){
+        Hinv2(&family[i], &nn, &u[i], &v[i], &theta[i], &nu[i], &out[i]);
+    };
+}
+
 
 
 
