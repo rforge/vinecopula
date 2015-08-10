@@ -35,10 +35,10 @@ joeBiCopula <- function (param=2) {
 
 ## density ##
 setMethod("dCopula", signature("numeric","joeBiCopula"), 
-          function(u, copula, log) {
+          function(u, copula, log, ...) {
             linkVineCop.PDF(matrix(u,ncol=copula@dimension),copula, log)
           })
-setMethod("dCopula", signature("matrix","joeBiCopula"), function(u, copula, log) linkVineCop.PDF(u, copula, log))
+setMethod("dCopula", signature("matrix","joeBiCopula"), function(u, copula, log, ...) linkVineCop.PDF(u, copula, log))
 
 ## jcdf ##
 setMethod("pCopula", signature("numeric","joeBiCopula"), 
@@ -99,7 +99,7 @@ surJoeBiCopula <- function (param=2) {
 ## density ##
 setMethod("dCopula", signature("numeric","surJoeBiCopula"), 
           function(u, copula, ...) {
-            linkVineCop.PDF(matrix(u,ncol=copula@dimension),copula)
+            linkVineCop.PDF(matrix(u,ncol=copula@dimension), copula, ...)
           })
 setMethod("dCopula", signature("matrix","surJoeBiCopula"), linkVineCop.PDF)
 

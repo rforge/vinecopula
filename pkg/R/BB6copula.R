@@ -37,10 +37,10 @@ BB6Copula <- function (param=c(1,1)) {
 
 ## density ##
 setMethod("dCopula", signature("numeric","BB6Copula"), 
-          function(u, copula, log) {
-            linkVineCop.PDF(matrix(u,ncol=copula@dimension),copula, log)
+          function(u, copula, log, ...) {
+            linkVineCop.PDF(matrix(u,ncol=copula@dimension),copula, log, ...)
           })
-setMethod("dCopula", signature("matrix","BB6Copula"), function(u, copula, log) linkVineCop.PDF(u, copula, log))
+setMethod("dCopula", signature("matrix","BB6Copula"), function(u, copula, log, ...) linkVineCop.PDF(u, copula, log))
 
 ## jcdf ##
 setMethod("pCopula", signature("numeric","BB6Copula"), 
@@ -91,7 +91,7 @@ surBB6Copula <- function (param=c(1,1)) {
 
 ## density ##
 setMethod("dCopula", signature("numeric","surBB6Copula"), 
-          function(u, copula, log) {
+          function(u, copula, log, ...) {
             linkVineCop.PDF(matrix(u,ncol=copula@dimension),copula, log)
           })
 setMethod("dCopula", signature("matrix","surBB6Copula"), linkVineCop.PDF)
@@ -158,7 +158,7 @@ r90BB6Copula <- function (param=c(-1,-1)) {
 
 ## density ##
 setMethod("dCopula", signature("numeric","r90BB6Copula"), 
-          function(u, copula, log) {
+          function(u, copula, log, ...) {
             linkVineCop.PDF(matrix(u,ncol=copula@dimension),copula,log)
           })
 setMethod("dCopula", signature("matrix","r90BB6Copula"), linkVineCop.PDF)
@@ -212,7 +212,7 @@ r270BB6Copula <- function (param=c(-1,-1)) {
 
 ## density ##
 setMethod("dCopula", signature("numeric","r270BB6Copula"), 
-          function(u, copula, log) {
+          function(u, copula, log, ...) {
             linkVineCop.PDF(matrix(u,ncol=copula@dimension, log),copula)
           })
 setMethod("dCopula", signature("matrix","r270BB6Copula"), linkVineCop.PDF)

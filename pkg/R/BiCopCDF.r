@@ -117,56 +117,111 @@ calcCDF <- function(u1, u2, family, par, par2) {
                        as.double(rep(0, length(u1))), 
                        PACKAGE = "VineCopula")[[6]]
     } else if (family %in% c(104, 114, 124, 134, 204, 214, 224, 234)) {
-        # maybe replace by C-Code auxiliary functions ###
-        ta <- function(t, par, par2, par3) {
-            (par2 * t)^par + (par3 * (1 - t))^par
-        }
-        ######## Pickands A
-        A <- function(t, par, par2, par3) {
-            (1 - par3) * (1 - t) + (1 - par2) * t + ta(t, par, par2, par3)^(1/par)
-        }
-        
-        w <- function(u, v) {
-            log(v)/log(u * v)
-        }
-        C <- function(u, v, par, par2, par3) {
-            (u * v)^A(w(u, v), par, par2, par3)
-        }
-        
-        if (family == 104) {
-            par3 <- 1
-            res <- C(u1, u2, par, par2, par3)
-        } else if (family == 114) {
-            par3 <- 1
-            res <- u1 + u2 - 1 + C(1 - u1, 1 - u2, par, par2, par3)
-        } else if (family == 124) {
-            par3 <- 1
-            res <- u2 - C(1 - u1, u2, -par, par2, par3)
-        } else if (family == 134) {
-            par3 <- 1
-            res <- u1 - C(u1, 1 - u2, -par, par2, par3)
-        } else if (family == 204) {
-            par3 <- par2
-            par2 <- 1
-            res <- C(u1, u2, par, par2, par3)
-        } else if (family == 214) {
-            par3 <- par2
-            par2 <- 1
-            res <- u1 + u2 - 1 + C(1 - u1, 1 - u2, par, par2, par3)
-        } else if (family == 224) {
-            par3 <- par2
-            par2 <- 1
-            res <- u2 - C(1 - u1, u2, -par, par2, par3)
-        } else if (family == 234) {
-            par3 <- par2
-            par2 <- 1
-            res <- u1 - C(u1, 1 - u2, -par, par2, par3)
-        } else {
-            ## CDFs for the different families
-            res <- rep(NA, length(u1))
-        }
-    }  
-    
-    ## return results
-    res
+      
+      if (family == 104) {
+        par3 <- 1
+        res <- .C("TawnC",
+                  as.double(u1),
+                  as.double(u2),
+                  as.integer(length(u1)),
+                  as.double(par),
+                  as.double(par2), 
+                  as.double(par3), 
+                  as.double(rep(0, length(u1))),
+                  PACKAGE = "VineCopula")[[7]]
+      } 
+      if (family == 114) {
+        par3 <- 1
+        res <- u1 + u2 - 1 + .C("TawnC",
+                                as.double(1-u1),
+                                as.double(1-u2),
+                                as.integer(length(u1)),
+                                as.double(par),
+                                as.double(par2), 
+                                as.double(par3), 
+                                as.double(rep(0, length(u1))),
+                                PACKAGE = "VineCopula")[[7]]
+      }
+      if (family == 124) {
+        par3 <- 1
+        res <- u2 - .C("TawnC",
+                       as.double(1-u1),
+                       as.double(u2),
+                       as.integer(length(u1)),
+                       as.double(-par),
+                       as.double(par2), 
+                       as.double(par3), 
+                       as.double(rep(0, length(u1))),
+                       PACKAGE = "VineCopula")[[7]]
+      } 
+      if (family == 134) {
+        par3 <- 1
+        res <- u1 - .C("TawnC",
+                       as.double(u1),
+                       as.double(1-u2),
+                       as.integer(length(u1)),
+                       as.double(-par),
+                       as.double(par2), 
+                       as.double(par3), 
+                       as.double(rep(0, length(u1))),
+                       PACKAGE = "VineCopula")[[7]]
+      } 
+      if (family == 204) {
+        par3 <- par2
+        par2 <- 1
+        res <- .C("TawnC",
+                  as.double(u1),
+                  as.double(u2),
+                  as.integer(length(u1)),
+                  as.double(par),
+                  as.double(par2), 
+                  as.double(par3), 
+                  as.double(rep(0, length(u1))),
+                  PACKAGE = "VineCopula")[[7]]
+      } 
+      if (family == 214) {
+        par3 <- par2
+        par2 <- 1
+        res <- u1 + u2 - 1 + .C("TawnC",
+                                as.double(1-u1),
+                                as.double(1-u2),
+                                as.integer(length(u1)),
+                                as.double(par),
+                                as.double(par2), 
+                                as.double(par3), 
+                                as.double(rep(0, length(u1))),
+                                PACKAGE = "VineCopula")[[7]]
+      } 
+      if (family == 224) {
+        par3 <- par2
+        par2 <- 1
+        res <- u2 - .C("TawnC",
+                       as.double(1-u1),
+                       as.double(u2),
+                       as.integer(length(u1)),
+                       as.double(-par),
+                       as.double(par2), 
+                       as.double(par3), 
+                       as.double(rep(0, length(u1))),
+                       PACKAGE = "VineCopula")[[7]]
+      } 
+      if (family == 234) {
+        par3 <- par2
+        par2 <- 1
+        res <- u1 - .C("TawnC",
+                       as.double(u1),
+                       as.double(1-u2),
+                       as.integer(length(u1)),
+                       as.double(-par),
+                       as.double(par2), 
+                       as.double(par3), 
+                       as.double(rep(0, length(u1))),
+                       PACKAGE = "VineCopula")[[7]]
+      }
+      } else {
+        res <- rep(NA, length(u1))
+      }
+
+  ## return results
+  res
 }
