@@ -82,8 +82,10 @@ RVineStructureSelect <- function(data, familyset = NA, type = 0, selectioncrit =
         RVine$Graph[[i]] <- g
     }
     
-    ## return results as 'RVineMatrix' object
-    as.RVM(RVine)
+    ## free memory and return results as 'RVineMatrix' object
+    .RVine <- RVine
+    rm(list = ls())
+    as.RVM(.RVine)
 }
 
 ## full graph with Kendall's tau as edge weights

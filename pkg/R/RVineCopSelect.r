@@ -122,11 +122,12 @@ RVineCopSelect <- function(data, familyset = NA, Matrix, selectioncrit = "AIC", 
         }
     }
     
-    ## return results
-    RVM <- RVineMatrix(Mold, 
-                       family = Types,
-                       par = Params,
-                       par2 = Params2, 
-                       names = varnames)
-    return(RVM)
+    ## free memory and return results
+    .RVM <- RVineMatrix(Mold, 
+                        family = Types,
+                        par = Params,
+                        par2 = Params2, 
+                        names = varnames)
+    rm(list = ls())
+    .RVM
 }

@@ -168,12 +168,16 @@ RVineSeqEst <- function(data, RVM, method = "mle", se = FALSE, max.df = 30,
         }
     }
     
+    ## store results
     oldRVM$par <- Params
     oldRVM$par2 <- Params2
-    
     if (se == FALSE) {
-        return(list(RVM = oldRVM))
+        .out <- list(RVM = oldRVM)
     } else {
-        return(list(RVM = oldRVM, se = seMat1, se2 = seMat2))
+        .out <- list(RVM = oldRVM, se = seMat1, se2 = seMat2)
     }
+    
+    ## free memory and return results
+    rm(list = ls())
+    .out
 }
