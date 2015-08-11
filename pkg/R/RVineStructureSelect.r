@@ -1,7 +1,7 @@
 RVineStructureSelect <- function(data, familyset = NA, type = 0, selectioncrit = "AIC", indeptest = FALSE, 
                                  level = 0.05, trunclevel = NA, progress = FALSE,  weights = NA, rotations = TRUE) { 
-    d <- n <- dim(data)[2]
-    N <- dim(data)[1]
+    d <- ncol(data)
+    N <- nrow(data)
     
     ## sanity checks 
     if (type == 0) 
@@ -30,7 +30,7 @@ RVineStructureSelect <- function(data, familyset = NA, type = 0, selectioncrit =
     
     ## set variable names and trunclevel if not provided 
     if (is.null(colnames(data))) 
-        colnames(data) <- paste("V", 1:n, sep = "")
+        colnames(data) <- paste("V", 1:d, sep = "")
     if (is.na(trunclevel)) 
         trunclevel <- d
     
@@ -61,7 +61,7 @@ RVineStructureSelect <- function(data, familyset = NA, type = 0, selectioncrit =
     oldVineGraph <- VineTree
     
     ## estimation in higher trees --------------------------
-    for (i in 2:(n - 1)) {
+    for (i in 2:(d - 1)) {
         # only estimate pair-copulas if not truncated
         if (trunclevel == i - 1) 
             familyset <- 0
@@ -88,31 +88,25 @@ RVineStructureSelect <- function(data, familyset = NA, type = 0, selectioncrit =
     as.RVM(.RVine)
 }
 
-## full graph with Kendall's tau as edge weights
 initializeFirstGraph <- function(data.univ, weights) {
     
-    # C = cor(data.univ,method='kendall')
-    q <- dim(data.univ)[2]
-#     C <- matrix(rep(1, q * q), ncol = q)
-#     
-#     for (i in 1:(q - 1)) {
-#         for (j in (i + 1):q) {
-#             tau <- fasttau(data.univ[, i], data.univ[, j], weights)
-#             C[i, j] <- tau
-#             C[j, i] <- tau
-#         }
-#     }
-#     rownames(C) <- colnames(C) <- colnames(data.univ)
-    C <- TauMatrix(data = data.univ, weights = weights)
+    ## calculate Kendall's tau
+    taus <- TauMatrix(data = data.univ, weights = weights)
     
-    g <- graph_from_adjacency_matrix(C, mode = "lower", weighted = TRUE, diag = FALSE)
+    ## create graph with Kendall's tau as weights
+    g <- graph_from_adjacency_matrix(taus,
+                                     mode = "lower",
+                                     weighted = TRUE,
+                                     diag = FALSE)
     E(g)$tau <- E(g)$weight
     E(g)$name <- paste(as_edgelist(g)[, 1], as_edgelist(g)[, 2], sep = ",")
     
-    for (i in 1:gsize(g)) {
-        E(g)$conditionedSet[[i]] <- ends(g, i, names = FALSE)
-    }
-    return(g)
+    ## store condition sets
+    E(g)$conditionedSet <- unname(split(ends(g, 1:gsize(g), names = FALSE),
+                                        1:gsize(g)))
+    
+    ## return graph object
+    g
 }
 
 ## find maximum spanning tree/ first vine tree
@@ -307,127 +301,127 @@ fit.TreeCopulas <- function(MST, oldVineGraph, type, copulaSelectionBy, testForI
 ## initialize graph for next vine tree (possible edges)
 buildNextGraph <- function(oldVineGraph, weights = NA) {
     
-    # EL <- as_edgelist(oldVineGraph)
     d <- gsize(oldVineGraph)
     
-    
+    ## initialize with full graph
     g <- make_full_graph(d)
     V(g)$name <- E(oldVineGraph)$name
     V(g)$conditionedSet <- E(oldVineGraph)$conditionedSet
-    
     if (!is.null(E(oldVineGraph)$conditioningSet)) {
         V(g)$conditioningSet <- E(oldVineGraph)$conditioningSet
     }
     
-    for (i in 1:gsize(g)) {
-        
-        con <- as.vector(ends(g, i, names = FALSE))
-        
-        temp <- ends(oldVineGraph, con, names = FALSE)
-        
-        ## check for proximity condition
-        ok <- FALSE
-        if ((temp[1, 1] == temp[2, 1]) || (temp[1, 2] == temp[2, 1])) {
-            ok <- TRUE
-            same <- temp[2, 1]
-        } else {
-            if ((temp[1, 1] == temp[2, 2]) || (temp[1, 2] == temp[2, 2])) {
-                ok <- TRUE
-                same <- temp[2, 2]
-            }
-        }
-        
-        ## if proximity condition is fulfilled
-        if (ok) {
-            # other1 <- temp[1, temp[1, ] != same]
-            # other2 <- temp[2, temp[2, ] != same]
-            
-            if (temp[1, 1] == same) {
-                zr1 <- E(oldVineGraph)[con[1]]$Copula.CondData.2
-            } else {
-                zr1 <- E(oldVineGraph)[con[1]]$Copula.CondData.1
-            }
-            
-            if (temp[2, 1] == same) {
-                zr2 <- E(oldVineGraph)[con[2]]$Copula.CondData.2
-            } else {
-                zr2 <- E(oldVineGraph)[con[2]]$Copula.CondData.1
-            }
-            # print(is.list(zr1))
-            if (is.list(zr1)) {
-                zr1a <- as.vector(zr1[[1]])
-                zr2a <- as.vector(zr2[[1]])
-            } else {
-                zr1a <- zr1
-                zr2a <- zr2
-            }
-            keine_nas <- !(is.na(zr1a) | is.na(zr2a))
-            # print(keine_nas) print(zr1a) E(g)[i]$weight = cor(x=zr1[keine_nas],y=zr2[keine_nas], method='kendall')
-            E(g)[i]$weight <- TauMatrix(cbind(zr1a[keine_nas], zr2a[keine_nas]), weights)[2,1]
-            
-            name.node1 <- strsplit(V(g)[con[1]]$name, split = " *[,;] *")[[1]]
-            name.node2 <- strsplit(V(g)[con[2]]$name, split = " *[,;] *")[[1]]
-            
-            ## conditioning set
-            schnitt <- intersect(name.node1, name.node2)      
-#             for (j in 1:length(name.node1)) {
-#                 for (k in 1:length(name.node2)) {
-#                     if (name.node1[j] == name.node2[k]) {
-#                         schnitt <- c(schnitt, name.node1[j])
-#                         name.node1[j] <- ""
-#                         name.node2[k] <- ""
-#                         break
-#                     }
-#                 }
-#             }
-            
-            ## conditioned set
-            differenz <- c(setdiff(name.node1, name.node2), setdiff(name.node2, name.node1))
-#             for (j in 1:length(name.node1)) {
-#                 if (name.node1[j] != "") {
-#                     differenz <- c(differenz, name.node1[j])
-#                 }
-#             }
-#             for (j in 1:length(name.node2)) {
-#                 if (name.node2[j] != "") {
-#                     differenz <- c(differenz, name.node2[j])
-#                 }
-#             }
-            
-            E(g)[i]$name <- paste(paste(differenz, collapse = ","),
-                                  paste(schnitt, collapse = ","),
-                                  sep = " ; ")
-            
-            if (is.list(V(g)[con[1]]$conditionedSet)) {
-                l1 <- c(as.vector(V(g)[con[1]]$conditionedSet[[1]]),
-                        as.vector(V(g)[con[1]]$conditioningSet[[1]]))
-                l2 <- c(as.vector(V(g)[con[2]]$conditionedSet[[1]]),
-                        as.vector(V(g)[con[2]]$conditioningSet[[1]]))
-            } else {
-                l1 <- c(V(g)[con[1]]$conditionedSet,
-                        V(g)[con[1]]$conditioningSet)
-                l2 <- c(V(g)[con[2]]$conditionedSet,
-                        V(g)[con[2]]$conditioningSet)
-            }
-            out <- intern_SchnittDifferenz(l1, l2)
-            
-            suppressWarnings({
-                E(g)$conditionedSet[i] <- list(out$differenz)
-            })
-            suppressWarnings({
-                E(g)$conditioningSet[i] <- list(out$schnitt)
-            })
-        }
-        
-        E(g)[i]$todel <- !ok
-    }
+    ## get info for all edges
+    out <- lapply(1:gsize(g),
+                  getEdgeInfo, 
+                  g = g, 
+                  oldVineGraph = oldVineGraph,
+                  weights = weights)
     
+    ## annotate graph (same order as in old version of this function)
+    E(g)$weight          <- sapply(out, function(x) x$tau)
+    E(g)$name            <- sapply(out, function(x) x$name)
+    E(g)$conditionedSet  <- lapply(out, function(x) x$nedSet)
+    E(g)$conditioningSet <- lapply(out, function(x) x$ningSet)
+    E(g)$todel           <- sapply(out, function(x) x$todel)
     E(g)$tau <- E(g)$weight
     
+    ## delete edges that are prohibited by the proximity condition
     g <- delete_edges(g, E(g)[E(g)$todel])
     
-    return(g)
+    ## return new graph
+    g
 }
+
+## function for obtaining edge information
+getEdgeInfo <- function(i, g, oldVineGraph, weights) {
+    
+    ## get edge
+    con <- as.vector(ends(g, i, names = FALSE))
+    temp <- ends(oldVineGraph, con, names = FALSE)
+    
+    ## check for proximity condition
+    ok <- FALSE
+    if ((temp[1, 1] == temp[2, 1]) || (temp[1, 2] == temp[2, 1])) {
+        ok <- TRUE
+        same <- temp[2, 1]
+    } else {
+        if ((temp[1, 1] == temp[2, 2]) || (temp[1, 2] == temp[2, 2])) {
+            ok <- TRUE
+            same <- temp[2, 2]
+        }
+    }
+    
+    ## dummy output
+    tau <- nedSet <- ningSet <- name <- NA
+    todel <- TRUE
+    
+    ## calculate edge info if proximity condition is fulfilled
+    if (ok) {
+        # get data
+        if (temp[1, 1] == same) {
+            zr1 <- E(oldVineGraph)[con[1]]$Copula.CondData.2
+        } else {
+            zr1 <- E(oldVineGraph)[con[1]]$Copula.CondData.1
+        }
+        if (temp[2, 1] == same) {
+            zr2 <- E(oldVineGraph)[con[2]]$Copula.CondData.2
+        } else {
+            zr2 <- E(oldVineGraph)[con[2]]$Copula.CondData.1
+        }
+        if (is.list(zr1)) {
+            zr1a <- as.vector(zr1[[1]])
+            zr2a <- as.vector(zr2[[1]])
+        } else {
+            zr1a <- zr1
+            zr2a <- zr2
+        }
+        
+        # calculate Kendall's tau
+        keine_nas <- !(is.na(zr1a) | is.na(zr2a))
+        tau <- fasttau(zr1a[keine_nas],
+                       zr2a[keine_nas],
+                       weights)
+        
+        # get names
+        name.node1 <- strsplit(V(g)[con[1]]$name, split = " *[,;] *")[[1]]
+        name.node2 <- strsplit(V(g)[con[2]]$name, split = " *[,;] *")[[1]]
+        
+        # infer conditioned set and conditioning set
+        if (is.list(V(g)[con[1]]$conditionedSet)) {
+            l1 <- c(as.vector(V(g)[con[1]]$conditionedSet[[1]]),
+                    as.vector(V(g)[con[1]]$conditioningSet[[1]]))
+            l2 <- c(as.vector(V(g)[con[2]]$conditionedSet[[1]]),
+                    as.vector(V(g)[con[2]]$conditioningSet[[1]]))
+        } else {
+            l1 <- c(V(g)[con[1]]$conditionedSet,
+                    V(g)[con[1]]$conditioningSet)
+            l2 <- c(V(g)[con[2]]$conditionedSet,
+                    V(g)[con[2]]$conditioningSet)
+        }
+        nedSet <- c(setdiff(l1, l2), setdiff(l2, l1))
+        ningSet <- intersect(l1, l2)
+
+        # set edge name
+        nmdiff <- c(setdiff(name.node1, name.node2),
+                  setdiff(name.node2, name.node1))
+        nmsect <- intersect(name.node1, name.node2)  
+        name <- paste(paste(nmdiff, collapse = ","),
+                      paste(nmsect, collapse = ","),
+                      sep = " ; ")
+        
+        # mark as ok
+        todel <- FALSE
+    }
+    
+    ## return edge information
+    list(tau = tau,
+         nedSet = nedSet,
+         ningSet = ningSet,
+         name = name,
+         todel = todel)
+}
+
 
 wrapper_fit.ACopula <- function(parameterForACopula, type, ...) {
     return(fit.ACopula(parameterForACopula$zr1, 
@@ -436,35 +430,6 @@ wrapper_fit.ACopula <- function(parameterForACopula, type, ...) {
                        ...))
 }
 
-intern_SchnittDifferenz <- function(liste1, liste2) {
-    out <- list()
-    out$schnitt <- intersect(liste1, liste2)
-    out$differenz <- c(setdiff(liste1, liste2), setdiff(liste2, liste1))
-    
-#     for (j in 1:length(liste1)) {
-#         for (k in 1:length(liste2)) {
-#             if (!is.na(liste2[k]) && liste1[j] == liste2[k]) {
-#                 out$schnitt <- c(out$schnitt, liste1[j])
-#                 liste1[j] <- NA
-#                 liste2[k] <- NA
-#                 break
-#             }
-#         }
-#     }
-#     
-#     for (j in 1:length(liste1)) {
-#         if (!is.na(liste1[j])) {
-#             out$differenz <- c(out$differenz, liste1[j])
-#         }
-#     }
-#     for (j in 1:length(liste2)) {
-#         if (!is.na(liste2[j])) {
-#             out$differenz <- c(out$differenz, liste2[j])
-#         }
-#     }
-    
-    return(out)
-}
 
 ## bivariate copula selection
 fit.ACopula <- function(u1, u2, familyset = NA, selectioncrit = "AIC", indeptest = FALSE, level = 0.05, weights = NA) {
