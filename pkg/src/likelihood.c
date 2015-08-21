@@ -896,7 +896,7 @@ void LL(int* family, int* n, double* u, double* v, double* theta, double* nu, do
 	  {
 	    dat[0] = u[j]; dat[1] = v[j];
 		f=log1p(*theta)-(1.0+*theta)*log(dat[0]*dat[1])-(2.0+1.0/(*theta))*log(pow(dat[0],-*theta)+pow(dat[1],-*theta)-1.0);
-		if(f>XINFMAX) ll += XINFMAX;
+		if(f>XINFMAX) ll += log(XINFMAX);
 		else if(f<log(DBL_MIN)) ll += log(DBL_MIN);
 		else ll += f;
 	  }
@@ -910,7 +910,7 @@ void LL(int* family, int* n, double* u, double* v, double* theta, double* nu, do
       t1 = pow(-log(dat[0]),*theta)+pow(-log(dat[1]),*theta);
 	  f= -pow(t1,1.0/(*theta))+(2.0/(*theta)-2.0)*log(t1)+(*theta-1.0)*log(log(dat[0])*log(dat[1]))-log(dat[0]*dat[1])+log1p((*theta-1.0)*pow(t1,-1.0/(*theta)));
 
-	  if(f>XINFMAX) ll += XINFMAX;
+	  if(f>XINFMAX) ll += log(XINFMAX);
 	  else if(f<log(DBL_MIN))ll += log(DBL_MIN);
 	  else ll += f;
     }
@@ -944,7 +944,7 @@ void LL(int* family, int* n, double* u, double* v, double* theta, double* nu, do
          dat[0] = u[j]; dat[1] = v[j];
          t1 = pow(-log(dat[0]),*nu)+pow(-log(dat[1]),*nu);
   	     f= -pow(t1,1/(*nu))+(2/(*nu)-2)*log(t1)+(*nu-1)*log(log(dat[0])*log(dat[1]))-log(dat[0]*dat[1])+log(1+(*nu-1)*pow(t1,-1.0/(*nu)));
-  	     if(f>XINFMAX) ll += XINFMAX;
+  	     if(f>XINFMAX) ll += log(XINFMAX);
   	     else if(f<log(DBL_MIN))ll += log(DBL_MIN);
   	     else ll += f;
       }		
@@ -1124,7 +1124,7 @@ void LL(int* family, int* n, double* u, double* v, double* theta, double* nu, do
          dat[0] = 1-u[j]; dat[1] = 1-v[j];
          t1 = pow(-log(dat[0]),*nu)+pow(-log(dat[1]),*nu);
   	     f= -pow(t1,1/(*nu))+(2/(*nu)-2)*log(t1)+(*nu-1)*log(log(dat[0])*log(dat[1]))-log(dat[0]*dat[1])+log(1+(*nu-1)*pow(t1,-1.0/(*nu)));
-  	     if(f>XINFMAX) ll += XINFMAX;
+  	     if(f>XINFMAX) ll += log(XINFMAX);
   	     else if(f<log(DBL_MIN))ll += log(DBL_MIN);
   	     else ll += f;
       }		
