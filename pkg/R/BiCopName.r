@@ -1,16 +1,14 @@
 BiCopName <- function(family, short = TRUE) {
-    if (is.logical(short) == FALSE) 
-        stop("'short' has to be a logical variable.")
+    stopifnot(is.logical(short))
     sapply(family, fam_name, short = short)
 }
 
 fam_name <- function(family, short) {
     fam <- NA
-    
+    ## get family name given a number
     if (is.numeric(family)) {
-        # Zahl zu Name
         if (short == TRUE) {
-            # kurzer Name
+            ## short name
             if (family == 0) 
                 fam <- "I"
             if (family == 1) 
@@ -76,7 +74,7 @@ fam_name <- function(family, short) {
             if (family == 40) 
                 fam <- "BB8_270"
             if (family == 100) 
-                fam <- "NP"  #changed Mathias
+                fam <- "NP"
             if (family == 41) 
                 fam <- "1-par AS"
             if (family == 51) 
@@ -102,7 +100,7 @@ fam_name <- function(family, short) {
             if (family == 234) 
                 fam <- "Tawn2_270"
         } else {
-            # langer Name
+            ## long names
             if (family == 0) 
                 fam <- "Independence"
             if (family == 1) 
@@ -195,7 +193,7 @@ fam_name <- function(family, short) {
                 fam <- "Rotated Tawn type 2 270 degrees"
         }
     } else {
-        # Name zu Zahl
+        ## get family number given a name
         if (family == "I" || family == "Independence") 
             fam <- 0
         if (family == "N" || family == "Gaussian") 
@@ -259,7 +257,7 @@ fam_name <- function(family, short) {
         if (family == "BB8_270" || family == "Rotated Joe-Frank 270 degrees") 
             fam <- 40
         if (family == "NP" || family == "Nonparametric") 
-            fam <- 100  #changed Mathias
+            fam <- 100 
         if (family == "1-par AS" || family == "1-parametric asymmetric") 
             fam <- 41
         if (family == "1-par AS180" || family == "Rotated 1-parametric asymmetric 180 degree") 
