@@ -372,14 +372,16 @@ Frank.itau.JJ <- function(tau) {
 }
 
 
-
 Joe.itau.JJ <- function(tau) {
     if (tau < 0) {
         return(1.000001)
     } else {
-        tauF <- function(a) {
-            # euler=0.5772156649015328606 1+((-2+2*euler+2*log(2)+digamma(1/a)+digamma(1/2*(2+a)/a)+a)/(-2+a))
-            1 + 4/a^2 * integrate(function(x) log(x) * x * (1 - x)^(2 * (1 - a)/a), 0, 1)$value
+        tauF <- function(par) {
+            param1 <- 2/par + 1
+            tem <- digamma(2) - digamma(param1)
+            tau <- 1 + tem * 2/(2 - par)
+            tau[par == 2] <- 1 - trigamma(2)
+            tau
         }
         
         v <- uniroot(function(x) tau - tauF(x),
