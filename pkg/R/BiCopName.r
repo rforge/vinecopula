@@ -1,7 +1,10 @@
 BiCopName <- function(family, short = TRUE) {
     if (is.logical(short) == FALSE) 
         stop("'short' has to be a logical variable.")
-    
+    sapply(family, fam_name, short = short)
+}
+
+fam_name <- function(family, short) {
     fam <- NA
     
     if (is.numeric(family)) {
@@ -284,5 +287,6 @@ BiCopName <- function(family, short = TRUE) {
     }
     if (is.na(fam)) 
         stop("Family not implemented.")
-    return(fam)
+    
+    fam
 }
