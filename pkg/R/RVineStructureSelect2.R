@@ -115,10 +115,9 @@ findMaximumTauTree2 <- function(g, mode = "RVine") {
             
             # find edge with minimal weight
             m <- apply(as.matrix(A[, tree]), 2, min)
-            cnt <- sum(m == min(m))  # count ties
             a <- apply(as.matrix(A[, tree]), 2, 
                        function(x) order(rank(x)))[1, ]
-            b <- order(rank(m))[cnt]
+            b <- order(rank(m))[1]
             j <- tree[b]
             i <- a[b]
             

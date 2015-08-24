@@ -1,5 +1,5 @@
-\name{RVineStructureSelect}
-\alias{RVineStructureSelect}
+\name{RVineStructureSelect2}
+\alias{RVineStructureSelect2}
 
 \title{Sequential Specification of R- and C-Vine Copula Models}
 
