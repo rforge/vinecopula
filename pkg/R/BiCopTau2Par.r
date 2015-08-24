@@ -1,4 +1,7 @@
 BiCopTau2Par <- function(family, tau) {
+    ## sanity check
+    if (any(abs(tau) > 0.99999))
+        stop("some tau is too close to -1 or 1")
     
     ## adjust length for input vectors; stop if not matching
     n <- max(length(family), length(tau))

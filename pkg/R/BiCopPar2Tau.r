@@ -58,14 +58,7 @@ calcTau <- function(family, par, par2) {
     } else if (family == 4 || family == 14) {
         tau <- 1 - 1/par
     } else if (family == 5) {
-        f <- function(x) x/(exp(x) - 1)
-        fu <- function(x) integrate(f, lower = 0, upper = x)$value
-        fl <- function(x) integrate(f, lower = x, upper = 0)$value
-        if (any(par > 0)) {
-            tau <- 1 - 4/par + 4/par^2 * sapply(par, fu)
-        } else {
-            tau <- 1 - 4/par - 4/par^2 * sapply(par, fl)
-        }
+        tau <- 1 - 4/par + 4/par * debye1(par)
     } else if (family == 6 || family == 16) {
         # tau = 1 + 4/par^2 * integrate(function(x) log(x)*x*(1-x)^(2*(1-par)/par), 0,
         # 1)$value
