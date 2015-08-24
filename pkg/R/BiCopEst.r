@@ -386,7 +386,7 @@ Joe.itau.JJ <- function(tau) {
         
         v <- uniroot(function(x) tau - tauF(x),
                      lower = 1, 
-                     upper = 500,
+                     upper = 5e5,
                      tol = .Machine$double.eps^0.5)$root
         return(v)
     }
