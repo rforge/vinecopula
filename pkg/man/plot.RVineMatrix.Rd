@@ -1,16 +1,24 @@
 \name{plot.RVineMatrix}
 \alias{plot.RVineMatrix}
-%- Also NEED an '\alias' for EACH other topic documented here.
+\alias{contour.RVineMatrix}
+
 \title{
 Plotting \code{RVineMatrix} objects.
 }
+
+
 \description{
-This function plots one or all trees of a given R-vine copula model. Edges can be labeld with information about the corresponding pair-copula.
+There are two plotting generics for \code{RVineMatrix} objects. \code{plot.RVineMatrix} plots one or all trees of a given R-vine copula model. Edges can be labeld with information about the corresponding pair-copula. \code{contour.RVineMatrix} produces a matrix of contour plots (using \code{\link[VineCopula:plot.BiCop]{plot.BiCop}}).
 }
+
+
 \usage{
-\method{plot}{RVineMatrix}(x, tree = "ALL", type = 0, edge.labels = NULL, interactive = FALSE,  ...)
+\method{plot}{RVineMatrix}(x, tree = "ALL", type = 0, edge.labels = NULL, legend.pos = "bottomleft",
+     interactive = FALSE,  ...)
+\method{contour}{RVineMatrix}(x, tree = "ALL", xylim = NULL, cex.nums = 1, ...)
 }
-%- maybe also 'usage' for other objects documented here.
+
+
 \arguments{
   \item{x}{\code{RVineMatrix} object.}
   \item{tree}{\code{"ALL"} or integer vector; specifies which trees are plotted.}
@@ -26,31 +34,42 @@ This function plots one or all trees of a given R-vine copula model. Edges can b
   \code{"family-par"} = pair-copula family and parameters \cr
   \code{"family-tau"} = pair-copula family and Kendall's tau.
   }
+  \item{legend.pos}{the \code{x} argument for \code{\link[graphics:legend]{legend}}.}
   \item{interactive}{logical; if TRUE, the user is asked to adjust the positioning of 
   vertices with his mouse.}
+  \item{xylim}{numeric vector of length 2; sets \code{xlim} and \code{ylim} for the contours}
+  \item{cex.nums}{numeric; expansion factor for font of the numbers.}
   \item{\dots}{
-Arguments passed to \code{\link[network:plot.network]{plot.network}}.
+Arguments passed to \code{\link[network:plot.network]{plot.network}} or \code{\link[VineCopula:plot.BiCop]{plot.BiCop}} respectively.}
 }
+
+
+\details{
+If you want the contour boxes to be perfect sqaures, the plot height should be \code{1.14/length(tree)*(d - min(tree))} times the plot width.
 }
+
+
 \author{
-Thomas Nagler
+Thomas Nagler, Nicole Barthel
 }
 
-
-%% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
 \code{\link[VineCopula:RVineMatrix]{RVineMatrix}},
-\code{\link[network:plot.network]{plot.network}}
-\code{\link[VineCopula:BiCopName]{BiCopName}}
+\code{\link[network:plot.network]{plot.network}},
+\code{\link[VineCopula:plot.BiCop]{plot.BiCop}},
+\code{\link[VineCopula:BiCopName]{BiCopName}},
+\code{\link[graphics:legend]{legend}}
 }
+
+
 \examples{
 ## build vine model
-strucmat <- matrix(c(3,1,2,0,2,1,0,0,1),3,3)
-fammat <- matrix(c(0,1,6,0,0,3,0,0,0),3,3)
-parmat <- matrix(c(0,0.3,3,0,0,1,0,0,0),3,3)
-par2mat <- matrix(c(0,0,0,0,0,0,0,0,0),3,3)
-RVM  <- RVineMatrix(Matrix=strucmat, family=fammat, par=parmat, par2=par2mat)
+strucmat <- matrix(c(3,   1, 2, 0, 2, 1, 0, 0, 1), 3, 3)
+fammat   <- matrix(c(0,   1, 6, 0, 0, 3, 0, 0, 0), 3, 3)
+parmat   <- matrix(c(0, 0.3, 3, 0, 0, 1, 0, 0, 0), 3, 3)
+par2mat  <- matrix(c(0,   0, 0, 0, 0, 0, 0, 0, 0), 3, 3)
+RVM  <- RVineMatrix(strucmat, fammat, parmat, par2mat)
 
 # plot trees
 plot(RVM)
@@ -58,18 +77,18 @@ plot(RVM)
 ## build new model
 # simulate from previous model
 u <- RVineSim(500, RVM)
-colnames(u) <- c("A", "B", "C")
+colnames(u) <- c("X", "Y", "Z")
 
 # estimate new model
 RVM2 <- RVineStructureSelect(u)
 
-# plot new model with variable names ...
+\dontrun{
+# plot new model with legend
 plot(RVM2, type = 1)
 
-# annotate edge with pair-copula family and parameter
-plot(RVM2, type = 1, edge.labels = "family-par")
-
+# show contour plots
+contour(RVM2)
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
+}
+
 \keyword{plot}

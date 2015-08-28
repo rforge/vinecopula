@@ -39,7 +39,7 @@ plot.BiCop <- function(x, type = "contour", margins, size, ...) {
         stop("'margins' has to be one of 'unif' or 'norm'")
     if (is.null(list(...)$xlim) & is.null(list(...)$ylim)) {
         xylim <- switch(margins,
-                        "unif"  = c(0, 1),
+                        "unif"  = c(1e-1, 1 - 1e-1),
                         "norm"  = c(-3, 3))
     } else {
         xylim <- range(c(list(...)$xlim, list(...)$ylim))
@@ -60,15 +60,15 @@ plot.BiCop <- function(x, type = "contour", margins, size, ...) {
         adj <- 1
         gu <- g[, 1L]
         gv <- g[, 2L]
-        levels <- c(0.1, 0.5, 1, 3, 5, 10, 20)
+        levels <- c(0.2, 0.6, 1, 1.5, 2, 3, 5, 10, 20)
         xlim <- ylim <- c(0, 1)
         at <- c(seq(0, 6, by = 0.05), seq(7, 100, by = 1))
     } else if (margins == "norm") {
         points <- qnorm(g[1L:size, 1L])
         adj <- tcrossprod(dnorm(points))
+        levels <- c(0.01, 0.025, 0.05, 0.1, 0.15, 0.2, 0.3, 0.4, 0.5)
         gu <- qnorm(g[, 1L])
         gv <- qnorm(g[, 2L])
-        levels <- c(0.02, 0.05, 0.1, 0.15, 0.2, 0.3, 0.4, 0.5)
         xlim <- ylim <- c(-3, 3)
         at <- seq(0, 1, l = 100)
     } 
