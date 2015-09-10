@@ -45,7 +45,7 @@ Arguments passed to \code{\link[network:plot.network]{plot.network}} or \code{\l
 
 
 \details{
-If you want the contour boxes to be perfect sqaures, the plot height should be \code{1.14/length(tree)*(d - min(tree))} times the plot width.
+If you want the contour boxes to be perfect sqaures, the plot height should be \code{1.25/length(tree)*(d - min(tree))} times the plot width.
 }
 
 
