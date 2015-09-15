@@ -1,7 +1,7 @@
 \name{BiCop}           
 \alias{BiCop}
 
-\title{Cunstructing BiCop-objects}
+\title{Constructing BiCop-objects}
 
 \description{
 This function creates an object of class \code{BiCop} and checks for family/parameter consistency.
