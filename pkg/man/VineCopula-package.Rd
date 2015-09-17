@@ -83,7 +83,7 @@ Version: \tab 1.7\cr
 Date: \tab 2015-07-30\cr
 License: \tab GPL (>=2)\cr
 Depends: \tab R (\eqn{\geq 2.11.0}{>= 2.11.0})\cr
-Imports: \tab graphics, grDevices, stats, utils, MASS, mvtnorm, igraph (>= 1.0.0), methods, copula, ADGofTest, lattice\cr
+Imports: \tab graphics, grDevices, stats, utils, MASS, mvtnorm, network, methods, copula, ADGofTest, lattice\cr
 Suggests: \tab CDVine, TSP\cr
 LazyLoad: \tab yes
 }

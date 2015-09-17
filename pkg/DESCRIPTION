@@ -6,7 +6,7 @@ Date: 2015-08-10
 Author: Ulf Schepsmeier, Jakob Stoeber, Eike Christian Brechmann, Benedikt Graeler, Thomas Nagler, Tobias Erhardt
 Maintainer: Tobias Erhardt <tobias.erhardt@tum.de>
 Depends: R (>= 2.11.0)
-Imports: graphics, grDevices, stats, utils, MASS, mvtnorm, igraph (>= 1.0.0), network, methods, copula, ADGofTest, lattice
+Imports: graphics, grDevices, stats, utils, MASS, mvtnorm, network, methods, copula, ADGofTest, lattice
 Suggests: CDVine, TSP
 Description: Tools for bivariate exploratory data analysis, bivariate copula selection and (vine) tree construction are provided. Vine copula models can be estimated either sequentially or by joint maximum likelihood estimation. Sampling algorithms and plotting methods are included. Data is assumed to lie in the unit hypercube (so-called copula data). For C- and D-vines links to the package 'CDVine' are provided.
 License: GPL (>= 2)

@@ -15,10 +15,6 @@ importFrom("stats", "cor", "dexp", "dgamma", "dnorm", "dt",
            "qnorm", "qt", "runif", "uniroot", "var")
 importFrom("utils", "combn", "getFromNamespace", "modifyList")
 importFrom("ADGofTest", "ad.test")
-importFrom("igraph", "E", "E<-", "V", "V<-", "as_adjacency_matrix",
-  "as_edgelist", "delete_edges", "ends", "graph_from_adjacency_matrix",
-  "graph_from_edgelist", "gsize", "layout_in_circle", "layout_with_graphopt",
-  "make_full_graph", "mst", "plot.igraph")
 
 export(pobs)
 

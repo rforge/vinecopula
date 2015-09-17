@@ -1,4 +1,4 @@
-\name{RVineStructureSelect}      
+\name{RVineStructureSelect}
 \alias{RVineStructureSelect}
 
 \title{Sequential Specification of R- and C-Vine Copula Models}
@@ -10,14 +10,14 @@ Tree structures are determined and appropriate pair-copula families are selected
 
 \usage{
 RVineStructureSelect(data, familyset = NA, type = 0, selectioncrit = "AIC",
-                     indeptest = FALSE, level = 0.05, trunclevel = NA,
-                     progress = FALSE, weights = NA, rotations = TRUE)
+                      indeptest = FALSE, level = 0.05, trunclevel = NA,
+                      progress = FALSE, weights = NA, rotations = TRUE)
 }
 
 \arguments{
   \item{data}{An N x d data matrix (with uniform margins).}
   \item{familyset}{An integer vector of pair-copula families to select from (the independence copula MUST NOT be specified in this vector unless one wants to fit an independence vine!).
-    The vector has to include at least one pair-copula family that allows for positive and one that allows for negative dependence. Not listed copula families might be included to better handle limit cases. 
+    The vector has to include at least one pair-copula family that allows for positive and one that allows for negative dependence. Not listed copula families might be included to better handle limit cases.
     If \code{familyset = NA} (default), selection among all possible families is performed.
     Coding of pair-copula families: \cr
 		\code{1} = Gaussian copula \cr
@@ -25,14 +25,14 @@ RVineStructureSelect(data, familyset = NA, type = 0, selectioncrit = "AIC",
 	        \code{3} = Clayton copula \cr
 	        \code{4} = Gumbel copula \cr
 	        \code{5} = Frank copula \cr
-	        \code{6} = Joe copula \cr 
+	        \code{6} = Joe copula \cr
 		\code{7} = BB1 copula \cr
 		\code{8} = BB6 copula \cr
 		\code{9} = BB7 copula \cr
 		\code{10} = BB8 copula \cr
 		\code{13} = rotated Clayton copula (180 degrees; ``survival Clayton'') \cr
 		\code{14} = rotated Gumbel copula (180 degrees; ``survival Gumbel'') \cr
-		\code{16} = rotated Joe copula (180 degrees; ``survival Joe'') \cr 
+		\code{16} = rotated Joe copula (180 degrees; ``survival Joe'') \cr
 		\code{17} = rotated BB1 copula (180 degrees; ``survival BB1'')\cr
 		\code{18} = rotated BB6 copula (180 degrees; ``survival BB6'')\cr
 		\code{19} = rotated BB7 copula (180 degrees; ``survival BB7'')\cr
@@ -112,10 +112,10 @@ Selecting and estimating regular vine copulae and application to financial retur
 Computational Statistics & Data Analysis, 59 (1), 52-69.
 }
 
-\author{Jeffrey Dissmann, Eike Brechmann, Ulf Schepsmeier}
+\author{Jeffrey Dissmann, Eike Brechmann, Ulf Schepsmeier, Thomas Nagler}
 
 \seealso{\code{\link{RVineTreePlot}}, \code{\link{RVineCopSelect}}}
- 
+
 \examples{
 # load data set
 data(daxreturns)
@@ -127,7 +127,7 @@ RVM <- RVineStructureSelect(daxreturns[1:750,1:4], c(1:6), progress = TRUE)
 
 \dontrun{
 # specify a C-vine copula model with only Clayton, Gumbel and Frank copulas (time-consuming)
-CVM <- RVineStructureSelect(daxreturns, c(3,4,5), "CVine")
+CVM <- RVineStructureSelect2(daxreturns, c(3,4,5), "CVine")
 }
 
 \dontrun{
