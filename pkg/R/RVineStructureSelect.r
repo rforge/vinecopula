@@ -1,43 +1,42 @@
-RVineStructureSelect <- function(data, familyset = NA, type = 0, selectioncrit = "AIC", indeptest = FALSE, 
-                                 level = 0.05, trunclevel = NA, progress = FALSE,  weights = NA, rotations = TRUE) { 
+RVineStructureSelect <- function(data, familyset = NA, type = 0, selectioncrit = "AIC", indeptest = FALSE, level = 0.05, trunclevel = NA, progress = FALSE,  weights = NA, rotations = TRUE) {
     d <- ncol(data)
-    N <- nrow(data)
+    n <- nrow(data)
     
-    ## sanity checks 
-    if (type == 0) 
-        type <- "RVine" else if (type == 1) 
+    ## sanity checks
+    if (type == 0)
+        type <- "RVine" else if (type == 1)
             type <- "CVine"
-    if (type != "RVine" & type != "CVine") 
+    if (type != "RVine" & type != "CVine")
         stop("Vine model not implemented.")
-    if (N < 2) 
+    if (n < 2)
         stop("Number of observations has to be at least 2.")
-    if (d < 3) 
+    if (d < 3)
         stop("Dimension has to be at least 3.")
-    if (any(data > 1) || any(data < 0)) 
+    if (any(data > 1) || any(data < 0))
         stop("Data has to be in the interval [0,1].")
     if (!is.na(familyset[1])) {
-        for (i in 1:length(familyset)) { 
+        for (i in 1:length(familyset)) {
             if (!(familyset[i] %in% c(0, 1:10, 13, 14, 16:20,
                                       23, 24, 26:30, 33, 34, 36:40,
-                                      104, 114, 124, 134, 204, 214, 224, 234))) 
+                                      104, 114, 124, 134, 204, 214, 224, 234)))
                 stop("Copula family not implemented.")
         }
     }
-    if (selectioncrit != "AIC" && selectioncrit != "BIC") 
+    if (selectioncrit != "AIC" && selectioncrit != "BIC")
         stop("Selection criterion not implemented.")
-    if (level < 0 & level > 1) 
+    if (level < 0 & level > 1)
         stop("Significance level has to be between 0 and 1.")
     
-    ## set variable names and trunclevel if not provided 
-    if (is.null(colnames(data))) 
-        colnames(data) <- paste("V", 1:d, sep = "")
-    if (is.na(trunclevel)) 
+    ## set variable names and trunclevel if not provided
+    if (is.null(colnames(data)))
+        colnames(data) <- paste0("V", 1:d)
+    if (is.na(trunclevel))
         trunclevel <- d
     
-    ## adjust familyset 
-    if (trunclevel == 0) 
+    ## adjust familyset
+    if (trunclevel == 0)
         familyset <- 0
-    if (rotations) 
+    if (rotations)
         familyset <- with_rotations(familyset)
     
     ## initialize object for results
@@ -45,16 +44,17 @@ RVineStructureSelect <- function(data, familyset = NA, type = 0, selectioncrit =
     
     ## estimation in first tree ----------------------------
     # find optimal tree
-    g <- initializeFirstGraph(data, weights)
-    MST <- findMaximumTauTree(g, mode = type) 
+    g <- initializeFirstGraph2(data, weights)
+    MST <- findMaximumTauTree2(g, mode = type)
+    
     # estimate pair-copulas
-    VineTree <- fit.FirstTreeCopulas(MST, 
-                                     data, 
-                                     familyset,
-                                     selectioncrit,
-                                     indeptest, 
-                                     level,
-                                     weights = weights)
+    VineTree <- fit.FirstTreeCopulas2(MST,
+                                      data,
+                                      familyset,
+                                      selectioncrit,
+                                      indeptest,
+                                      level,
+                                      weights = weights)
     # store results
     RVine$Tree[[1]] <- VineTree
     RVine$Graph[[1]] <- g
@@ -63,20 +63,20 @@ RVineStructureSelect <- function(data, familyset = NA, type = 0, selectioncrit =
     ## estimation in higher trees --------------------------
     for (i in 2:(d - 1)) {
         # only estimate pair-copulas if not truncated
-        if (trunclevel == i - 1) 
+        if (trunclevel == i - 1)
             familyset <- 0
         # find optimal tree
-        g <- buildNextGraph(VineTree, weights)
-        MST <- findMaximumTauTree(g, mode = type) 
+        g <- buildNextGraph2(VineTree, weights)
+        MST <- findMaximumTauTree2(g, mode = type)
         # estimate pair-copulas
-        VineTree <- fit.TreeCopulas(MST,
-                                    VineTree, 
-                                    familyset, 
-                                    selectioncrit,
-                                    indeptest,
-                                    level, 
-                                    progress, 
-                                    weights = weights)
+        VineTree <- fit.TreeCopulas2(MST,
+                                     VineTree,
+                                     familyset,
+                                     selectioncrit,
+                                     indeptest,
+                                     level,
+                                     progress,
+                                     weights = weights)
         # store results
         RVine$Tree[[i]] <- VineTree
         RVine$Graph[[i]] <- g
@@ -85,57 +85,96 @@ RVineStructureSelect <- function(data, familyset = NA, type = 0, selectioncrit =
     ## free memory and return results as 'RVineMatrix' object
     .RVine <- RVine
     rm(list = ls())
-    as.RVM(.RVine)
+    as.RVM2(.RVine)
 }
 
-initializeFirstGraph <- function(data.univ, weights) {
-    
+initializeFirstGraph2 <- function(data.univ, weights) {
     ## calculate Kendall's tau
     taus <- TauMatrix(data = data.univ, weights = weights)
     
-    ## create graph with Kendall's tau as weights
-    g <- graph_from_adjacency_matrix(taus,
-                                     mode = "lower",
-                                     weighted = TRUE,
-                                     diag = FALSE)
-    E(g)$tau <- E(g)$weight
-    E(g)$name <- paste(as_edgelist(g)[, 1], as_edgelist(g)[, 2], sep = ",")
-    
-    ## store condition sets
-    E(g)$conditionedSet <- unname(split(ends(g, 1:gsize(g), names = FALSE),
-                                        1:gsize(g)))
-    
-    ## return graph object
-    g
+    ## return full graph with tau as weights
+    graphFromTauMatrix(taus)
 }
 
-## find maximum spanning tree/ first vine tree
-findMaximumTauTree <- function(g, mode = "RVine") {
+findMaximumTauTree2 <- function(g, mode = "RVine") {
+    ## construct adjency matrix
+    A <- adjacencyMatrix(g)
+    d <- ncol(A)
     
     if (mode == "RVine") {
-        return(mst(g, weights = 1 - abs(E(g)$weight)))
-    } else if (mode == "CVine") {
-        M <- abs(as_adjacency_matrix(g, attr = "weight", sparse = 0))
-        sumtaus <- rowSums(M)
-        root <- which.max(sumtaus)
+        ## initialize
+        tree <- NULL
+        edges <- matrix(NA, d - 1, 2)
+        w <- numeric(d - 1)
+        i <- 1
         
-        Ecken <- ends(g, 1:gsize(g), names = FALSE)
-        pos <- Ecken[, 2] == root | Ecken[, 1] == root
+        ## construct minimum spanning tree
+        for (k in 1:(d - 1)) {
+            # add selected edge to tree
+            tree <- c(tree, i)
+            
+            # find edge with minimal weight
+            m <- apply(as.matrix(A[, tree]), 2, min)
+            a <- apply(as.matrix(A[, tree]), 2, 
+                       function(x) order(rank(x)))[1, ]
+            b <- order(rank(m))[1]
+            j <- tree[b]
+            i <- a[b]
+            
+            # store edge and weight
+            edges[k, ] <- c(j, i)
+            w[k] <- A[i, j]
+            
+            ## adjust adjecency matrix to prevent loops
+            for (t in tree)
+                A[i, t] <- A[t, i] <- Inf
+        }
         
-        MST <- delete_edges(g, E(g)[!pos])
+        ## reorder edges for backwads compatibility with igraph output
+        edges <- t(apply(edges, 1, function(x) sort(x)))
+        edges <- edges[order(edges[, 2], edges[, 1]), ]
         
-        return(MST)
+        ## delete unused edges from graph
+        E <- g$E$nums
+        in.tree <- apply(matrix(edges, ncol = 2), 1,
+                         function(x) which((x[1] == E[, 1]) & (x[2] == E[, 2])))
+        if (is.list(in.tree))
+            do.call()
+        MST <- g
+        g$E$todel <- rep(TRUE, nrow(E))
+        if (any(g$E$todel)) {
+            g$E$todel[in.tree] <- FALSE
+            MST <- deleteEdges(g)
+        }
+    } else if (mode  == "CVine") {
+        ## set root as vertex with minimal sum of weights
+        A <- adjacencyMatrix(g)
+        diag(A) <- 0
+        sumtaus <- rowSums(A)
+        root <- which.min(sumtaus)
+        
+        ## delete unused edges
+        g$E$todel <- !((g$E$nums[, 2] == root) | (g$E$nums[, 1] == root))
+        MST <- g
+        if (any(g$E$todel ))
+            MST <- deleteEdges(g)
+    } else {
+        stop("vine not implemented")
     }
+    
+    ## return result
+    MST
 }
+
 
 # not required any longer? Use TauMatrix instead
 fasttau <- function(x, y, weights = NA) {
     if (any(is.na(weights))) {
         m <- length(x)
         n <- length(y)
-        if (m == 0 || n == 0) 
+        if (m == 0 || n == 0)
             stop("both 'x' and 'y' must be non-empty")
-        if (m != n) 
+        if (m != n)
             stop("'x' and 'y' must have the same length")
         out <- .C("ktau",
                   x = as.double(x),
@@ -144,9 +183,9 @@ fasttau <- function(x, y, weights = NA) {
                   tau = as.double(0),
                   S = as.double(0),
                   D = as.double(0),
-                  T = as.integer(0), 
+                  T = as.integer(0),
                   U = as.integer(0),
-                  V = as.integer(0), 
+                  V = as.integer(0),
                   PACKAGE = "VineCopula")
         ktau <- out$tau
     } else {
@@ -156,77 +195,80 @@ fasttau <- function(x, y, weights = NA) {
 }
 
 ## fit pair-copulas for the first vine tree
-fit.FirstTreeCopulas <- function(MST, data.univ, type, copulaSelectionBy, testForIndependence, testForIndependence.level, weights = NA) {
+fit.FirstTreeCopulas2 <- function(MST, data.univ, type, copulaSelectionBy, testForIndependence, testForIndependence.level, weights = NA) {
     
-    d <- gsize(MST)
+    ## initialize estimation results with empty list
+    d <- nrow(MST$E$nums)
+    parameterForACopula <- lapply(1:d, function(i) NULL)
     
-    parameterForACopula <- list()
-    
+    ## prepare for estimation and store names
     for (i in 1:d) {
-        parameterForACopula[[i]] <- list()
-        
-        a <- ends(MST, i, names = FALSE)
-        
+        ## get edge and corresponding data
+        a <- MST$E$nums[i, ]
         parameterForACopula[[i]]$zr1 <- data.univ[, a[1]]
         parameterForACopula[[i]]$zr2 <- data.univ[, a[2]]
+        MST$E$Copula.Data.1[i] <- list(data.univ[, a[1]])
+        MST$E$Copula.Data.2[i] <- list(data.univ[, a[2]])
         
-        E(MST)[i]$Copula.Data.1 <- list(data.univ[, a[1]])
-        E(MST)[i]$Copula.Data.2 <- list(data.univ[, a[2]])
-        
-        if (is.null(V(MST)[a[1]]$name)) {
-            E(MST)[i]$Copula.CondName.1 <- a[1] 
-        } else { 
-            E(MST)[i]$Copula.CondName.1 <- V(MST)[a[1]]$name
-        }
-        
-        if (is.null(V(MST)[a[2]]$name)) {
-            E(MST)[i]$Copula.CondName.2 <- a[2] 
+        ## set names for this edge
+        if (is.null(MST$V$names[a[1]])) {
+            MST$E$Copula.CondName.1[i] <- a[1]
         } else {
-            E(MST)[i]$Copula.CondName.2 <- V(MST)[a[2]]$name
+            MST$E$Copula.CondName.1[i] <- MST$V$names[a[1]]
         }
-        
-        if (is.null(V(MST)[a[1]]$name) || is.null(V(MST)[a[2]]$name)) {
-            E(MST)[i]$Copula.Name <- paste(a[1], a[2], sep = " , ") 
+        if (is.null(MST$V$names[a[2]])) {
+            MST$E$Copula.CondName.2[i] <- a[2]
         } else {
-            E(MST)[i]$Copula.Name <- paste(V(MST)[a[1]]$name, 
-                                           V(MST)[a[2]]$name,
-                                           sep = " , ")
+            MST$E$Copula.CondName.2[i] <- MST$V$names[a[2]]
+        }
+        if (is.null(MST$V$names[a[1]]) || is.null(MST$V$names[a[2]])) {
+            MST$E$Copula.Name[i] <- paste(a[1], a[2], sep = " , ")
+        } else {
+            MST$E$Copula.Name[i] <- paste(MST$V$names[a[1]],
+                                          MST$V$names[a[2]],
+                                          sep = " , ")
         }
     }
     
+    ## estimate parameters and select family
     outForACopula <- lapply(X = parameterForACopula,
                             FUN = wrapper_fit.ACopula,
-                            type, copulaSelectionBy,
+                            type,
+                            copulaSelectionBy,
                             testForIndependence,
-                            testForIndependence.level, 
+                            testForIndependence.level,
                             weights)
     
+    ## store estimated model and pseudo-obversations for next tree
     for (i in 1:d) {
-        E(MST)$Copula.param[[i]] <- c(outForACopula[[i]]$par,
-                                      outForACopula[[i]]$par2)
-        E(MST)[i]$Copula.type <- outForACopula[[i]]$family
-        E(MST)[i]$Copula.out <- list(outForACopula[[i]])
+        MST$E$Copula.param[[i]] <- c(outForACopula[[i]]$par,
+                                     outForACopula[[i]]$par2)
+        MST$E$Copula.type[i] <- outForACopula[[i]]$family
+        MST$E$Copula.out[i] <- list(outForACopula[[i]])
         
-        E(MST)[i]$Copula.CondData.1 <- list(outForACopula[[i]]$CondOn.1)
-        E(MST)[i]$Copula.CondData.2 <- list(outForACopula[[i]]$CondOn.2)
+        MST$E$Copula.CondData.1[i] <- list(outForACopula[[i]]$CondOn.1)
+        MST$E$Copula.CondData.2[i] <- list(outForACopula[[i]]$CondOn.2)
     }
     
-    return(MST)
+    ## return results
+    MST
 }
 
 ## fit pair-copulas for vine trees 2,...
-fit.TreeCopulas <- function(MST, oldVineGraph, type, copulaSelectionBy, testForIndependence, testForIndependence.level, progress, weights = NA) {
-    d <- gsize(MST)
+fit.TreeCopulas2 <- function(MST, oldVineGraph, type, copulaSelectionBy, testForIndependence, testForIndependence.level, progress, weights = NA) {
     
-    parameterForACopula <- list()
+    ## initialize estimation results with empty list
+    d <- nrow(MST$E$nums)
+    parameterForACopula <- lapply(1:d, function(i) NULL)
     
+    
+    ## prepare for estimation
     for (i in 1:d) {
-        parameterForACopula[[i]] <- list()
+        ## get edge and corresponding data
+        con <- MST$E$nums[i, ]
+        temp <- oldVineGraph$E$nums[con, ]
         
-        con <- as.vector(ends(MST, i, names = FALSE))
-        
-        temp <- ends(oldVineGraph, con, names = FALSE)
-        
+        ## fetch corresponding data and names
         if ((temp[1, 1] == temp[2, 1]) || (temp[1, 2] == temp[2, 1])) {
             same <- temp[2, 1]
         } else {
@@ -235,23 +277,19 @@ fit.TreeCopulas <- function(MST, oldVineGraph, type, copulaSelectionBy, testForI
             }
         }
         
-        # other1 <- temp[1, temp[1, ] != same]
-        # other2 <- temp[2, temp[2, ] != same]
-        
         if (temp[1, 1] == same) {
-            zr1 <- E(oldVineGraph)[con[1]]$Copula.CondData.2
-            n1 <- E(oldVineGraph)[con[1]]$Copula.CondName.2
+            zr1 <- oldVineGraph$E$Copula.CondData.2[con[1]]
+            n1  <- oldVineGraph$E$Copula.CondName.2[con[1]]
         } else {
-            zr1 <- E(oldVineGraph)[con[1]]$Copula.CondData.1
-            n1 <- E(oldVineGraph)[con[1]]$Copula.CondName.1
+            zr1 <- oldVineGraph$E$Copula.CondData.1[con[1]]
+            n1  <- oldVineGraph$E$Copula.CondName.1[con[1]]
         }
-        
         if (temp[2, 1] == same) {
-            zr2 <- E(oldVineGraph)[con[2]]$Copula.CondData.2
-            n2 <- E(oldVineGraph)[con[2]]$Copula.CondName.2
+            zr2 <- oldVineGraph$E$Copula.CondData.2[con[2]]
+            n2  <- oldVineGraph$E$Copula.CondName.2[con[2]]
         } else {
-            zr2 <- E(oldVineGraph)[con[2]]$Copula.CondData.1
-            n2 <- E(oldVineGraph)[con[2]]$Copula.CondName.1
+            zr2 <- oldVineGraph$E$Copula.CondData.1[con[2]]
+            n2  <- oldVineGraph$E$Copula.CondName.1[con[2]]
         }
         
         if (is.list(zr1)) {
@@ -266,79 +304,78 @@ fit.TreeCopulas <- function(MST, oldVineGraph, type, copulaSelectionBy, testForI
             n2a <- n2
         }
         
-        if (progress == TRUE) 
-            message(n1a, " + ", n2a, " --> ", E(MST)[i]$name)
+        if (progress == TRUE)
+            message(n1a, " + ", n2a, " --> ", MST$E$names[i])
         
         parameterForACopula[[i]]$zr1 <- zr1a
         parameterForACopula[[i]]$zr2 <- zr2a
         
-        E(MST)[i]$Copula.Data.1 <- list(zr1a)
-        E(MST)[i]$Copula.Data.2 <- list(zr2a)
+        MST$E$Copula.Data.1[i] <- list(zr1a)
+        MST$E$Copula.Data.2[i] <- list(zr2a)
         
-        E(MST)[i]$Copula.CondName.1 <- n1a
-        E(MST)[i]$Copula.CondName.2 <- n2a
+        MST$E$Copula.CondName.1[i] <- n1a
+        MST$E$Copula.CondName.2[i] <- n2a
     }
     
+    ## estimate parameters and select family
     outForACopula <- lapply(X = parameterForACopula,
                             FUN = wrapper_fit.ACopula,
-                            type, copulaSelectionBy,
-                            testForIndependence, 
-                            testForIndependence.level, 
+                            type,
+                            copulaSelectionBy,
+                            testForIndependence,
+                            testForIndependence.level,
                             weights)
     
+    ## store estimated model and pseudo-obversations for next tree
     for (i in 1:d) {
-        E(MST)$Copula.param[[i]] <- c(outForACopula[[i]]$par, outForACopula[[i]]$par2)
-        E(MST)[i]$Copula.type <- outForACopula[[i]]$family
-        E(MST)[i]$Copula.out <- list(outForACopula[[i]])
+        MST$E$Copula.param[[i]] <- c(outForACopula[[i]]$par,
+                                     outForACopula[[i]]$par2)
+        MST$E$Copula.type[i] <- outForACopula[[i]]$family
+        MST$E$Copula.out[i] <- list(outForACopula[[i]])
         
-        E(MST)[i]$Copula.CondData.1 <- list(outForACopula[[i]]$CondOn.1)
-        E(MST)[i]$Copula.CondData.2 <- list(outForACopula[[i]]$CondOn.2)
+        MST$E$Copula.CondData.1[i] <- list(outForACopula[[i]]$CondOn.1)
+        MST$E$Copula.CondData.2[i] <- list(outForACopula[[i]]$CondOn.2)
     }
     
-    return(MST)
+    ## return results
+    MST
 }
 
 ## initialize graph for next vine tree (possible edges)
-buildNextGraph <- function(oldVineGraph, weights = NA) {
+buildNextGraph2 <- function(oldVineGraph, weights = NA) {
     
-    d <- gsize(oldVineGraph)
+    d <- nrow(oldVineGraph$E$nums)
     
     ## initialize with full graph
-    g <- make_full_graph(d)
-    V(g)$name <- E(oldVineGraph)$name
-    V(g)$conditionedSet <- E(oldVineGraph)$conditionedSet
-    if (!is.null(E(oldVineGraph)$conditioningSet)) {
-        V(g)$conditioningSet <- E(oldVineGraph)$conditioningSet
-    }
+    g <- makeFullGraph(d)
+    g$V$names <- oldVineGraph$E$names
+    g$V$conditionedSet <- oldVineGraph$E$conditionedSet
+    g$V$conditioningSet <- oldVineGraph$E$conditioningSet
     
     ## get info for all edges
-    out <- lapply(1:gsize(g),
-                  getEdgeInfo, 
-                  g = g, 
+    out <- lapply(1:nrow(g$E$nums),
+                  getEdgeInfo2,
+                  g = g,
                   oldVineGraph = oldVineGraph,
                   weights = weights)
     
     ## annotate graph (same order as in old version of this function)
-    E(g)$weight          <- sapply(out, function(x) x$tau)
-    E(g)$name            <- sapply(out, function(x) x$name)
-    E(g)$conditionedSet  <- lapply(out, function(x) x$nedSet)
-    E(g)$conditioningSet <- lapply(out, function(x) x$ningSet)
-    E(g)$todel           <- sapply(out, function(x) x$todel)
-    E(g)$tau <- E(g)$weight
+    g$E$weights         <- sapply(out, function(x) x$tau)
+    g$E$names           <- sapply(out, function(x) x$name)
+    g$E$conditionedSet  <- lapply(out, function(x) x$nedSet)
+    g$E$conditioningSet <- lapply(out, function(x) x$ningSet)
+    g$E$todel           <- sapply(out, function(x) x$todel)
     
     ## delete edges that are prohibited by the proximity condition
-    g <- delete_edges(g, E(g)[E(g)$todel])
-    
-    ## return new graph
-    g
+    deleteEdges(g)
 }
 
 ## function for obtaining edge information
-getEdgeInfo <- function(i, g, oldVineGraph, weights) {
+getEdgeInfo2 <- function(i, g, oldVineGraph, weights) {
     
     ## get edge
-    con <- as.vector(ends(g, i, names = FALSE))
-    temp <- ends(oldVineGraph, con, names = FALSE)
+    con <- g$E$nums[i, ]
+    temp <- oldVineGraph$E$nums[con, ]
     
     ## check for proximity condition
     ok <- FALSE
@@ -356,18 +393,18 @@ getEdgeInfo <- function(i, g, oldVineGraph, weights) {
     tau <- nedSet <- ningSet <- name <- NA
     todel <- TRUE
     
-    ## calculate edge info if proximity condition is fulfilled
+    # info if proximity condition is fulfilled ...
     if (ok) {
-        # get data
+        ## get data
         if (temp[1, 1] == same) {
-            zr1 <- E(oldVineGraph)[con[1]]$Copula.CondData.2
+            zr1 <- oldVineGraph$E$Copula.CondData.2[con[1]]
         } else {
-            zr1 <- E(oldVineGraph)[con[1]]$Copula.CondData.1
+            zr1 <- oldVineGraph$E$Copula.CondData.1[con[1]]
         }
         if (temp[2, 1] == same) {
-            zr2 <- E(oldVineGraph)[con[2]]$Copula.CondData.2
+            zr2 <- oldVineGraph$E$Copula.CondData.2[con[2]]
         } else {
-            zr2 <- E(oldVineGraph)[con[2]]$Copula.CondData.1
+            zr2 <- oldVineGraph$E$Copula.CondData.1[con[2]]
         }
         if (is.list(zr1)) {
             zr1a <- as.vector(zr1[[1]])
@@ -377,40 +414,31 @@ getEdgeInfo <- function(i, g, oldVineGraph, weights) {
             zr2a <- zr2
         }
         
-        # calculate Kendall's tau
+        ## calculate Kendall's tau
         keine_nas <- !(is.na(zr1a) | is.na(zr2a))
-        tau <- fasttau(zr1a[keine_nas],
-                       zr2a[keine_nas],
-                       weights)
+        tau <- fasttau(zr1a[keine_nas], zr2a[keine_nas], weights)
         
-        # get names
-        name.node1 <- strsplit(V(g)[con[1]]$name, split = " *[,;] *")[[1]]
-        name.node2 <- strsplit(V(g)[con[2]]$name, split = " *[,;] *")[[1]]
+        ## get names
+        name.node1 <- strsplit(g$V$names[con[1]], split = " *[,;] *")[[1]]
+        name.node2 <- strsplit(g$V$names[con[2]], split = " *[,;] *")[[1]]
         
-        # infer conditioned set and conditioning set
-        if (is.list(V(g)[con[1]]$conditionedSet)) {
-            l1 <- c(as.vector(V(g)[con[1]]$conditionedSet[[1]]),
-                    as.vector(V(g)[con[1]]$conditioningSet[[1]]))
-            l2 <- c(as.vector(V(g)[con[2]]$conditionedSet[[1]]),
-                    as.vector(V(g)[con[2]]$conditioningSet[[1]]))
-        } else {
-            l1 <- c(V(g)[con[1]]$conditionedSet,
-                    V(g)[con[1]]$conditioningSet)
-            l2 <- c(V(g)[con[2]]$conditionedSet,
-                    V(g)[con[2]]$conditioningSet)
-        }
+        ## infer conditioned set and conditioning set
+        l1 <- c(g$V$conditionedSet[[con[1]]],
+                g$V$conditioningSet[[con[1]]])
+        l2 <- c(g$V$conditionedSet[[con[2]]],
+                g$V$conditioningSet[[con[2]]])
         nedSet <- c(setdiff(l1, l2), setdiff(l2, l1))
         ningSet <- intersect(l1, l2)
-
-        # set edge name
+        
+        ## set edge name
         nmdiff <- c(setdiff(name.node1, name.node2),
-                  setdiff(name.node2, name.node1))
-        nmsect <- intersect(name.node1, name.node2)  
+                    setdiff(name.node2, name.node1))
+        nmsect <- intersect(name.node1, name.node2)
         name <- paste(paste(nmdiff, collapse = ","),
                       paste(nmsect, collapse = ","),
                       sep = " ; ")
         
-        # mark as ok
+        ## mark as ok
         todel <- FALSE
     }
     
@@ -424,7 +452,7 @@ getEdgeInfo <- function(i, g, oldVineGraph, weights) {
 
 
 wrapper_fit.ACopula <- function(parameterForACopula, type, ...) {
-    return(fit.ACopula(parameterForACopula$zr1, 
+    return(fit.ACopula(parameterForACopula$zr1,
                        parameterForACopula$zr2,
                        type,
                        ...))
@@ -458,23 +486,23 @@ fit.ACopula <- function(u1, u2, familyset = NA, selectioncrit = "AIC", indeptest
     }
     
     ## store pseudo-observations for estimation in next tree
-    out$CondOn.1 <- .C("Hfunc1", 
+    out$CondOn.1 <- .C("Hfunc1",
                        as.integer(out$family),
                        as.integer(length(u1)),
                        as.double(u1),
                        as.double(u2),
                        as.double(out$par),
-                       as.double(out$par2), 
-                       as.double(rep(0, length(u1))), 
+                       as.double(out$par2),
+                       as.double(rep(0, length(u1))),
                        PACKAGE = "VineCopula")[[7]]
     out$CondOn.2 <- .C("Hfunc2",
                        as.integer(out$family),
                        as.integer(length(u1)),
                        as.double(u2),
-                       as.double(u1), 
-                       as.double(out$par), 
-                       as.double(out$par2), 
-                       as.double(rep(0, length(u1))), 
+                       as.double(u1),
+                       as.double(out$par),
+                       as.double(out$par2),
+                       as.double(rep(0, length(u1))),
                        PACKAGE = "VineCopula")[[7]]
     
     ## return results
@@ -482,41 +510,28 @@ fit.ACopula <- function(u1, u2, familyset = NA, selectioncrit = "AIC", indeptest
 }
 
 ## build R-Vine matrix object based on nested set of trees
-as.RVM <- function(RVine) {
+as.RVM2 <- function(RVine) {
     
     ## initialize objects
     n <- length(RVine$Tree) + 1
     con <- list()
-    nam <- V(RVine$Tree[[1]])$name
-    conditionedSets <- NULL
-    corresppondingParams <- list()
-    corresppondingTypes <- list()
+    nam <- RVine$Tree[[1]]$V$names
+    nedSets <- list()
+    crspParams <- list()
+    crspTypes <- list()
     
     ## get selected pairs, families and estimated parameters
-    if (is.list(E(RVine$Tree[[n - 1]])$conditionedSet)) {
-        conditionedSets[[n - 1]][[1]] <- (E(RVine$Tree[[n - 1]])$conditionedSet[[1]])
-        for (k in 1:(n - 2)) {
-            # conditionedSets[[k]] = E(RVine$Tree[[k]])$conditionedSet[[1]]
-            conditionedSets[[k]] <- E(RVine$Tree[[k]])$conditionedSet
-            corresppondingParams[[k]] <- as.list(E(RVine$Tree[[k]])$Copula.param)
-            corresppondingTypes[[k]] <- as.list(E(RVine$Tree[[k]])$Copula.type)
-        }
-        
-        corresppondingParams[[n - 1]] <- list()
-        corresppondingParams[[n - 1]] <- as.list(E(RVine$Tree[[n - 1]])$Copula.param)
-        corresppondingTypes[[n - 1]] <- as.list(E(RVine$Tree[[n - 1]])$Copula.type)
-        # print(corresppondingParams)
+    for (k in 1:(n - 2)) {
+        nedSets[[k]]    <- RVine$Tree[[k]]$E$conditionedSet
+        crspParams[[k]] <- as.list(RVine$Tree[[k]]$E$Copula.param)
+        crspTypes[[k]]  <- as.list(RVine$Tree[[k]]$E$Copula.type)
+    }
+    crspParams[[n - 1]] <- as.list(RVine$Tree[[n - 1]]$E$Copula.param)
+    crspTypes[[n - 1]]  <- as.list(RVine$Tree[[n - 1]]$E$Copula.type)
+    if (is.list(RVine$Tree[[n - 1]]$E$conditionedSet)) {
+        nedSets[[n - 1]] <- list(RVine$Tree[[n - 1]]$E$conditionedSet[[1]])
     } else {
-        conditionedSets[[n - 1]][[1]] <- (E(RVine$Tree[[n - 1]])$conditionedSet)
-        for (k in 1:(n - 2)) {
-            conditionedSets[[k]] <- E(RVine$Tree[[k]])$conditionedSet
-            corresppondingParams[[k]] <- as.list(E(RVine$Tree[[k]])$Copula.param)
-            corresppondingTypes[[k]] <- as.list(E(RVine$Tree[[k]])$Copula.type)
-        }
-        # print(conditionedSets)
-        corresppondingParams[[n - 1]] <- list()
-        corresppondingParams[[n - 1]] <- as.list(E(RVine$Tree[[n - 1]])$Copula.param)
-        corresppondingTypes[[n - 1]] <- as.list(E(RVine$Tree[[n - 1]])$Copula.type)
+        nedSets[[n - 1]] <- list(RVine$Tree[[n - 1]]$E$conditionedSet)
     }
     
     ## initialize matrices for RVineMatrix object
@@ -527,23 +542,22 @@ as.RVM <- function(RVine) {
     
     ## store structure, families and parameters in matrices
     for (k in 1:(n - 1)) {
-        w <- conditionedSets[[n - k]][[1]][1]
+        w <- nedSets[[n - k]][[1]][1]
         
         M[k, k] <- w
-        M[(k + 1), k] <- conditionedSets[[n - k]][[1]][2]
+        M[(k + 1), k] <- nedSets[[n - k]][[1]][2]
         
-        Param[(k + 1), k] <- corresppondingParams[[n - k]][[1]][1]
-        Params2[(k + 1), k] <- corresppondingParams[[n - k]][[1]][2]
-        
-        Type[(k + 1), k] <- corresppondingTypes[[n - k]][[1]]
+        Param[(k + 1), k]   <- crspParams[[n - k]][[1]][1]
+        Params2[(k + 1), k] <- crspParams[[n - k]][[1]][2]
+        Type[(k + 1), k]    <- crspTypes[[n - k]][[1]]
         
         if (k == (n - 1)) {
-            M[(k + 1), (k + 1)] <- conditionedSets[[n - k]][[1]][2]
+            M[(k + 1), (k + 1)] <- nedSets[[n - k]][[1]][2]
         } else {
             for (i in (k + 2):n) {
-                for (j in 1:length(conditionedSets[[n - i + 1]])) {
-                    cs <- conditionedSets[[n - i + 1]][[j]]
-                    cty <- corresppondingTypes[[n - i + 1]][[j]]
+                for (j in 1:length(nedSets[[n - i + 1]])) {
+                    cs <- nedSets[[n - i + 1]][[j]]
+                    cty <- crspTypes[[n - i + 1]][[j]]
                     if (cs[1] == w) {
                         M[i, k] <- cs[2]
                         Type[i, k] <- cty
@@ -566,14 +580,13 @@ as.RVM <- function(RVine) {
                         break
                     }
                 }
-                Param[i, k] <- corresppondingParams[[n - i + 1]][[j]][1]
-                Params2[i, k] <- corresppondingParams[[n - i + 1]][[j]][2]
-                conditionedSets[[n - i + 1]][[j]] <- NULL
-                corresppondingParams[[n - i + 1]][[j]] <- NULL
-                corresppondingTypes[[n - i + 1]][[j]] <- NULL
+                Param[i, k]   <- crspParams[[n - i + 1]][[j]][1]
+                Params2[i, k] <- crspParams[[n - i + 1]][[j]][2]
+                nedSets[[n - i + 1]][[j]]    <- NULL
+                crspParams[[n - i + 1]][[j]] <- NULL
+                crspTypes[[n - i + 1]][[j]]  <- NULL
             }
         }
-        
     }
     
     ## clean NAs
@@ -583,3 +596,84 @@ as.RVM <- function(RVine) {
     ## return RVineMatrix object
     RVineMatrix(M, family = Type, par = Param, par2 = Params2, names = nam)
 }
+
+
+## functions for handling the tree structure -------------------------
+graphFromTauMatrix <- function(tau) {
+    d <- ncol(tau)
+    # get variable names
+    nms <- colnames(tau)
+    # construct edge set
+    E <- cbind(do.call(c, sapply(1:(d-1), function(i) seq.int(i))),
+               do.call(c, sapply(1:(d-1), function(i) rep(i+1, i))))
+    # add edge names
+    E.names <- apply(E, 1, function(x) paste(nms[x[1]],  nms[x[2]], sep = ","))
+    # set weights
+    w <- tau[upper.tri(tau)]
+    
+    ## return results
+    list(V = list(names = nms,
+                  conditionedSet = NULL,
+                  conditioningSet = NULL),
+         E = list(nums = E,
+                  names = E.names,
+                  weights = w,
+                  conditionedSet = lapply(1:nrow(E), function(i) E[i, ]),
+                  conditioningSet = NULL))
+}
+
+makeFullGraph <- function(d) {
+    ## create matrix of all combinations
+    E <- cbind(do.call(c, lapply(1:(d-1), function(i) rep(i, d-i))),
+               do.call(c, lapply(1:(d-1), function(i) (i+1):d)))
+    E <- matrix(E, ncol = 2)
+    
+    ## output dummy list with edges set
+    list(V = list(names = NULL,
+                  conditionedSet = NULL,
+                  conditioningSet = NULL),
+         E = list(nums = E,
+                  names = NULL,
+                  weights = NULL,
+                  conditionedSet = E,
+                  conditioningSet = NULL))
+}
+
+adjacencyMatrix <- function(g) {
+    ## create matrix of all combinations
+    d <- length(g$V$names)
+    v.all <- cbind(do.call(c, lapply(1:(d-1), function(i) seq.int(i))),
+                   do.call(c, lapply(1:(d-1), function(i) rep(i+1, i))))
+    
+    ## fnd weight
+    vals <- apply(v.all, 1, set_weight, E = g$E)
+    
+    ## create symmetric matrix of weights
+    M <- matrix(0, d, d)
+    M[upper.tri(M)] <- vals
+    M <- M + t(M)
+    diag(M) <- Inf
+    
+    ## return final matrix
+    M
+}
+
+set_weight <- function(x, E) {
+    is.edge <- (x[1] == E$nums[, 1]) & (x[2] == E$nums[, 2])
+    if (!any(is.edge)) Inf else (1 - abs(E$weights[which(is.edge)]))
+}
+
+
+deleteEdges <- function(g) {
+    ## reduce edge list
+    keep <- which(!g$E$todel)
+    E <- list(nums            = matrix(g$E$nums[keep, ], ncol = 2),
+              names           = g$E$names[keep],
+              weights         = g$E$weights[keep],
+              conditionedSet  = g$E$conditionedSet[keep],
+              conditioningSet = g$E$conditioningSet[keep])
+    
+    ## return reduced graph
+    list(V = g$V, E = E)
+}
+
