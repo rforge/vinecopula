@@ -31,8 +31,14 @@ BiCopSim <- function(N, family, par, par2 = 0, obj = NULL, check.pars = TRUE) {
         stop("'par2' has to be a single number or a size N vector")
     
     ## sanity checks for family and parameters
-    if (check.pars)
+    if (check.pars) {
         BiCopCheck(family, par, par2)
+    } else {
+        # allow zero parameter for Clayton an Frank otherwise
+        family[(family %in% c(3, 13, 23, 33)) & (par == 0)] <- 0
+        family[(family == 5) & (par == 0)] <- 0
+    }
+    
     
     ## start with independent uniforms (byrow for backwards compatibility)
     w <- matrix(runif(2*N), ncol = 2, byrow = TRUE)

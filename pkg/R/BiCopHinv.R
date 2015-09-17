@@ -39,9 +39,14 @@ BiCopHinv <- function(u1, u2, family, par, par2 = 0, obj = NULL, check.pars = TR
     if (!(length(par2) %in% c(1, n)))
         stop("'par2' has to be a single number or a size n vector")
     
-    ## check for family/parameter consistency#
-    if (check.pars) 
+    ## sanity checks for family and parameters
+    if (check.pars) {
         BiCopCheck(family, par, par2)
+    } else {
+        # allow zero parameter for Clayton an Frank otherwise
+        family[(family %in% c(3, 13, 23, 33)) & (par == 0)] <- 0
+        family[(family == 5) & (par == 0)] <- 0
+    }
     
     ## calculate inverse h-functions
     if (length(par) == 1) {

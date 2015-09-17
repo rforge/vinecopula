@@ -53,8 +53,13 @@ BiCopHfunc <- function(u1, u2, family, par, par2 = 0, obj = NULL, check.pars = T
         stop("'par2' has to be a single number or a size n vector")
     
     ## sanity checks for family and parameters
-    if (check.pars)
+    if (check.pars) {
         BiCopCheck(family, par, par2)
+    } else {
+        # allow zero parameter for Clayton an Frank otherwise
+        family[(family %in% c(3, 13, 23, 33)) & (par == 0)] <- 0
+        family[(family == 5) & (par == 0)] <- 0
+    }
     
     ## calculate h-functions
     if (length(par) == 1) {
