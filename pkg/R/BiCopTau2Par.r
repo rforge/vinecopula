@@ -1,4 +1,4 @@
-BiCopTau2Par <- function(family, tau) {
+BiCopTau2Par <- function(family, tau, check.taus = TRUE) {
     ## sanity check
     if (any(abs(tau) > 0.99999))
         stop("some tau is too close to -1 or 1")
@@ -11,6 +11,11 @@ BiCopTau2Par <- function(family, tau) {
         par <- rep(tau, n)
     if (!all(c(length(family), length(tau)) %in% c(1, n)))
         stop("Input lenghts don't match")
+    
+    ## check for family/tau consistency
+    if (check.taus)
+        BiCopCheckTaus(family, tau)
+    
     
     ## calculate the parameter
     if (length(tau) == 1) {
@@ -34,30 +39,18 @@ calcPar <- function(family, tau) {
     } else if (family %in% 1:2) {
         par <- sin(pi * tau/2)
     } else if (family %in% c(3, 13)) {
-        if (tau < 0)
-            stop("Clayton copula cannot be used for tau<0.")
         par <- 2 * tau/(1 - tau)
     } else if (family %in% c(4, 14)) {
-        if (tau < 0)
-            stop("Gumbel copula cannot be used for tau<0.")
         par <- 1/(1 - tau)
     } else if (family == 5) {
         par <- if (tau == 0) 0 else Frank.itau.JJ(tau)
     } else if (family %in% c(6, 16)) {
-        if (tau < 0)
-            stop("Joe copula cannot be used for tau<0.")
         par <- Joe.itau.JJ(tau)
     } else if (family %in% c(23, 33)) {
-        if (tau > 0)
-            stop("Rotated Clayton copula cannot be used for tau>0.")
         par <- 2 * tau/(1 + tau)
     } else if (family %in% c(24, 34)) {
-        if (tau > 0)
-            stop("Rotated Gumbel copula cannot be used for tau>0.")
         par <- -(1/(1 + tau))
     } else if (family %in% c(26, 36)) {
-        if (tau > 0)
-            stop("Rotated Joe copula cannot be used for tau>0.")
         par <- -Joe.itau.JJ(-tau)
     } else if (family %in% c(41, 51)) {
         par <- ipsA.tau2cpar(tau)

@@ -95,3 +95,27 @@ BiCopCheck <- function(family, par, par2) {
     ## return TRUE if all checks pass
     TRUE
 }
+
+BiCopCheckTaus <- function(family, tau) {
+    ## check for family/tau consistency
+    checkTaus<- function(x) {
+        if (family %in% c(3, 13) && tau <= 0)
+            stop("Clayton copula cannot be used for tau<=0.")
+        if (family %in% c(4, 14) && tau < 0)
+            stop("Gumbel copula cannot be used for tau<0.")
+        if (family == 5 && tau == 0)
+            stop("Frank copula cannot be used for tau=0")
+        if (family %in% c(6, 16) && tau < 0)
+            stop("Joe copula cannot be used for tau<0.")
+        if (family %in% c(23, 33) && tau >= 0)
+            stop("Rotated Clayton copula cannot be used for tau>=0.")
+        if (family %in% c(24, 34) && tau > 0)
+            stop("Rotated Gumbel copula cannot be used for tau>0.")
+        if (family %in% c(26, 36) && tau > 0)
+            stop("Rotated Joe copula cannot be used for tau>0.")
+    }
+    apply(cbind(family, tau), 1, checkTaus)
+    
+    ## return TRUE if all checks pass
+    TRUE
+}

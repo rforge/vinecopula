@@ -8,7 +8,7 @@ This function computes the parameter of a (one parameter) bivariate copula for a
 }
 
 \usage{
-BiCopTau2Par(family, tau)
+BiCopTau2Par(family, tau, check.taus = TRUE)
 }
 
 \arguments{
@@ -31,6 +31,7 @@ BiCopTau2Par(family, tau)
 		\code{36} = rotated Joe copula (270 degrees)\cr
     Note that (with exception of the t-copula) two parameter bivariate copula families cannot be used.}
     \item{tau}{numeric; single number or vector of size \code{m}; Kendall's tau value (vector with elements in [-1,1]).}
+    \item{check.taus}{logical; default is \code{TRUE}; if \code{FALSE}, checks for family/tau-consistency are ommited (should only be used with care).}
 }
 
 \value{
