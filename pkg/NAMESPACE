@@ -5,10 +5,10 @@ import(methods)
 import(lattice)
 import(network)
 
-importFrom("grDevices", "colorRampPalette", "rgb", "terrain.colors", "col2rgb")
+importFrom("grDevices", "colorRampPalette", "rgb", "terrain.colors", "col2rgb", "gray")
 importFrom("graphics", "abline", "box", "hist", "legend", "lines",
            "pairs", "par", "points", "strwidth", "text",
-           "plot.new", "polygon", "strheight")
+           "plot.new", "plot.window", "polygon", "strheight")
 importFrom("stats", "cor", "dexp", "dgamma", "dnorm", "dt",
            "integrate", "ks.test", "optim", "optimize", "pbinom",
            "pchisq", "pexp", "pgamma", "pnorm", "pt", "qexp", "qgamma",
@@ -111,6 +111,7 @@ S3method(as.copuladata, matrix)
 S3method(as.copuladata, list)
 S3method(pairs, copuladata)
 S3method(plot, BiCop)
+S3method(contour, BiCop)
 S3method(plot, RVineMatrix)
 S3method(contour, RVineMatrix)
 

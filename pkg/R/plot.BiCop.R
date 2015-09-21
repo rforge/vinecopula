@@ -1,4 +1,4 @@
-plot.BiCop <- function(x, type = "contour", margins, size, ...) {    
+plot.BiCop <- function(x, type = "surface", margins, size, ...) {    
     ## partial matching and sanity check for type
     stopifnot(class(type) == "character")
     tpnms <- c("contour", "surface", "lambda")
@@ -27,10 +27,9 @@ plot.BiCop <- function(x, type = "contour", margins, size, ...) {
                        "contour" = 100L,
                        "surface" = 25L)
     stopifnot(is.numeric(size))
-    
+    size <- round(size)
     
     ## construct grid for evaluation of the copula density
-    size <- round(size)
     if (size < 3) {
         warning("size too small, set to 5")
         size <- 5
@@ -44,35 +43,37 @@ plot.BiCop <- function(x, type = "contour", margins, size, ...) {
     } else {
         xylim <- range(c(list(...)$xlim, list(...)$ylim))
     }
-    sq <- seq(xylim[1L], xylim[2L], len = size)
-    points <- switch(margins,
-                     "unif"  = 1:size/(size + 1),
-                     "norm"  = pnorm(sq))
-    g <- as.matrix(expand.grid(points, points))
-    
-    ## evaluate on grid
-    vals <- BiCopPDF(g[, 1L], g[, 2L], x)
-    cop <- matrix(vals, size, size)
     
     ## prepare for plotting with selected margins
     if (margins == "unif") {
+        points <- switch(type,
+                         "contour"  = seq(1e-5, 1 - 1e-5, length.out = size),
+                         "surface"  = 1:size / (size + 1))
+                g <- as.matrix(expand.grid(points, points))
         points <- g[1L:size, 1L]
         adj <- 1
         gu <- g[, 1L]
         gv <- g[, 2L]
         levels <- c(0.2, 0.6, 1, 1.5, 2, 3, 5, 10, 20)
         xlim <- ylim <- c(0, 1)
-        at <- c(seq(0, 6, by = 0.05), seq(7, 100, by = 1))
+        at <- c(seq(0, 6, length.out = 50), seq(7, 100, length.out = 50))
     } else if (margins == "norm") {
+        points <- pnorm(seq(xylim[1L], xylim[2L], length.out = size))
+        g <- as.matrix(expand.grid(points, points))
         points <- qnorm(g[1L:size, 1L])
         adj <- tcrossprod(dnorm(points))
         levels <- c(0.01, 0.025, 0.05, 0.1, 0.15, 0.2, 0.3, 0.4, 0.5)
         gu <- qnorm(g[, 1L])
         gv <- qnorm(g[, 2L])
         xlim <- ylim <- c(-3, 3)
-        at <- seq(0, 1, l = 100)
+        at <- c(seq(0, 0.3, length.out = 50), seq(0.3, 100, length.out = 50))
     } 
     
+    ## evaluate on grid
+    vals <- BiCopPDF(g[, 1L], g[, 2L], x)
+    cop <- matrix(vals, size, size)
+    
+    ## actual plotting
     if (type == "contour") {        
         # set default parameters
         pars <- list(x = points, 
@@ -115,18 +116,24 @@ plot.BiCop <- function(x, type = "contour", margins, size, ...) {
                      par.settings = list(axis.line = list(col = "transparent")),
                      at = at,
                      col.regions=
-                         c(colorRampPalette(
-                             c(TUMblue, TUMgreen, TUMorange))(121),
-                           rep(TUMorange, 300)),
+                         c(colorRampPalette(c(tint(TUMblue, 0.5), "white"))(50),
+                           rep("white", 50)),
                      xlab = switch(margins,
                                    "unif" = expression(u[1]),
                                    "norm" = expression(z[1])),
                      ylab = switch(margins,
                                    "unif" = expression(u[2]),
                                    "norm" = expression(z[2])),
-                     zlab = "density")
+                     zlab = "density",
+                     zlim = switch(margins,
+                                   "unif" = c(0, max(3, 1.1*max(lst$c))),
+                                   "norm" = c(0, max(0.4, 1.1*max(lst$c)))))
         
         # call wireframe with final parameters
         do.call(wireframe, modifyList(pars, list(...)))
     }
+}
+
+contour.BiCop <- function(x, margins = "norm", size = 100L, ...) {
+    plot(x, type = "contour", margins = margins, size = size, ...)
 }
