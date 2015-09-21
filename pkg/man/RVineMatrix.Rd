@@ -1,18 +1,18 @@
-\name{RVineMatrix}      
+\name{RVineMatrix}
 \alias{RVineMatrix}
 
 \title{R-Vine Copula Model in Matrix Notation}
 
 \description{
 This function creates an \code{\link{RVineMatrix}} object which encodes an R-vine copula model.
-It contains the matrix identifying the R-vine tree structure, the matrix identifying the copula families 
+It contains the matrix identifying the R-vine tree structure, the matrix identifying the copula families
 utilized and two matrices for corresponding parameter values.
 }
 
 \usage{
 RVineMatrix(Matrix, family = array(0, dim = dim(Matrix)),
             par = array(NA, dim = dim(Matrix)),
-            par2 = array(NA, dim = dim(Matrix)), names=NULL)
+            par2 = array(NA, dim = dim(Matrix)), names=NULL, check.pars = TRUE)
 }
 
 \arguments{
@@ -26,14 +26,14 @@ RVineMatrix(Matrix, family = array(0, dim = dim(Matrix)),
 	        \code{3} = Clayton copula \cr
 	        \code{4} = Gumbel copula \cr
 	        \code{5} = Frank copula \cr
-	        \code{6} = Joe copula \cr 
+	        \code{6} = Joe copula \cr
 		\code{7} = BB1 copula \cr
 		\code{8} = BB6 copula \cr
 		\code{9} = BB7 copula \cr
 		\code{10} = BB8 copula \cr
 		\code{13} = rotated Clayton copula (180 degrees; ``survival Clayton'') \cr
 		\code{14} = rotated Gumbel copula (180 degrees; ``survival Gumbel'') \cr
-		\code{16} = rotated Joe copula (180 degrees; ``survival Joe'') \cr 
+		\code{16} = rotated Joe copula (180 degrees; ``survival Joe'') \cr
 		\code{17} = rotated BB1 copula (180 degrees; ``survival BB1'')\cr
 		\code{18} = rotated BB6 copula (180 degrees; ``survival BB6'')\cr
 		\code{19} = rotated BB7 copula (180 degrees; ``survival BB7'')\cr
@@ -67,6 +67,8 @@ RVineMatrix(Matrix, family = array(0, dim = dim(Matrix)),
   \item{par2}{Lower (or upper) triangular d x d matrix with zero diagonal entries that assigns the second parameter
     for pair-copula families with two parameters to each (conditional) pair defined by \code{Matrix} (default: \code{par2 = array(NA, dim = dim(Matrix))}).}
   \item{names}{A vector of names for the d variables; default: \code{names = NULL}.}
+  \item{check.pars}{logical; default is \code{TRUE}; if \code{FALSE}, checks for family/parameter-consistency are ommited (should only be used with care).}
+
 }
 
 \value{
@@ -78,7 +80,7 @@ RVineMatrix(Matrix, family = array(0, dim = dim(Matrix)),
 }
 
 \note{
-The \code{print} function writes the R-vine matrix defined by \code{Matrix}. A detailed output is given by \code{print(RVM, detail=TRUE)}, 
+The \code{print} function writes the R-vine matrix defined by \code{Matrix}. A detailed output is given by \code{print(RVM, detail=TRUE)},
 where \code{RVM} is the \code{\link{RVineMatrix}} object. \cr
 The \code{\link{RVineMatrix}} function automatically checks if the given matrix is a valid R-vine matrix (see \code{\link{RVineMatrixCheck}}). \cr
 Although the function allows upper triangular matrices as its input, it will always store them as lower triangular matrices.

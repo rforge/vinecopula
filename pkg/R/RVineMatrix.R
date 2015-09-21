@@ -1,4 +1,4 @@
-RVineMatrix <- function(Matrix, family = array(0, dim = dim(Matrix)), par = array(NA, dim = dim(Matrix)), par2 = array(NA, dim = dim(Matrix)), names = NULL) {
+RVineMatrix <- function(Matrix, family = array(0, dim = dim(Matrix)), par = array(NA, dim = dim(Matrix)), par2 = array(NA, dim = dim(Matrix)), names = NULL, check.pars = TRUE) {
     
     ## set NAs to zero
     Matrix[is.na(Matrix)] <- 0
@@ -36,10 +36,12 @@ RVineMatrix <- function(Matrix, family = array(0, dim = dim(Matrix)), par = arra
         stop("'Matrix' is not a valid R-vine matrix")
     
     ## check for family/parameter consistency
-    if (!all(par %in% c(0, NA))) {
-        for (i in 2:dim(Matrix)[1]) {
-            for (j in 1:(i - 1)) {
-                BiCopCheck(family[i, j], par[i, j], par2[i, j])
+    if (check.pars) {
+        if (!all(par %in% c(0, NA))) {
+            for (i in 2:dim(Matrix)[1]) {
+                for (j in 1:(i - 1)) {
+                    BiCopCheck(family[i, j], par[i, j], par2[i, j])
+                }
             }
         }
     }
