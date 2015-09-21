@@ -919,7 +919,7 @@ void LL(int* family, int* n, double* u, double* v, double* theta, double* nu, do
     {
         for(j=0;j<*n;j++)
         {
-            if (fabs(*theta) < 10) {
+            if (fabs(*theta) < 1e-10) {
                 ll = 0;
             } else {
                 dat[0] = u[j]; dat[1] = v[j];
