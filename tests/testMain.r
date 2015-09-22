@@ -32,4 +32,23 @@ if(!all(check_BiCopPar2Beta)){
   gc()
 }
 
+# BiCopPar2TailDep
+results_BiCopPar2TailDep <- testRunBiCopPar("BiCopPar2TailDep")
+check_BiCopPar2TailDep <- testCheck(results_BiCopPar2TailDep)
+if(!all(check_BiCopPar2TailDep)){
+  print(check_BiCopPar2TailDep)
+} else {
+  rm(results_BiCopPar2TailDep)
+  gc()
+}
 
+
+# testRunBiCopTau2Par
+results_BiCopTau2Par <- testRunBiCopTau("BiCopTau2Par")
+check_BiCopTau2Par <- testCheck2(results_BiCopTau2Par)
+if(!all(check_BiCopTau2Par)){
+  print(check_BiCopTau2Par)
+} else {
+  rm(results_BiCopTau2Par)
+  gc()
+}

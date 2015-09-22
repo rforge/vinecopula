@@ -25,294 +25,6 @@
 
 #define XINFMAX DBL_MAX
 
-//////////////////////////////////////////////////////////////
-// Generatorfunction of BB1, BB6, BB7 and BB8
-// Input:
-// u		variable
-// n		number of iterations
-// param	vector of parameter (theta, delta)
-// copula	copula family (7=BB1, 8=BB6, 9=BB7, 10=BB10)
-// out		outout
-//////////////////////////////////////////////////////////////
-/*
- void gen(double* u, int* n, double* param, int* copula, double* out)
- {
- int j;
- double *h;
- h = Calloc(*n,double);
- 
- for(j=0;j<*n;j++)
- {
- if(u[j]==0) h[j] = 0;
- else if (u[j]==1) h[j] = u[j];
- else
- {
- if(*copula==3)	//Clayton
- {
- h[j] = 1/param[0]*(pow(u[j],(-param[0]))-1);
- }
- if(*copula==4)	//Gumbel
- {
- h[j] = pow((-log(u[j])),param[0]);
- }
- if(*copula==5)	//Frank
- {
- h[j] = -log((exp(-param[0]*u[j])-1)/(exp(-param[0])-1));
- }
- if(*copula==6)	//Joe
- {
- h[j] = -log(1-pow((1-u[j]),param[0]));
- }			
- if(*copula==7)	//BB1
- {
- h[j] = pow((pow(u[j],(-param[0]))-1),param[1]);
- }
- else if(*copula==8) //BB6
- {
- h[j] = pow((-log(-pow(1-u[j],param[0])+1)),param[1]);
- }
- else if(*copula==9)	//BB7
- {
- h[j] = pow(1-pow(1-u[j],param[0]),-param[1])-1;
- }
- else if(*copula==10) //BB8
- {
- h[j] = -log( (1-pow(1-param[1]*u[j],param[0])) / (1-pow(1-param[1],param[0])) );
- }
- }
- out[j]=h[j];
- }
- Free(h);
- }
- */
-
-//////////////////////////////////////////////////////////////
-// Inverse generator of BB1, BB6, BB7 and BB8
-// Input:
-// u		variable
-// n		number of iterations
-// param	vector of parameter (theta, delta)
-// copula	copula family (7=BB1, 8=BB6, 9=BB7, 10=BB8)
-// out		outout
-//////////////////////////////////////////////////////////////
-/*
- void genInv(double* u, int* n, double* param, int* copula, double* out)
- {
- int j;
- double *h;
- h = Calloc(*n,double);
- 
- for(j=0;j<*n;j++)
- {
- if(u[j]==0) h[j] = 0;
- else if (u[j]==1) h[j] = u[j];
- else
- {
- if(*copula==3)	//Clayton
- {
- h[j] = pow((1+param[0]*u[j]),(-1/param[0]));
- }
- if(*copula==4)	//Gumbel
- {
- h[j] = exp(-pow(u[j],1/param[0]));
- }
- if(*copula==5)	//Frank
- {
- h[j] = -1/param[0]*log(1-exp(-u[j])*(1-exp(-param[0])));
- }
- if(*copula==6)	//Joe
- {
- h[j] = 1-pow((1-exp(-u[j])),1/param[0]);
- }
- if(*copula==7)	//BB1
- {
- h[j] = pow(1+pow(u[j],1/param[1]),(-1/param[0]));
- }
- else if(*copula==8) //BB6
- {
- h[j] = 1-pow(1-exp(-pow(u[j],1/param[1])),1/param[0]);
- }
- else if(*copula==9)	//BB7
- {
- h[j] = 1-pow(1-pow(1+u[j],-1/param[1]),(1/param[0]));
- }
- else if(*copula==10) //BB8
- {
- h[j] = 1/param[1] * ( 1-pow(1-(1-pow(1-param[1],param[0]))*exp(-u[j]),1/param[0]) );
- }
- }
- out[j]=h[j];
- }
- Free(h);
- }
- */
-
-//////////////////////////////////////////////////////////////
-// First derivative of the generator of BB1, BB2 and BB7
-// Input:
-// u		variable
-// n		number of iterations
-// param	vector of parameter (theta, delta)
-// copula	copula family (7=BB1, 8=BB6, 9=BB7)
-// out		outout
-//////////////////////////////////////////////////////////////
-/*
- void genDrv(double* u, int* n, double* param, int* copula, double* out)
- {
- int j;
- double *h;
- h = Calloc(*n,double);
- 
- for(j=0;j<*n;j++)
- {
- if(u[j]==0) h[j] = 0;
- else if (u[j]==1) h[j] = u[j];
- else
- {
- if(*copula==7)	//BB1
- {
- h[j] = -(param[0]*param[1])*pow(pow(u[j],-param[0])-1,param[1]-1)*pow(u[j],-1-param[0]);
- }
- else if(*copula==8) //BB6
- {
- h[j] = pow(-log(-pow(1-u[j],param[0])+1),param[1]-1) * param[1] * pow(1-u[j],param[0]-1) * param[0] / (pow(1-u[j],param[0])-1);
- }
- else if(*copula==9)	//BB7
- {
- h[j] = -(param[0]*param[1])*pow(1-u[j],param[0]-1)*pow(1-pow(1-u[j],param[0]),-1-param[1]);
- }
- else if(*copula==10) //BB8
- {
- h[j] = -param[0] * param[1] * ( pow(1-param[1]*u[j],param[0]-1) ) / ( 1-pow(1-param[1]*u[j],param[0]) );
- }
- }
- out[j]=h[j];
- }
- Free(h);
- }
- */
-
-//////////////////////////////////////////////////////////////
-// Second derivative of the generator of BB1, BB6, BB7 and BB8
-// Input:
-// u		variable
-// n		number of iterations
-// param	vector of parameter (theta, delta)
-// copula	copula family (7=BB1, 8=BB6, 9=BB7, 10=BB8)
-// out		outout
-//////////////////////////////////////////////////////////////
-/*
- void genDrv2(double* u, int* n, double* param, int* copula, double* out)
- {
- int j;
- double *h;
- h = Calloc(*n,double);
- 
- for(j=0;j<*n;j++)
- {
- if(u[j]==0) h[j] = 0;
- else if (u[j]==1) h[j] = u[j];
- else
- {
- if(*copula==7)	//BB1
- {
- h[j] = param[0]*param[1]*pow(u[j],-2-param[0])*pow(pow(u[j],-param[0])-1,param[1]-2)*((1+param[0]*param[1])*pow(u[j],-param[0])-param[0]-1);
- }
- else if(*copula==8) //BB6
- {
- h[j] = ( param[0]*param[1] * ( 
- pow(-log(-pow(1-u[j],param[0])+1),param[1]-2) * pow(1-u[j],2*param[0]-2) * param[0]*param[1] - 
- pow(-log(-pow(1-u[j],param[0])+1),param[1]-2) * pow(1-u[j],2*param[0]-2) * param[0] - 
- pow(-log(-pow(1-u[j],param[0])+1),param[1]-1) * pow(1-u[j],param[0]-2) * param[0] - 
- pow(-log(-pow(1-u[j],param[0])+1),param[1]-1) * pow(1-u[j],2*param[0]-2) + 
- pow(-log(-pow(1-u[j],param[0])+1),param[1]-1) * pow(1-u[j],param[0]-2) ) ) / pow(pow(1-u[j],param[0])-1,2);
- }
- else if(*copula==9)	//BB7
- {
- h[j] = param[0]*param[1]*pow(1-u[j],param[0]-2)*pow(1-pow(1-u[j],param[0]),-2-param[1])*((1+param[0]*param[1])*pow(1-u[j],param[0])+param[0]-1);
- }
- else if(*copula==10) //BB8
- {
- h[j] = ( pow(param[1],2) * param[0] * 
- (pow(1-u[j]*param[1],param[0]-2) * param[0] + pow(1-u[j]*param[1],2*param[0]-2) - pow(1-u[j]*param[1],param[0]-2)) ) / 
- ( pow(pow(1-u[j]*param[1],param[0])-1,2) );
- }
- }
- out[j]=h[j];
- }
- Free(h);
- }
- */
-
-//////////////////////////////////////////////////////////////
-// Copula of BB1, BB6, BB7 and BB8
-// Input:
-// u		variable 1
-// v		variable 2
-// n		number of iterations
-// param	vector of parameter (theta, delta)
-// copula	copula family (7=BB1, 8=BB6, 9=BB7, 1=BB8)
-// out		outout
-//////////////////////////////////////////////////////////////
-/*
- void copCdf(double* u, double* v, int* n, double* param, int* copula, double* out)
- {
- int j;
- double *out1;
- double *out2;
- double *out3;
- out1 = Calloc(*n,double);
- out2 = Calloc(*n,double);
- out3 = Calloc(*n,double);
- gen(u, n, param, copula, out1);
- gen(v, n, param, copula, out2);
- for(j=0;j<*n;j++)
- {
- out3[j]=out1[j]+out2[j];
- }
- genInv(out3 , n, param, copula, out);
- Free(out1);
- Free(out2);
- Free(out3);
- }
- */
-
-//////////////////////////////////////////////////////////////
-// Copula density of BB1, BB6, BB7 and BB8
-// Input:
-// u		variable 1
-// v		variable 2
-// n		number of iterations
-// param	vector of parameter (theta, delta)
-// copula	copula family (7=BB1, 8=BB6, 9=BB7, 10=BB8)
-// out		outout
-//////////////////////////////////////////////////////////////
-/*
- void copPdf(double* u, double* v, int* n, double* param, int* copula, double* out)
- {
- int j;
- double *out1, *out2, *out3, *out4, *out5;
- out1 = Calloc(*n,double);
- out2 = Calloc(*n,double);
- out3 = Calloc(*n,double);
- out4 = Calloc(*n,double);
- out5 = Calloc(*n,double);
- copCdf(u,v,n,param,copula,out1);
- genDrv2(out1,n,param,copula,out2);
- genDrv(u,n,param,copula,out3);
- genDrv(v,n,param,copula,out4);
- genDrv(out1,n,param,copula,out5);
- for(j=0;j<*n;j++)
- {
- out[j]=-(out2[j]*out3[j]*out4[j])/pow(out5[j],3);
- }
- Free(out1);
- Free(out2);
- Free(out3);
- Free(out4);
- Free(out5);
- }
- */
 
 ///////////////////////////////////////////////////////
 // New
@@ -362,17 +74,6 @@ void archCDF(double* u, double* v, int* n, double* param, int* copula, double* o
             }
             else if(*copula==5)	//Frank
             {
-                /*double nu;
-                 t1 = -param[0]*u[j];
-                 t2 = -param[0]*v[j];
-                 t3 = exp(t1);
-                 t4 = exp(t2);
-                 t5 = 1-t3;
-                 t6 = 1-t4;
-                 nu = 1-exp(-param[0]);
-                 t7 = t5*t6;
-                 t8 = nu-t7;
-                 out[j] = -1/param[0]*log(t8/nu);*/
                 if (param[0]>0) {
                     t1=-log1p(exp(-param[0]) * expm1(param[0]-u[j]*param[0])/expm1(-param[0]));
                     t2=-log1p(exp(-param[0]) * expm1(param[0]-v[j]*param[0])/expm1(-param[0]));
@@ -550,8 +251,6 @@ void dbb6(double* u, double* v, int* n, double* param, double* out)
         t11 = t5+t10;
         t13 = pow(t11,t12);
         t14 = exp(-t13);
-        //t15 = 1.0-t14;
-        //t17 = pow(t15,t16);
         t35 = pow(t11,-2.0*t32*t12);
         t36 = t35*th;
         t37 = exp(t13);
@@ -633,11 +332,9 @@ void dbb8(double* u, double* v, int* n, double* param, double* out)
     {
         t2 = 1.0-de*u[i];
         t3 = pow(t2,th);
-        //t4 = 1.0-t3;
         t10 = 1.0-de;
         t11 = pow(t10,th);
         t12 = 1.0-t11;
-        //t13 = 1/t12;
         t16 = 1/th;
         t33 = th*t3;
         t38 = 2.0*th;
@@ -647,9 +344,6 @@ void dbb8(double* u, double* v, int* n, double* param, double* out)
         t69 = t12*t12;
         t6 = 1.0-de*v[i];
         t7 = pow(t6,th);
-        //t8 = 1.0-t7;
-        //t15 = 1.0-(1.0-t3)*t8*t13;
-        //t17 = pow(t15,t16);
         t25 = t3*t7;
         t26 = t11-t7-t3+t25;
         t29 = pow(-t26/t12,t16);
@@ -667,94 +361,6 @@ void dbb8(double* u, double* v, int* n, double* param, double* out)
 }
 
 
-
-//////////////////////////////////////////////////////////////
-// New function to compute log-likelihood for bivariate copula (for the rotated copulas
-// Input:
-// family    copula family (0=independent, 1=gaussian, 2=student, 3=clayton, 4=gumbel, 5=frank)
-// n         sample size
-// u         first variable of data set
-// v         second variable of data set
-// theta     dependency parameter
-// nu        degrees-of-freedom for students copula
-// loglik    output
-//////////////////////////////////////////////////////////////
-
-/*
- void LL_mod(int* family, int* n, double* u, double* v, double* theta, double* nu, double* loglik)
- {
- double* negv;
- double* negu;
- negv = (double *) malloc(*n*sizeof(double));
- negu = (double *) malloc(*n*sizeof(double));
- double ntheta, nnu;
- int nfamily;
- ntheta = -*theta;
- nnu = -*nu;
- 
- for(int i=0;i<*n;i++)
- {
- if(u[i]<UMIN) u[i]=UMIN;
- else if(u[i]>UMAX) u[i]=UMAX;
- if(v[i]<UMIN) v[i]=UMIN;
- else if(v[i]>UMAX) v[i]=UMAX;
- }
- 
- if((*family==43))
- {
- nfamily=3;
- if(*theta > 0){
- ntheta=2*(*theta)/(1-*theta);
- LL(&nfamily, n, u,  v, &ntheta, nu, loglik);
- }else{
- ntheta=-2*(*theta)/(1+*theta);
- for (int i = 0; i < *n; ++i) {negv[i]=1 - v[i];}
- LL(&nfamily, n, u,  negv, &ntheta, &nnu, loglik);
- }
- }else if((*family==44))
- {
- nfamily=4;
- if(*theta > 0){
- ntheta=1/(1-*theta);
- LL(&nfamily, n, u,  v, &ntheta, nu, loglik);
- }else{
- ntheta=1/(1+*theta);
- for (int i = 0; i < *n; ++i) {negv[i]=1 - v[i];}
- LL(&nfamily, n, u,  negv, &ntheta, &nnu, loglik);
- }
- }else{
- if((*family==23) | (*family==24) | (*family==26) | (*family==27) | (*family==28) | (*family==29) | (*family==30) | (*family==61))	// 90? rotated copulas
- {
- nfamily = (*family)-20;
- for (int i = 0; i < *n; ++i) {negv[i] = 1 - v[i];}
- LL(&nfamily, n, u,  negv, &ntheta, &nnu, loglik);
- }
- else if((*family==33) | (*family==34) | (*family==36) | (*family==37) | (*family==38) | (*family==39) | (*family==40) | (*family==71))	// 270? rotated copulas
- {
- nfamily = (*family)-30;
- for (int i = 0; i < *n; ++i) {negu[i] = 1 - u[i];}
- LL(&nfamily, n, negu,  v, &ntheta, &nnu, loglik);
- }
- else if((*family==124) | (*family==224))
- {
- nfamily = (*family)-20;
- for (int i = 0; i < *n; ++i) {negu[i] = 1 - u[i];}
- LL(&nfamily, n, u,  negv, &ntheta, nu, loglik);
- }
- else if((*family==134) | (*family==234))
- {
- nfamily = (*family)-30;
- for (int i = 0; i < *n; ++i) {negv[i] = 1 - v[i];}
- LL(&nfamily, n, negu,  v, &ntheta, nu, loglik);
- }
- else {
- LL(family, n, u,  v, theta, nu, loglik);
- }
- }
- free(negv);
- free(negu);
- }
- */
 
 void LL_mod2(int* family, int* n, double* u, double* v, double* theta, double* nu, double* loglik)
 {
@@ -953,34 +559,7 @@ void LL(int* family, int* n, double* u, double* v, double* theta, double* nu, do
                 else ll += f;
             }		
         }else{
-            /*
-            double part1, part2, part3, part4;
             
-            for(j=0;j<*n;j++)
-            {
-            part1=pow(1+pow(pow(pow(u[j],-*theta)-1,*nu)+pow(pow(v[j],-*theta)-1,*nu),1/(*nu)),-1/(*theta)-2);
-            part2=pow(pow(pow(u[j],-*theta)-1,*nu)+pow(pow(v[j],-*theta)-1,*nu),2/(*nu)-2);
-            part3=(*theta)*(*nu)+1+(*theta)*(*nu-1)*pow(pow(pow(u[j],-*theta)-1,*nu)+pow(pow(v[j],-*theta)-1,*nu),-1/(*nu));
-            part4=pow(pow(u[j],-*theta)-1,*nu-1)*pow(u[j],-*theta-1)*pow(pow(v[j],-*theta)-1,*nu-1)*pow(v[j],-*theta-1);
-            if(!isfinite(part1) || isnan(part1))
-            {
-            part1=1;
-            }
-            if(!isfinite(part2) || isnan(part2))
-            {
-            part2=1;
-            }
-            if(!isfinite(part3) || isnan(part3))
-            {
-            part3=1;
-            }
-            if(!isfinite(part4) || isnan(part4))
-            {
-            part4=1;
-            }
-            ll+=log(part1)+log(part2)+log(part3)+log(part4);
-            }
-            */
             double *param, *fuc;
             param=Calloc(2,double);
             param[0]=*theta;
@@ -1133,37 +712,7 @@ void LL(int* family, int* n, double* u, double* v, double* theta, double* nu, do
                 else ll += f;
             }		
         }else{	  
-            /*
-            double part1, part2, part3, part4;
             
-            for(j=0;j<*n;j++)
-            {
-            u[j]=1-u[j]; v[j]=1-v[j];
-            part1=pow(1+pow(pow(pow(u[j],-*theta)-1,*nu)+pow(pow(v[j],-*theta)-1,*nu),1/(*nu)),-1/(*theta)-2);
-            part2=pow(pow(pow(u[j],-*theta)-1,*nu)+pow(pow(v[j],-*theta)-1,*nu),2/(*nu)-2);
-            part3=(*theta)*(*nu)+1+(*theta)*(*nu-1)*pow(pow(pow(u[j],-*theta)-1,*nu)+pow(pow(v[j],-*theta)-1,*nu),-1/(*nu));
-            part4=pow(pow(u[j],-*theta)-1,*nu-1)*pow(u[j],-*theta-1)*pow(pow(v[j],-*theta)-1,*nu-1)*pow(v[j],-*theta-1);
-            if(!isfinite(part1) || isnan(part1))
-            {
-            part1=1;
-            }
-            if(!isfinite(part2) || isnan(part2))
-            {
-            part2=1;
-            }
-            if(!isfinite(part3) || isnan(part3))
-            {
-            part3=1;
-            }
-            if(!isfinite(part4) || isnan(part4))
-            {
-            part4=1;
-            }
-            ll+=log(part1)+log(part2)+log(part3)+log(part4);
-            
-            u[j]=1-u[j]; v[j]=1-v[j];
-            }
-            */
             double *param, *fuc;
             param=Calloc(2,double);
             param[0]=*theta;
@@ -1543,34 +1092,7 @@ void copLik(int* family, int* n, double* u, double* v, double* theta, double* nu
             }
             
         }else{
-            /*
-            double part1, part2, part3, part4;
             
-            for(j=0;j<*n;j++)
-            {
-            part1=pow(1+pow(pow(pow(u[j],-*theta)-1,*nu)+pow(pow(v[j],-*theta)-1,*nu),1/(*nu)),-1/(*theta)-2);
-            part2=pow(pow(pow(u[j],-*theta)-1,*nu)+pow(pow(v[j],-*theta)-1,*nu),2/(*nu)-2);
-            part3=(*theta)*(*nu)+1+(*theta)*(*nu-1)*pow(pow(pow(u[j],-*theta)-1,*nu)+pow(pow(v[j],-*theta)-1,*nu),-1/(*nu));
-            part4=pow(pow(u[j],-*theta)-1,*nu-1)*pow(u[j],-*theta-1)*pow(pow(v[j],-*theta)-1,*nu-1)*pow(v[j],-*theta-1);
-            if(!isfinite(part1) || isnan(part1))
-            {
-            part1=1;
-            }
-            if(!isfinite(part2) || isnan(part2))
-            {
-            part2=1;
-            }
-            if(!isfinite(part3) || isnan(part3))
-            {
-            part3=1;
-            }
-            if(!isfinite(part4) || isnan(part4))
-            {
-            part4=1;
-            }
-            lik *= part1*part2*part3*part4;
-            }
-            */
             double *param, *fuc;
             param=Calloc(2,double);
             param[0]=*theta;
@@ -1703,37 +1225,7 @@ void copLik(int* family, int* n, double* u, double* v, double* theta, double* nu
             }
             
         }else{
-            /*
-            double part1, part2, part3, part4;
             
-            for(j=0;j<*n;j++)
-            {
-            u[j]=1-u[j]; v[j]=1-v[j];
-            part1=pow(1+pow(pow(pow(u[j],-*theta)-1,*nu)+pow(pow(v[j],-*theta)-1,*nu),1/(*nu)),-1/(*theta)-2);
-            part2=pow(pow(pow(u[j],-*theta)-1,*nu)+pow(pow(v[j],-*theta)-1,*nu),2/(*nu)-2);
-            part3=(*theta)*(*nu)+1+(*theta)*(*nu-1)*pow(pow(pow(u[j],-*theta)-1,*nu)+pow(pow(v[j],-*theta)-1,*nu),-1/(*nu));
-            part4=pow(pow(u[j],-*theta)-1,*nu-1)*pow(u[j],-*theta-1)*pow(pow(v[j],-*theta)-1,*nu-1)*pow(v[j],-*theta-1);
-            if(!isfinite(part1) || isnan(part1))
-            {
-            part1=1;
-            }
-            if(!isfinite(part2) || isnan(part2))
-            {
-            part2=1;
-            }
-            if(!isfinite(part3) || isnan(part3))
-            {
-            part3=1;
-            }
-            if(!isfinite(part4) || isnan(part4))
-            {
-            part4=1;
-            }
-            lik *=part1*part2*part3*part4;
-            
-            u[j]=1-u[j]; v[j]=1-v[j];
-            }
-            */
             double *param, *fuc;
             param=Calloc(2,double);
             param[0]=*theta;

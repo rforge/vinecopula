@@ -39,14 +39,12 @@ RVineGrad <- function(data, RVM, par = RVM$par, par2 = RVM$par2, start.V = NA, p
         stop("'RVM' has to be an RVineMatrix object.")
     
     
-    # if(any(is.na(calcupdate))) { n=dim(RVM) calcupdate=array(0,dim=c(n,n,n,n)) for(i in (n-1):1){ for(k in n:(i+1)){ calcupdate[, ,k,i
-    # ]=RVineMatrixUpdate(RVM,k,i) } } }
+
     
     o <- diag(RVM$Matrix)
     if (any(o != length(o):1)) {
         oldRVM <- RVM
         RVM <- normalizeRVineMatrix(RVM)
-        # RVM = getFromNamespace('normalizeRVineMatrix','VineCopula')(RVM)
         data <- data[, o[length(o):1]]
     }
     
@@ -65,7 +63,6 @@ RVineGrad <- function(data, RVM, par = RVM$par, par2 = RVM$par2, start.V = NA, p
     ll <- as.vector(V$value)
     vv <- as.vector(V$direct)
     vv2 <- as.vector(V$indirect)
-    # calcup=as.vector(calcupdate)
     
     w1 <- as.vector(RVM$family)
     w1[is.na(w1)] <- 0
@@ -81,7 +78,6 @@ RVineGrad <- function(data, RVM, par = RVM$par, par2 = RVM$par2, start.V = NA, p
     maxmat[is.na(maxmat)] <- 0
     condirect[is.na(condirect)] <- 0
     conindirect[is.na(conindirect)] <- 0
-    # tilde_vdirect_array=array(0,dim=c(n,n,N,n,n)) tilde_vindirect_array=array(0,dim=c(n,n,N,n,n)) tilde_value_array=array(0,dim=c(n,n,N,n,n))
     
     
     out <- rep(0, sum(posParams[lower.tri(posParams, diag = FALSE)]) + sum(w1 == 2))
@@ -101,11 +97,7 @@ RVineGrad <- function(data, RVM, par = RVM$par, par2 = RVM$par2, start.V = NA, p
               as.double(ll),
               as.double(vv),
               as.double(vv2),
-              #as.integer(calcup),
               as.integer(as.vector(posParams)),
-              #as.double(as.vector(tilde_vdirect_array)),
-              #as.double(as.vector(tilde_vindirect_array)),
-              #as.double(as.vector(tilde_value_array)),
               PACKAGE = 'VineCopula')
     
     
@@ -122,10 +114,7 @@ RVineGrad <- function(data, RVM, par = RVM$par, par2 = RVM$par2, start.V = NA, p
         gradient <- c(gradient, grad2[tt:1])
     }
     
-    # tilde_vdirect=out[[16]] tilde_vindirect=out[[17]] tilde_value=out[[18]] V$tilde_direct = array(tilde_vdirect,dim=c(n,n,N,n,n)) V$tilde_indirect =
-    # array(tilde_vindirect,dim=c(n,n,N,n,n)) V$tilde_value = array(tilde_value,dim=c(n,n,N,n,n))
-        
-    # out2=list(gradient=gradient,V=V)
+    
     out2 <- list(gradient = gradient)
     return(out2)
 }

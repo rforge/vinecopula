@@ -19,33 +19,6 @@ RVinePIT <- function(data, RVM) {
     if (is(RVM)[1] != "RVineMatrix") 
         stop("'RVM' has to be an RVineMatrix object.")
     
-    #if(type=="CVine") type=1
-    #else if(type=="DVine") type=2
-    #else if(type=="RVine") type=0
-    
-    #if(!(type %in% c(0,1,2)) ) stop("Vine type not implemented.")
-    
-    #if(type==1 || type==2)
-    #{
-    #	if(type==1)
-    #		vine=R2CVine(RVM)
-    #	else if(type==2)
-    #		vine=R2DVine(RVM)
-    
-    #	tmp = .C("pit",
-    #     as.integer(T),
-    #     as.integer(d),
-    #     as.integer(vine$family),
-    #     as.integer(type),
-    #     as.double(vine$par),
-    #     as.double(vine$par2),
-    #		 as.double(data),
-    #         as.double(rep(0,T*d)),
-    #        PACKAGE='VineCopula')[[8]]
-    #	 
-    #	U <- matrix(tmp,ncol=d)
-    #}
-    #else {
     
     o <- diag(RVM$Matrix)
     if (any(o != length(o):1)) {

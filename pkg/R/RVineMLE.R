@@ -285,13 +285,9 @@ RVineMLE <- function(data, RVM, start = RVM$par, start2 = RVM$par2, maxit = 200,
     
     ## log-likelihood function to be maximized
     optim_LL <- function(parm, data, posParams, posParams2, Copula.Types, start, start2, RVM, calcupdate = NA) {
-      # calcupdate=NA V=NA
         
         nParams <- sum(posParams, na.rm = TRUE)
         nParams2 <- sum(posParams2, na.rm = TRUE)
-        
-        # for(k in 1:nParams) { if(Copula.Types[k]==0) { if(k==1){parm=c(0,parm)} else if(k>length(parm)){parm=c(parm,0)} else
-        # {parm=c(parm[1:(k-1)],0,parm[k:length(parm)])} } }
         
         matrixParams <- start
         matrixParams2 <- start2
@@ -304,7 +300,6 @@ RVineMLE <- function(data, RVM, start = RVM$par, start2 = RVM$par2, maxit = 200,
         
         ll <- RVineLogLik(data, RVM, par = matrixParams, par2 = matrixParams2)
         
-        # V=ll$V
         
         if (is.finite(ll$loglik)) {
             return(ll$loglik)
@@ -321,14 +316,6 @@ RVineMLE <- function(data, RVM, start = RVM$par, start2 = RVM$par2, maxit = 200,
     ableitung <- function(parm, data, posParams, posParams2, Copula.Types, start, start2, RVM, calcupdate) {
         nParams <- sum(posParams, na.rm = TRUE)
         nParams2 <- sum(posParams2, na.rm = TRUE)
-        
-        # outparm=parm for (i in 1:length(parm)) { handle_parm=parm handle_parm[i]=handle_parm[i]+0.000001 handle_parm2=parm
-        # handle_parm2[i]=handle_parm2[i]-0.000001
-        # outparm[i]=(optim_LL(handle_parm,data,posParams,posParams2,Copula.Types,start,start2,RVM,calcupdate=NA)-optim_LL(handle_parm2,data,posParams,posParams2,Copula.Types,start,start2,RVM,calcupdate=NA))/(2*0.000001)
-        # } print('finite differences:') print(outparm)
-        
-        # for(k in 1:nParams) { if(Copula.Types[k]==0) { if(k==1){parm=c(0,parm)} else if(k>length(parm)){parm=c(parm,0)} else
-        # {parm=c(parm[1:(k-1)],0,parm[k:length(parm)])} } }
         
         matrixParams <- start
         matrixParams2 <- start2
@@ -370,7 +357,6 @@ RVineMLE <- function(data, RVM, start = RVM$par, start2 = RVM$par2, maxit = 200,
     ## optimization
     if (all(Copula.Types %in% c(0, 1, 2, 3:6, 13, 14, 16, 23, 24, 26, 33, 34, 36, 43, 44)) && grad == TRUE) {
         
-        # n=dim(RVM) calcupdate=array(0,dim=c(n,n,n,n)) for(i in (n-1):1){ for(k in n:(i+1)){ calcupdate[, ,k,i ]=RVineMatrixUpdate(RVM,k,i) } }
         if (hessian == TRUE || se == TRUE) {
             out1 <- optim(par = startpar, 
                           fn = optim_LL, 

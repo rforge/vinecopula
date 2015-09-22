@@ -84,16 +84,14 @@ calcTau <- function(family, par, par2) {
     } else if (family == 9 || family == 19) {
         theta <- par
         delta <- par2
-        # tau=1-2/(delta*(2-theta))+4/(theta^2*delta)*gamma(delta+2)*gamma((2-2*theta)/(theta)+1)/gamma(delta+3+(2-2*theta)/(theta))
+        
         kt <- function(t, th, de) {
             ((1 - (1 - t)^th)^-de - 1)/(-th * de * (1 - t)^(th - 1) * (1 - (1 - t)^th)^(-de - 1))
         }
         tau <- 1 + 4 * mapply(function(theta, delta) {
             integrate(function(t)  kt(t, th = theta, de = delta), 0, 1)$value
         }, theta, delta)
-        # kt <- function(t) { 1/( (1-t)^(par-1) ) } kt2 <- function(t) { 1-t } kt3 <-
-        # function(t) { 1/( (1-t)^(par-1)*(1-(1-t)^par)^(-par2-1) ) } tau <-
-        # 1-4/par/par2*(integrate(kt,0,1)$value-integrate(kt2,0,1)$value-integrate(kt3,0,1)$value)
+        
     } else if (family == 10 || family == 20) {
         theta <- par
         delta <- par2
@@ -110,8 +108,7 @@ calcTau <- function(family, par, par2) {
     } else if (family == 24 || family == 34) {
         tau <- -1 - 1/par
     } else if (family == 26 || family == 36) {
-        # tau <- -1-4/par^2*integrate(function(x) log(x)*x*(1-x)^(2*(1+par)/-par), 0,
-        # 1)$value
+        
         theta <- -par
         param1 <- 2/theta + 1
         tem <- digamma(2) - digamma(param1)
@@ -138,8 +135,7 @@ calcTau <- function(family, par, par2) {
     } else if (family == 29 || family == 39) {
         theta <- -par
         delta <- -par2
-        # tau <-
-        # 1-2/(delta*(2-theta))+4/(theta^2*delta)*gamma(delta+2)*gamma((2-2*theta)/(theta)+1)/gamma(delta+3+(2-2*theta)/(theta))
+        
         kt <- function(t, th, de) {
             ((1 - (1 - t)^th)^(-de) - 1)/(-th * de * (1 - t)^(th - 1) * (1 - (1 - t)^th)^(-de - 1))
         }

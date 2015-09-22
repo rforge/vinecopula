@@ -330,7 +330,6 @@ if((*copula)==43)
 			nparam[0]=1/(1+param[0]);
 			for (i = 0; i < *n; ++i) {negv[i] = 1 - v[i];}
 			diffPDF_u(u, negv, n, nparam, &ncopula, out);
-			//for(i=0;i<*n;i++){out[i]=-out[i];}
 		}
 	}else{
 
@@ -339,7 +338,6 @@ if((*copula)==43)
 	  ncopula = (*copula)-20;
       for (i = 0; i < *n; ++i) {negv[i] = 1 - v[i];}
 	  diffPDF_u(u, negv, n, nparam, &ncopula, out);
-	  //for(i=0;i<*n;i++){out[i]=-out[i];}
     }
   else if(((*copula==33) | (*copula==34) | (*copula==36) | (*copula==37) | (*copula==38) | (*copula==39) | (*copula==40)))	// 270? rotated copulas
     {
@@ -579,7 +577,6 @@ if((*copula)==43)
 	  ncopula = (*copula)-30;
       for (i = 0; i < *n; ++i) {negu[i] = 1 - u[i];}
 	  diffPDF_u(v, negu, n, nparam, &ncopula, out);
-	  //for(i=0;i<*n;i++){out[i]=-out[i];}
     }
   else if(((*copula==13) | (*copula==14) | (*copula==16) | (*copula==17) | (*copula==18) | (*copula==19) | (*copula==20)))	// 180? rotated copulas
 	{

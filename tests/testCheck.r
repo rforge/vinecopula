@@ -30,3 +30,28 @@ testCheck <- function(results){
   
   return(check)
 }
+
+
+testCheck2 <- function(results){
+  ## length of results
+  n <- length(results)
+  
+  check <- rep(TRUE, n)
+  
+  for(i in 1:n){
+    ## Check 1: is.na
+    if(any(is.na(results[[i]]))) check[i] <- FALSE
+    ## Check 2: is.nan
+    if(any(is.nan(results[[i]]))) check[i] <- FALSE
+    ## Check 3: is.infinite
+    if(any(is.infinite(results[[i]]))) check[i] <- FALSE
+    ## Check 4: in range
+    tmp <- VineCopula:::BiCopCheck(family=as.numeric(names(results)[i]), 
+                                   par=results[[i]], par2=rep(5,length(results[[i]])))
+    if(!tmp) check[i] <- FALSE
+    ## check for jumps
+    ## TODO
+  }
+  
+  return(check)
+}

@@ -411,16 +411,7 @@ void Hfunc(int* family, int* n, double* u, double* v, double* theta, double* nu,
     h = Calloc(*n,double);
     double x;
     
-    /*for(int i=0;i<*n;i++)
-     {
-     if(u[i]<UMIN) u[i]=UMIN;
-     else if(u[i]>UMAX) u[i]=UMAX;
-     if(v[i]<UMIN) v[i]=UMIN;
-     else if(v[i]>UMAX) v[i]=UMAX;
-     }*/
-    //Rprintf("family in Hfunc: %d\n", *family);
-    //Rprintf("theta=par1 in Hfunc: %f\n", *theta);
-    //Rprintf("nu=par2 in Hfunc: %f\n", *nu);
+
     for(j=0;j<*n;j++)
     {
         if((v[j]==0) | ( u[j]==0)) h[j] = 0;
@@ -856,82 +847,6 @@ void qcondjoe(double* q, double* u, double* de, double* out)
 }
 
 
-/*void qcondbb1(double* q, double* u, double* de, double* th, double* out)
- {
- double t1, t2, t3, t4, t5, t6, t7, t9, t10,
- t12, t13, t16, t17, t20, t24, t25, t27, t29,
- t32, t33, t34, t36, t38, t39, t43, t59;
- double c21,pdf;
- int iter,mxiter;
- double diff,v,vb4,tau,tau2,v0,mxstep,min(double,double);
- 
- // mxiter=20; // need larger mxiter for d,th large
- mxiter=30;
- mxstep=.05; // .05 .1; //.25;  // some failures if set at 0.25
- t1 = pow(*u,-*th);
- t2 = t1-1.0;
- t3 = pow(t2,*de);
- t16 = 1./(*u);
- t17 = 1./t2;
- t38 = t1*t16;
- t39 = t38*t17;
- 
- v = 0.5 * (*q+*u); // starting guess
- diff=.1; iter=0;
- // B4(th) when de=1, B6(de) when th=0
- vb4=pow(*q,-*th/(1+*th))-1;
- vb4=vb4*pow(*u,-*th)+1;
- vb4=pow(vb4,-1/(*th));
- tau=1-2/(*de*(*th+2.)); tau2=pow(tau,1.7);
- // for tau large, choose v=u as starting point
- // de near 1, choose vb4
- // otherwise weight (q+u)/2 and u
- if(*de<1.3) v=vb4;
- else v=tau2*(*u) + (1-tau2)*(*q+*u)/2.;
- while(fabs(diff)>1.e-6 && iter<mxiter)
- { t4 = pow(v,-*th);
- t5 = t4-1.0;
- t6 = pow(t5,*de);
- t7 = t3+t6;
- t9 = pow(t7,1./(*de));
- t10 = 1.0+t9;
- t12 = pow(t10,-1./(*th));
- t13 = t12*t9;
- t20 = 1./t10;
- t24 = t9*t9;
- t25 = t12*t24;
- t27 = 1./v;
- t29 = 1./t5;
- t32 = t7*t7;
- t33 = 1./t32;
- t34 = t10*t10;
- t36 = t33/t34;
- t43 = t4*(*th);
- t59 = t43*t27*t29;
- 
- c21 = t13*t3*t1*t16*t17/t7*t20;
- pdf = t25*t6*t27*t4*t29*t36*t3*t39-t13*t6*t43*t27*t29*t33*t3*t38*t17*t20+
- t13*t3*t38*t17*t33*t20*t6*(*de)*t59+t25*t3*t39*t36*t6*t59;
- iter++;
- // added for large (de,th) to prevent possible infinite loop etc
- if(pdf<1.e-5 || isnan(pdf) || isnan(c21))
- {
- if(c21>*q) v=v-MIN(mxstep,v/2);
- else v=v+MIN(mxstep,(1-v)/2);
- if(iter>10) mxstep=.025;  // half the original
- }
- else
- {
- diff=(c21-*q)/pdf;
- v0=v;
- v-=diff;
- // this can be infinite loop if |v| is extremely large
- //while(v<=0 || v>=1 || fabs(diff)>0.25) { diff/=2; v+=diff; }
- while(v<=0 || v>=1 || fabs(diff)>mxstep) { diff/=2; v+=diff; }
- }
- }
- *out = v;
- }*/
 
 
 ///////////////////////////////////////////////////////////////
@@ -1028,10 +943,6 @@ void Hinv1(int* family, int* n, double* u, double* v, double* theta, double* nu,
         Hinv(&nfamily,  n,  negu,  v,  &ntheta,  &nnu,  out);
         for (int i = 0; i < *n; i++) {out[i]=1-out[i];};
     }
-    // else if(*family==104 | *family==204 | *family==114 | *family==214)
-    // {
-    // Hinv( family,  n,  v,  u,  theta,  nu,  out);		// u und v vertauscht
-    // }
     else if((*family==124) | (*family==224))
     {
         nfamily=(*family)-20;
@@ -1108,12 +1019,7 @@ void Hinv2(int* family, int* n, double* v, double* u, double* theta, double* nu,
         nfamily=(*family)-30;
         for (int i = 0; i < *n; ++i) {negu[i]=1 - u[i];}
         Hinv(&nfamily,  n,  v,  negu,  &ntheta,  &nnu,  out);
-        //*out = 1-*out;
     }
-    // else if(*family==104 | *family==204 | *family==114 | *family==214)
-    // {
-    // Hinv( family,  n,  u,  v,  theta,  nu,  out);		// u und v vertauscht
-    // }
     else if((*family==124) | (*family==224))
     {
         nfamily = (*family)-20;
@@ -1218,8 +1124,6 @@ void Hinv(int* family, int* n, double* u, double* v, double* theta, double* nu, 
         }
         else if(*family==4) //gumbel - must turn to numerical inversion
         {
-            //double nu=0.0;
-            //HNumInv(family,&u[j],&v[j],theta,&nu,&hinv[j]);
             qcondgum(&u[j],&v[j],theta,&hinv[j]);
         }
         else if(*family==5) //frank - numerical inversion
@@ -1241,7 +1145,6 @@ void Hinv(int* family, int* n, double* u, double* v, double* theta, double* nu, 
         else if(*family==7) //BB1
         {
             HNumInv(family,&u[j],&v[j],theta,nu,&hinv[j]);
-            //qcondbb1(&u[j],&v[j],nu,theta,&hinv[j]);
         }
         else if(*family==8) //BB6
         {
@@ -1266,10 +1169,8 @@ void Hinv(int* family, int* n, double* u, double* v, double* theta, double* nu, 
         }
         else if(*family==14) //rotated gumbel (180?) - must turn to numerical inversion
         {
-            //int jj=4;
             u[j]=1-u[j];
             v[j]=1-v[j];
-            //HNumInv(&jj,&u[j],&v[j],theta,nu,&hinv[j]);
             qcondgum(&u[j],&v[j],theta,&hinv[j]);
             hinv[j]=1-hinv[j];
             u[j]=1-u[j];
@@ -1299,7 +1200,6 @@ void Hinv(int* family, int* n, double* u, double* v, double* theta, double* nu, 
             u[j]=1-u[j];
             v[j]=1-v[j];
             HNumInv(&jj,&u[j],&v[j],theta,nu,&hinv[j]);
-            //qcondbb1(&u[j],&v[j],nu,theta,&hinv[j]);
             hinv[j]=1-hinv[j];
             u[j]=1-u[j];
             v[j]=1-v[j];
